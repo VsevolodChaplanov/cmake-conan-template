@@ -3,6 +3,9 @@ conan/
 
 .mypy_cache
 
+.vs
+.idea
+
 # Prerequisites
 *.d
 
