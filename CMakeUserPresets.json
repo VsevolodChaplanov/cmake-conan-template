@@ -1,0 +1,160 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 28,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "dev-common",
+            "hidden": true,
+            "inherits": [
+                "dev-mode",
+                "conan"
+            ]
+        },
+        {
+            "name": "dev-linux",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "inherits": [
+                "dev-common",
+                "ci-linux"
+            ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "ENABLE_STATIC_ANALYZERS": "OFF"
+            }
+        },
+        {
+            "name": "dev-darwin",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
+            "inherits": [
+                "dev-common",
+                "ci-darwin"
+            ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        },
+        {
+            "name": "dev-win64",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "inherits": [
+                "dev-common",
+                "cppcheck",
+                "clang-tidy",
+                "ci-win64"
+            ],
+            "environment": {
+                "UseMultiToolTask": "true",
+                "EnforceProcessCountAcrossBuilds": "true"
+            }
+        },
+        {
+            "name": "dev-win64-ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "inherits": [
+                "dev-common",
+                "ci-win64-ninja"
+            ],
+            "environment": {
+                "UseMultiToolTask": "true",
+                "EnforceProcessCountAcrossBuilds": "true"
+            }
+        },
+        {
+            "name": "dev-coverage",
+            "binaryDir": "${sourceDir}/build/coverage",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "inherits": [
+                "dev-mode",
+                "coverage-linux",
+                "conan"
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "dev-win-debug-config",
+            "configurePreset": "dev-win64",
+            "configuration": "Debug",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "dev-win-release-config",
+            "configurePreset": "dev-win64",
+            "configuration": "Release",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "dev-win-relwithdebinfo-config",
+            "configurePreset": "dev-win64",
+            "configuration": "RelWithDebInfo",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "dev-test-common",
+            "hidden": true,
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error"
+            }
+        },
+        {
+            "name": "dev-win-test-debug",
+            "configuration": "Debug",
+            "configurePreset": "dev-win64",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "inherits": [
+                "dev-test-common"
+            ]
+        }
+    ]
+}

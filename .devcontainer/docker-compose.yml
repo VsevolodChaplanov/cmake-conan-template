@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  app:
+    container_name: cppapp
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    command: sleep infinity
+    volumes:
+      - ../..:/home/workspaces/:cached
+
+volumes:
+  pgdata: {}

@@ -1,3 +1,8 @@
+build/
+conan/
+
+.mypy_cache
+
 # Prerequisites
 *.d
 

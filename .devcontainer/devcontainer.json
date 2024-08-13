@@ -1,0 +1,37 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/cpp
+{
+	"name": "cpp-cmake-conan",
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "cppapp",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cpptools-themes",
+				"vscode-icons-team.vscode-icons",
+				"ms-vscode.cpptools",
+				"ms-vscode.cpptools-extension-pack",
+				"twxs.cmake",
+				"ms-vscode.cmake-tools",
+				"llvm-vs-code-extensions.vscode-clangd",
+				"matepek.vscode-catch2-test-adapter",
+				"tdennis4496.cmantic",
+				"IBM.output-colorizer",
+				"xaver.clang-format",
+				"cheshirekow.cmake-format",
+				"streetsidesoftware.code-spell-checker",
+				"pokowaka.pokowaka-iwyu",
+				"mutantdino.resourcemonitor",
+				"cschlosser.doxdocgen",
+				"pnp.polacode"
+			]
+		},
+		"settings": {
+			"editor.formatOnSave": true
+		}
+	},
+	"workspaceFolder": "/home/workspaces/${localWorkspaceFolderBasename}",
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {}
+	}
+}

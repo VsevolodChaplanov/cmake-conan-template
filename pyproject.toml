@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "TEMPLATE_PROJECT_NAME"
+version = "0.1.0"
+description = ""
+authors = ["VChaplanov"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+conan = "^2.6.0"
+cmakelang = "^0.6.13"
+cmake = "^3.30.2"
+
+[tool.poetry.group.dev.dependencies]
+ipdb = "^0.13.13"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
