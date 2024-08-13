@@ -83,6 +83,9 @@
             "environment": {
                 "UseMultiToolTask": "true",
                 "EnforceProcessCountAcrossBuilds": "true"
+            },
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {

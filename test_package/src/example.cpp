@@ -1,7 +1,7 @@
 #include <vector>
 #include <string>
 
-#include <ex/ex.hpp>
+#include <my_project/my_project.hpp>
 
 int main() {
 	std::vector<std::string> vec;

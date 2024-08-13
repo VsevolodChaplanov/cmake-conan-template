@@ -9,7 +9,7 @@ guide.
 ## Developer mode
 
 Build system targets that are only useful for developers of this project are
-hidden if the `TEMPLATE_PROJECT_NAME_DEVELOPER_MODE` option is disabled. Enabling this
+hidden if the `my_project_DEVELOPER_MODE` option is disabled. Enabling this
 option makes tests and other developer targets and options available. Not
 enabling this option means that you are a consumer of this project and thus you
 have no need for these targets and options.
@@ -23,7 +23,7 @@ the project. As a developer, you are recommended to always have the [latest
 CMake version][2] installed to make use of the latest Quality-of-Life
 additions.
 
-You have a few options to pass `TEMPLATE_PROJECT_NAME_DEVELOPER_MODE` to the configure
+You have a few options to pass `my_project_DEVELOPER_MODE` to the configure
 command, but this project prefers to use presets.
 
 As a developer, you should create a `CMakeUserPresets.json` file at the root of
@@ -165,3 +165,18 @@ variable.
 
 [1]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
 [2]: https://cmake.org/download/
+
+#### run `cmake-format`
+
+For windows you can run following command
+
+```shell
+Get-ChildItem -Path <DIRECTORY_TO_FORMAT> -Filter <GLOB_RULE> -Recurse | ForEach-Object { & cmake-format -i $_.FullName }
+```
+
+Examples to format all code in project
+
+```shell
+Get-ChildItem -Path .\ -Filter CMakeLists.txt -Recurse | ForEach-Object { & cmake-format -i $_.FullName }
+Get-ChildItem -Path .\cmake\ -Filter *.cmake -Recurse | ForEach-Object { & cmake-format -i $_.FullName }
+```

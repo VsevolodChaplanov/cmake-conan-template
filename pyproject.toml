@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "TEMPLATE_PROJECT_NAME"
+name = "my_project"
 version = "0.1.0"
 description = ""
 authors = ["VChaplanov"]

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(TEMPLATE_PROJECT_NAMETestPackage CXX)
+project(my_projectTestPackage CXX)
 
-find_package(TEMPLATE_PROJECT_NAME CONFIG REQUIRED)
+find_package(my_project CONFIG REQUIRED)
 
 add_executable(${PROJECT_NAME} src/example.cpp)
-target_link_libraries(${PROJECT_NAME} TEMPLATE_PROJECT_NAME::TEMPLATE_PROJECT_NAME)
+target_link_libraries(${PROJECT_NAME} my_project::my_project)

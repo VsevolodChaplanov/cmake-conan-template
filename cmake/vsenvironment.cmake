@@ -89,7 +89,7 @@ function(run_vcvarsall)
             detect_architecture()
 
             # run vcvarsall and print the environment variables
-            message(STATUS "[Rcs] Running `${VCVARSALL_FILE} ${VCVARSALL_ARCH}` to set up the MSVC environment")
+            message(STATUS "Running `${VCVARSALL_FILE} ${VCVARSALL_ARCH}` to set up the MSVC environment")
 
             execute_process(
                 COMMAND

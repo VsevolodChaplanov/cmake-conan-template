@@ -3,7 +3,7 @@ from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
 
 class pubsubRecipe(ConanFile):
-    name = "TEMPLATE_PROJECT_NAME"
+    name = "my_project"
     version = "0.1"
     package_type = "library"
 
@@ -11,7 +11,7 @@ class pubsubRecipe(ConanFile):
     license = "<Put the package license here>"
     author = "<Put your name here> <And your email here>"
     url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of TEMPLATE_PROJECT_NAME package here>"
+    description = "<Description of my_project package here>"
     topics = ("<Put some tag here>", "<here>", "<and here>")
 
     # Binary configuration
@@ -55,4 +55,4 @@ class pubsubRecipe(ConanFile):
         cmake.install()
 
     def package_info(self):
-        self.cpp_info.libs = ["TEMPLATE_PROJECT_NAME"]
+        self.cpp_info.libs = ["my_project"]

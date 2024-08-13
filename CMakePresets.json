@@ -26,7 +26,8 @@
             "hidden": true,
             "inherits": "cmake-pedantic",
             "cacheVariables": {
-                "TEMPLATE_PROJECT_NAME_DEVELOPER_MODE": "ON"
+                "my_project_DEVELOPER_MODE": "ON",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
             }
         },
         {
@@ -41,14 +42,14 @@
             "name": "cppcheck",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_CXX_CPPCHECK": "cppcheck;--inline-suppr"
+                "my_project_ENABLE_CPPCHECK": "ON"
             }
         },
         {
             "name": "clang-tidy",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--header-filter=^${sourceDir}/"
+                "my_project_ENABLE_CLANGTIDY": "ON"
             }
         },
         {
@@ -89,6 +90,11 @@
         },
         {
             "name": "ci-linux",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
             "inherits": [
                 "flags-gcc-clang",
                 "ci-std"
@@ -101,6 +107,11 @@
         },
         {
             "name": "ci-darwin",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
             "inherits": [
                 "flags-appleclang",
                 "ci-std"
@@ -137,8 +148,7 @@
             },
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl.exe",
-                "CMAKE_CXX_COMPILER": "cl.exe"
+                "CMAKE_BUILD_TYPE": "Release"
             }
         },
         {
@@ -157,6 +167,11 @@
         },
         {
             "name": "ci-coverage",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
             "inherits": [
                 "coverage-linux",
                 "dev-mode",
@@ -169,6 +184,11 @@
         {
             "name": "ci-sanitize",
             "binaryDir": "${sourceDir}/build/sanitize",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
             "inherits": [
                 "ci-linux",
                 "dev-mode",
@@ -195,6 +215,11 @@
         },
         {
             "name": "ci-macos",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Darwin"
+            },
             "inherits": [
                 "ci-build",
                 "ci-darwin",
@@ -205,6 +230,11 @@
         },
         {
             "name": "ci-ubuntu",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
             "inherits": [
                 "ci-build",
                 "ci-linux",
@@ -216,6 +246,11 @@
         },
         {
             "name": "ci-windows",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
             "inherits": [
                 "ci-build",
                 "ci-win64",
@@ -235,6 +270,7 @@
                 "ci-build",
                 "ci-win64-ninja",
                 "dev-mode",
+                "ci-multi-config",
                 "conan"
             ],
             "binaryDir": "${sourceDir}/build/${presetName}"
