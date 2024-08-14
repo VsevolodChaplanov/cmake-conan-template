@@ -39,6 +39,13 @@
             }
         },
         {
+            "name": "iwyu",
+            "hidden": true,
+            "cacheVariables": {
+                "my_project_ENABLE_INCLUDE_WHAT_YOU_USE": "ON"
+            }
+        },
+        {
             "name": "cppcheck",
             "hidden": true,
             "cacheVariables": {
@@ -148,7 +155,9 @@
             },
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
             }
         },
         {

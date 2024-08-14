@@ -6,12 +6,8 @@
     "cSpell.language": "en,ru",
     "editor.formatOnSave": true,
     "cmake.copyCompileCommands": "${workspaceFolder}/build/compile_commands.json",
-    // "cmake.environment": {
-    //     "CMAKE_C_COMPILER": "cl.exe",
-    //     "CMAKE_CXX_COMPILER": "cl.exe",
-    // },
     "cmake.configureOnOpen": false,
-    "clangd.path": "clangd",
+    "clangd.path": "clangd.exe",
     "clangd.checkUpdates": true,
     "clangd.onConfigChanged": "restart",
     "clangd.arguments": [
@@ -59,7 +55,6 @@
         "ctime": "cpp",
         "cwchar": "cpp",
         "cwctype": "cpp",
-        "deque": "cpp",
         "exception": "cpp",
         "filesystem": "cpp",
         "format": "cpp",

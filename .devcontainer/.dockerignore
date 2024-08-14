@@ -5,7 +5,7 @@ cmake-build-*/
 
 .devcontainer
 
-# User spesific settings
+# User specific settings
 CMakeUserPresets.json
 
 # IDE files

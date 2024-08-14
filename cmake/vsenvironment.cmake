@@ -74,8 +74,6 @@ endfunction()
 # Run vcvarsall.bat and set CMake environment variables
 function(run_vcvarsall)
     # if MSVC but VSCMD_VER is not set, which means vcvarsall has not run
-    message("MSVC ${MSVC}")
-    message("MSVC $ENV{VSCMD_VER}")
     if(MSVC AND NOT DEFINED ENV{VSCMD_VER})
         # find vcvarsall.bat
         get_filename_component(MSVC_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
