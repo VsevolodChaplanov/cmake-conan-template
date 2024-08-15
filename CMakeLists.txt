@@ -12,10 +12,6 @@ project(
 include(cmake/vsenvironment.cmake)
 run_vcvarsall()
 
-message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
-message(STATUS "C compiler: ${CMAKE_C_COMPILER}")
-message(STATUS "Generator: ${CMAKE_GENERATOR}")
-
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
 include(cmake/ccache.cmake)

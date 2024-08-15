@@ -5,6 +5,7 @@ conan/
 
 .vs
 .idea
+.vscode/
 
 # Prerequisites
 *.d

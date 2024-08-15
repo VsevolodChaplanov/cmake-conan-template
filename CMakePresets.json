@@ -202,7 +202,6 @@
         },
         {
             "name": "ci-build",
-            "binaryDir": "${sourceDir}/build",
             "hidden": true
         },
         {
@@ -215,6 +214,7 @@
         },
         {
             "name": "ci-macos",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
@@ -230,6 +230,7 @@
         },
         {
             "name": "ci-ubuntu",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
@@ -246,6 +247,7 @@
         },
         {
             "name": "ci-windows",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
@@ -261,6 +263,7 @@
         },
         {
             "name": "ci-windows-ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
@@ -272,8 +275,7 @@
                 "dev-mode",
                 "ci-multi-config",
                 "conan"
-            ],
-            "binaryDir": "${sourceDir}/build/${presetName}"
+            ]
         }
     ]
 }

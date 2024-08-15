@@ -20,7 +20,7 @@ class pubsubRecipe(ConanFile):
     default_options = {"shared": False, "fPIC": True}
 
     # Sources are located in the same place as this recipe, copy them to the recipe
-    exports_sources = "CMakeLists.txt", "src/*", "include/*", "cmake/*"
+    exports_sources = "CMakeLists.txt", "dependencies.cmake", "options.cmake" "src/*", "include/*", "cmake/*"
 
     def requirements(self):
         self.requires("fmt/[10.2.1]", transitive_headers=True)
