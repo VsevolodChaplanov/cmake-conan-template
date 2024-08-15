@@ -8,16 +8,20 @@ project(
     DESCRIPTION "Short description"
     HOMEPAGE_URL "https://example.com/"
     LANGUAGES CXX)
-    
+
 include(cmake/vsenvironment.cmake)
 run_vcvarsall()
 
 include(cmake/project-is-top-level.cmake)
+include(cmake/project-options.cmake)
 include(cmake/variables.cmake)
 include(cmake/ccache.cmake)
-include(cmake/cmake-format.cmake)
+include(cmake/linker.cmake)
+include(cmake/ipo.cmake)
+include(cmake/static_analyzers.cmake)
 
-project_enable_cache()
+my_project_enable_cache()
+my_project_enable_ipo()
 
 # ---- Project options target
 
@@ -54,7 +58,14 @@ target_link_libraries(
     PUBLIC fmt::fmt ${PROJECT_NAME}_options
     PRIVATE ${PROJECT_NAME}_PCH)
 
+my_project_configure_linker(${PROJECT_NAME})
+my_project_enable_cppcheck(${WARNINGS_AS_ERRORS} ${OVERRIDE_CPPCHECK}) # use default options
+my_project_enable_clang_tidy(${PROJECT_NAME} ${WARNINGS_AS_ERRORS})
+my_project_enable_include_what_you_use()
+
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+
+# my_project_configure_linker(${PROJECT_NAME})
 
 # ---- Install rules ----
 

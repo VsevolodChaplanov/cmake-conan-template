@@ -78,7 +78,9 @@
             },
             "inherits": [
                 "dev-common",
-                "ci-win64-ninja"
+                "ci-win64-ninja",
+                "clang-tidy",
+                "cppcheck"
             ],
             "environment": {
                 "UseMultiToolTask": "true",

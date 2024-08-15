@@ -17,6 +17,7 @@ endif()
 
 include(cmake/lint-targets.cmake)
 include(cmake/spell-targets.cmake)
+include(cmake/cmake-format-targets.cmake)
 include(cmake/static_analyzers.cmake)
 
 option(WARNINGS_AS_ERRORS "thread warnings as errors for static analyzers" ON)

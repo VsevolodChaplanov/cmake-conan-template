@@ -80,7 +80,7 @@ RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/nul
     apt-get install -y --no-install-recommends cmake cmake-curses-gui
 
 
-# Install optional dependecies
+# Install optional dependencies
 RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
     doxygen graphviz ccache cppcheck

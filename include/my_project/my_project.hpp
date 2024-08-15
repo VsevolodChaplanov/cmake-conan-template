@@ -1,6 +1,10 @@
-#ifndef EX_EX_HPP
-#define EX_EX_HPP
+#ifndef my_project_HPP
+#define my_project_HPP
 
-void hello_world();
+#include <fmt/core.h>
+
+#include <my_project/static_string.hpp>
+
+template<static_string V = "hello world"> constexpr auto hello_world() { fmt::println("{}\n", V); }
 
 #endif
