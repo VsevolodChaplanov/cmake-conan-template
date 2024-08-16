@@ -14,8 +14,6 @@ default(PATTERNS ${FORMAT_ROOT_DIR}/cmake/*.cmake ${FORMAT_ROOT_DIR}/CMakeLists.
 
 file(GLOB cmake_files ${PATTERNS})
 
-message("cmake files ${cmake_files}")
-
 foreach(file ${cmake_files})
     execute_process(
         COMMAND ${FORMAT_COMMAND} -i ${file}

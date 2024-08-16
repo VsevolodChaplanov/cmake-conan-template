@@ -8,3 +8,9 @@ void hello_example() {
 	constexpr auto greeting = "hello world"_fs;
 	std::cout << fmt::format("{}\n", greeting.view());
 }
+
+struct aaa {
+	int a_;
+
+	aaa(int bbb) : a_{bbb} {}
+};

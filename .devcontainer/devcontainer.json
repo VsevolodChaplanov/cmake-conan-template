@@ -21,9 +21,7 @@
 				"cheshirekow.cmake-format",
 				"streetsidesoftware.code-spell-checker",
 				"pokowaka.pokowaka-iwyu",
-				"mutantdino.resourcemonitor",
 				"cschlosser.doxdocgen",
-				"pnp.polacode"
 			]
 		},
 		"settings": {
