@@ -1,11 +1,14 @@
 #ifndef static_string_HPP
 #define static_string_HPP
 
-#include <cstddef>
-#include <array>
 #include <algorithm>
-#include <string_view>
+#include <array>
+#include <cstddef>
 #include <string>
+#include <string_view>
+
+#include <fmt/core.h>
+#include <fmt/format.h>
 
 /**
  * @brief class for compile time struct tagging
@@ -22,14 +25,14 @@ template<std::size_t N> struct static_string final {
 		std::ranges::copy(data, m_data.begin());
 	}
 
-	template<char... data> constexpr explicit static_string() noexcept : m_data({data...}) {}
+	template<char... Data> constexpr explicit static_string() noexcept : m_data({Data...}) {}
 
-	constexpr explicit(false) static_string(const char* const data, std::integral_constant<std::size_t, N>) noexcept {
+	constexpr explicit static_string(const char* const data, std::integral_constant<std::size_t, N>) noexcept {
 		std::ranges::copy_n(data, N, begin());
 	}
 
 	template<std::input_iterator TIt, std::sentinel_for<TIt> TS>
-	constexpr explicit(false) static_string(TIt begin, TS end) : m_data(begin, end) {}
+	constexpr explicit static_string(TIt begin, TS end) : m_data(begin, end) {}
 
 	constexpr bool empty() const noexcept { return N == 0; }
 
@@ -53,9 +56,9 @@ template<std::size_t N> struct static_string final {
 
 	constexpr std::string string() const { return std::string(begin(), begin() + N); }
 
-	constexpr explicit(false) operator std::string_view() const noexcept { return view(); }
+	constexpr explicit operator std::string_view() const noexcept { return view(); }
 
-	constexpr explicit(false) operator std::string() const noexcept { return string(); }
+	constexpr explicit operator std::string() const noexcept { return string(); }
 
 	constexpr auto operator[](std::size_t index) const noexcept { return m_data[index]; }
 
@@ -84,7 +87,7 @@ template<std::size_t N> struct static_string final {
 	std::array<char, N + 1> m_data{};
 };
 
-template<static_string VString> consteval auto operator""_fs() { return VString; }
+template<static_string VString> consteval auto operator""_fs() noexcept { return VString; }
 
 template<std::size_t N> constexpr auto format_as(const static_string<N>& string) -> std::string_view {
 	return string.view();
@@ -96,7 +99,7 @@ constexpr static_string<K + M> operator+(const static_string<K>& lhs, const stat
 	std::ranges::copy(lhs, result.begin());
 	std::ranges::copy(rhs, result.begin() + K);
 	return result;
-};
+}
 
 template<size_t K, size_t M>
 constexpr static_string<K - 1 + M> operator+(const char (&lhs)[K], const static_string<M>& rhs) {
@@ -109,6 +112,13 @@ constexpr static_string<K + M - 1> operator+(const static_string<K>& lhs, const 
 	static_string rhs2{rhs};
 	return lhs + rhs2;
 }
+
+template<std::size_t N> struct fmt::formatter<static_string<N>> final : public fmt::formatter<std::string_view> {
+	using base = fmt::formatter<std::string_view>;
+	auto format(const static_string<N>& string, auto& ctx) const {
+		return fmt::formatter<std::string_view>::format(string.view(), ctx);
+	}
+};
 
 /** CTAD helpers for static_string */
 

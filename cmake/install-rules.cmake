@@ -15,10 +15,7 @@ install(
     RUNTIME COMPONENT ${package}_Runtime
     LIBRARY COMPONENT ${package}_Runtime NAMELINK_COMPONENT ${package}_Development
     ARCHIVE COMPONENT ${package}_Development
-    PUBLIC_HEADER
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${package}
-        FILE_SET HEADERS
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${package})
+    PUBLIC_HEADER FILE_SET HEADERS COMPONENT ${package}_Development)
 
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 

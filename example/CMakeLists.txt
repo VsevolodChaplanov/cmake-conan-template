@@ -4,6 +4,7 @@ project(my_projectExamples CXX)
 
 include(../cmake/project-is-top-level.cmake)
 include(../cmake/folders.cmake)
+include(../cmake/static_analyzers.cmake)
 
 if(PROJECT_IS_TOP_LEVEL)
     find_package(my_project REQUIRED)
@@ -11,9 +12,13 @@ endif()
 
 add_custom_target(run-examples)
 
+option(LINT_EXAMPLES "enable linters for examples" OFF)
 function(add_example NAME)
     add_executable("${NAME}" "${NAME}.cpp")
     target_link_libraries("${NAME}" PRIVATE my_project::my_project)
+    target_cppcheck(${NAME} ${WARNINGS_AS_ERRORS} "")
+    target_clangtidy(${NAME} ${WARNINGS_AS_ERRORS})
+    target_include_what_you_use(${NAME})
     add_custom_target(
         "run_${NAME}"
         COMMAND "${NAME}"

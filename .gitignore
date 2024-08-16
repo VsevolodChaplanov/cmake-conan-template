@@ -1,5 +1,6 @@
 build/
 conan/
+install/
 
 .mypy_cache
 

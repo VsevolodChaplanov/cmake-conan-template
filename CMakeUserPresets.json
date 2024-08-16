@@ -25,11 +25,13 @@
             },
             "inherits": [
                 "dev-common",
-                "ci-linux"
+                "ci-linux",
+                "cppcheck",
+                "clang-tidy",
+                "iwyu"
             ],
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "ENABLE_STATIC_ANALYZERS": "OFF"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {

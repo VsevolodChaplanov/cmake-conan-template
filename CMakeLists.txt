@@ -12,15 +12,19 @@ project(
 include(cmake/vsenvironment.cmake)
 run_vcvarsall()
 
+include(options.cmake)
+include(dependencies.cmake)
+
 include(cmake/project-is-top-level.cmake)
-include(cmake/project-options.cmake)
 include(cmake/variables.cmake)
 include(cmake/ccache.cmake)
 include(cmake/linker.cmake)
 include(cmake/ipo.cmake)
-include(cmake/static_analyzers.cmake)
 
-my_project_enable_cache()
+if(my_project_ENABLE_CCACHE)
+    my_project_enable_cache()
+endif()
+
 my_project_enable_ipo()
 
 # ---- Project options target
@@ -39,33 +43,43 @@ target_link_libraries(${PROJECT_NAME}_PCH INTERFACE ${PROJECT_NAME}_options)
 add_library(${PROJECT_NAME})
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
+option(WARNINGS_AS_ERRORS "thread warnings as errors for static analyzers" OFF)
+include(cmake/static_analyzers.cmake)
+
+option(my_project_ENABLE_CPPCHECK "enable cppcheck static analyzer for ${PROJECT_NAME}" OFF)
+if(my_project_ENABLE_CPPCHECK)
+    target_cppcheck(${PROJECT_NAME} ${WARNINGS_AS_ERRORS} "") # empty string can not be defined as option
+endif()
+
+option(my_project_ENABLE_CLANGTIDY "enable clang-tidy static analyzer for ${PROJECT_NAME}" OFF)
+if(my_project_ENABLE_CLANGTIDY)
+    target_clangtidy(${PROJECT_NAME} ${WARNINGS_AS_ERRORS})
+endif()
+
+option(my_project_ENABLE_INCLUDE_WHAT_YOU_USE "enable include what you use for ${PROJECT_NAME}" OFF)
+if(my_project_ENABLE_INCLUDE_WHAT_YOU_USE)
+    target_include_what_you_use(${PROJECT_NAME})
+endif()
+
 set_property(TARGET ${PROJECT_NAME} PROPERTY EXPORT_NAME ${PROJECT_NAME})
 
-file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/*)
-file(GLOB LIBRARY_SOURCES ${PROJECT_SOURCE_DIR}/src/*)
+file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/*.hpp)
+file(GLOB LIBRARY_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 target_sources(
     ${PROJECT_NAME}
-    PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR} FILES ${LIBRARY_INCLUDES}
+    PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${LIBRARY_INCLUDES}
     PRIVATE ${LIBRARY_SOURCES})
 
 target_include_directories(${PROJECT_NAME} ${warning_guard} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                                                                    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-find_package(fmt REQUIRED)
 target_link_libraries(
     ${PROJECT_NAME}
     PUBLIC fmt::fmt ${PROJECT_NAME}_options
     PRIVATE ${PROJECT_NAME}_PCH)
 
 my_project_configure_linker(${PROJECT_NAME})
-my_project_enable_cppcheck(${WARNINGS_AS_ERRORS} ${OVERRIDE_CPPCHECK}) # use default options
-my_project_enable_clang_tidy(${PROJECT_NAME} ${WARNINGS_AS_ERRORS})
-my_project_enable_include_what_you_use()
-
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-
-# my_project_configure_linker(${PROJECT_NAME})
 
 # ---- Install rules ----
 

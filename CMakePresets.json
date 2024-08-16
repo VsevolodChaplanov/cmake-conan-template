@@ -251,6 +251,7 @@
                 "clang-tidy",
                 "conan",
                 "cppcheck",
+                "iwyu",
                 "dev-mode"
             ]
         },
