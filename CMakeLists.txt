@@ -27,56 +27,7 @@ endif()
 
 my_project_enable_ipo()
 
-# ---- Project options target
-
-add_library(${PROJECT_NAME}_options INTERFACE)
-target_compile_features(${PROJECT_NAME}_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
-
-# ---- Declare library precompiled headers
-
-add_library(${PROJECT_NAME}_PCH INTERFACE)
-target_precompile_headers(${PROJECT_NAME}_PCH INTERFACE <string> <vector>)
-target_link_libraries(${PROJECT_NAME}_PCH INTERFACE ${PROJECT_NAME}_options)
-
-# ---- Declare library ----
-
-add_library(${PROJECT_NAME})
-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-
-set_property(TARGET ${PROJECT_NAME} PROPERTY EXPORT_NAME ${PROJECT_NAME})
-
-file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/*.hpp)
-file(GLOB LIBRARY_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
-
-target_sources(
-    ${PROJECT_NAME}
-    PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${LIBRARY_INCLUDES}
-    PRIVATE ${LIBRARY_SOURCES})
-
-target_include_directories(${PROJECT_NAME} ${warning_guard} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                                                                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-
-target_link_libraries(
-    ${PROJECT_NAME}
-    PUBLIC fmt::fmt ${PROJECT_NAME}_options
-    PRIVATE ${PROJECT_NAME}_PCH)
-
-my_project_configure_linker(${PROJECT_NAME})
-
-# ---- Install rules ----
-
-if(NOT CMAKE_SKIP_INSTALL_RULES)
-    include(cmake/install-rules.cmake)
-endif()
-
-# ---- Examples ----
-
-if(PROJECT_IS_TOP_LEVEL)
-    option(BUILD_EXAMPLES "Build examples tree." "${my_project_DEVELOPER_MODE}")
-    if(BUILD_EXAMPLES)
-        add_subdirectory(example)
-    endif()
-endif()
+add_subdirectory(core)
 
 # ---- Developer mode ----
 

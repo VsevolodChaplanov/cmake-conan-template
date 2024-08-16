@@ -37,7 +37,8 @@ ARG GCC_VER="13"
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
-    gcc-${GCC_VER} g++-${GCC_VER} gdb
+    gcc-${GCC_VER} g++-${GCC_VER} gdb && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # Set gcc-${GCC_VER} as default gcc
@@ -56,7 +57,8 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - 2>/dev/
     apt-get install -y --no-install-recommends \
     clang-${LLVM_VER} lldb-${LLVM_VER} lld-${LLVM_VER} clangd-${LLVM_VER} \
     llvm-${LLVM_VER}-dev libclang-${LLVM_VER}-dev clang-tidy-${LLVM_VER} \
-    clang-format-${LLVM_VER}
+    clang-format-${LLVM_VER} && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # Set the default clang-tidy, so CMake can find it
@@ -77,13 +79,15 @@ RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/nul
     | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null && \
     apt-add-repository -y "deb ${CMAKE_URL} ${CMAKE_PKG} main" && \
     apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
-    apt-get install -y --no-install-recommends cmake cmake-curses-gui
+    apt-get install -y --no-install-recommends cmake cmake-curses-gui && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # Install optional dependencies
 RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
-    doxygen graphviz ccache cppcheck
+    doxygen graphviz ccache cppcheck && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install include-what-you-use
 ENV IWYU /home/iwyu

@@ -2,7 +2,14 @@
 conan/
 install/
 
+cmake-build-*
+
 .mypy_cache
+
+conan_test/build
+conan_test/CMakeUserPresets.json
+
+fetch_content_test/build
 
 .vs
 .idea

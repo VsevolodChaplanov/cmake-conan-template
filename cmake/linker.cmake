@@ -1,4 +1,4 @@
-function(my_project_configure_linker project_name)
+function(target_configure_linker project_name)
     include(CheckCXXCompilerFlag)
 
     set(USER_LINKER_OPTION

@@ -30,6 +30,8 @@
 	},
 	"workspaceFolder": "/home/workspaces/${localWorkspaceFolderBasename}",
 	"features": {
-		"ghcr.io/devcontainers/features/git:1": {}
+		"ghcr.io/devcontainers/features/git:1": {},
+		"git": "latest",
+		"git-lfs": "latest"
 	}
 }
