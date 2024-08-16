@@ -1,3 +1,5 @@
+option(WARNINGS_AS_ERRORS "thread warnings as errors for static analyzers" OFF)
+
 function(target_cppcheck target WARNINGS_AS_ERRORS CPPCHECK_OPTIONS)
     find_program(CPPCHECK cppcheck)
     if(CPPCHECK)
@@ -68,7 +70,7 @@ function(target_clangtidy target WARNINGS_AS_ERRORS)
 
         # construct the clang-tidy command line --config-file=${CMAKE_SOURCE_DIR}/.clang-tidy;-p;${CMAKE_BINARY_DIR}
         set(TARGET_CXX_CLANGTIDY
-            ${CLANGTIDY};-extra-arg=-Wno-unknown-warning-option;-extra-arg=-Wno-ignored-optimization-argument;-extra-arg=-Wno-unused-command-line-argument;
+            ${CLANGTIDY};--config-file=${CMAKE_SOURCE_DIR}/.clang-tidy;-extra-arg=-Wno-unknown-warning-option;-extra-arg=-Wno-ignored-optimization-argument;-extra-arg=-Wno-unused-command-line-argument;-p;${CMAKE_BINARY_DIR}
         )
         # set standard
         if(NOT "${CMAKE_CXX_STANDARD}" STREQUAL "")

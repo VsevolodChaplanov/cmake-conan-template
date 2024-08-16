@@ -16,9 +16,11 @@ option(LINT_EXAMPLES "enable linters for examples" OFF)
 function(add_example NAME)
     add_executable("${NAME}" "${NAME}.cpp")
     target_link_libraries("${NAME}" PRIVATE my_project::my_project)
-    target_cppcheck(${NAME} ${WARNINGS_AS_ERRORS} "")
-    target_clangtidy(${NAME} ${WARNINGS_AS_ERRORS})
-    target_include_what_you_use(${NAME})
+    if(LINT_EXAMPLES)
+        target_cppcheck(${NAME} ${WARNINGS_AS_ERRORS} "")
+        target_clangtidy(${NAME} ${WARNINGS_AS_ERRORS})
+        target_include_what_you_use(${NAME})
+    endif()
     add_custom_target(
         "run_${NAME}"
         COMMAND "${NAME}"
