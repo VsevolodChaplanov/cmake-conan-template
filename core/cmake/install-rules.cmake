@@ -10,8 +10,10 @@ install(
     RUNTIME COMPONENT ${package}_Runtime
     LIBRARY COMPONENT ${package}_Runtime NAMELINK_COMPONENT ${package}_Development
     ARCHIVE COMPONENT ${package}_Development
-    PUBLIC_HEADER FILE_SET HEADERS COMPONENT ${package}_Development
-    RUNTIME_DEPENDENCY_SET ${package}_Dependency)
+    PUBLIC_HEADER FILE_SET HEADERS COMPONENT ${package}_Development)
+
+install(IMPORTED_RUNTIME_ARTIFACTS)
+install(RUNTIME_DEPENDENCY_SET ${package}_Dependency)
 
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 

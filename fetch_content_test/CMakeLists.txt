@@ -31,7 +31,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(my_project)
 
 add_executable(${PROJECT_NAME} src/fetch_content_test.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE my_project::my_project-core Catch2::Catch2WithMain)
+target_link_libraries(${PROJECT_NAME} PRIVATE my_project::core Catch2::Catch2WithMain)
 
 enable_testing()
 catch_discover_tests(${PROJECT_NAME})

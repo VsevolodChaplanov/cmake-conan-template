@@ -19,7 +19,7 @@ include(Catch)
 # ---- Tests ----
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/source/my_project_test.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE my_project::my_project-core Catch2::Catch2WithMain)
+target_link_libraries(${PROJECT_NAME} PRIVATE my_project::core Catch2::Catch2WithMain)
 
 option(LINT_TESTS "enable static analyzers for tests" OFF)
 

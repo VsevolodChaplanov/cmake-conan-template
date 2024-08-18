@@ -31,24 +31,14 @@ class my_projectRecipe(ConanFile):
         "core/CMakeLists.txt",
         "cmake/*")
 
-    my_project_components = [
-        {
-            "target": "core",
-            "lib": "core",
-            "requires": (
-                ["fmt::fmt"]
-            )
-        }
-    ]
-
     @property
     def _my_project_components(self):
         def fmt(): return ['fmt::fmt']
 
         my_project_components = [
             {
-                'target': 'my_project-core',
-                'lib': 'my_project-core',
+                'target': 'core',
+                'lib': 'core',
                 'requires': (fmt())
             }
         ]
