@@ -24,7 +24,7 @@ RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
     software-properties-common wget apt-utils file zip \
     openssh-client gpg-agent socat rsync \
-    make ninja-build git
+    make ninja-build git lcov gcovr
 
 RUN apt install python3 python3-pip python3-dev -y
 RUN pip3 install conan numpy codespell cmakelang
@@ -36,7 +36,7 @@ ARG GCC_VER="13"
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
-    gcc-${GCC_VER} g++-${GCC_VER} gdb && \
+    gcc-${GCC_VER} g++-${GCC_VER} gdb gcov-{GCC_VER} && \
     rm -rf /var/lib/apt/lists/*
 
 

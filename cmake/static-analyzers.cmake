@@ -2,9 +2,9 @@ include(CMakeParseArguments)
 
 option(WARNINGS_AS_ERRORS "thread warnings as errors for static analyzers" OFF)
 
-function(get_default_cppcheck_options OPTIONS TEMPLATE)  
-    # Enable all warnings that are actionable by the user of this toolset style should enable the other 3, but
-    # we'll be explicit just in case
+function(get_default_cppcheck_options OPTIONS TEMPLATE)
+    # Enable all warnings that are actionable by the user of this toolset style should enable the other 3, but we'll be
+    # explicit just in case
     set(SUPPRESS_DIR "*:${CMAKE_CURRENT_BINARY_DIR}/_deps/*.h")
 
     set(CPPCHECK_OPTIONS
@@ -24,7 +24,9 @@ function(get_default_cppcheck_options OPTIONS TEMPLATE)
         --inconclusive
         --suppress=${SUPPRESS_DIR})
 
-    set(OPTIONS "${CPPCHECK_OPTIONS}" PARENT_SCOPE)
+    set(OPTIONS
+        "${CPPCHECK_OPTIONS}"
+        PARENT_SCOPE)
 endfunction()
 
 function(target_cppcheck target files)
@@ -57,8 +59,8 @@ function(target_cppcheck target files)
         endif()
 
         message(STATUS "cppcheck options for target ${target}: ${TARGET_CXX_CPPCHECK}")
-        
-        if (ARGUMENTS_USE_ON_BUILD)
+
+        if(ARGUMENTS_USE_ON_BUILD)
             set_target_properties(${target} PROPERTIES CXX_CPPCHECK ${TARGET_CXX_CPPCHECK})
         endif()
 
@@ -72,20 +74,20 @@ function(target_cppcheck target files)
 endfunction()
 
 function(get_clang_tidy_default_options OPTIONS)
-    set(DEFAULT_OPTIONS --config-file=${CMAKE_SOURCE_DIR}/.clang-tidy  
-                        -extra-arg=-Wno-unknown-warning-option
-                        -extra-arg=-Wno-ignored-optimization-argument
-                        -extra-arg=-Wno-unused-command-line-argument
-                        -p
-                        ${CMAKE_BINARY_DIR})
-    set(OPTIONS "${DEFAULT_OPTIONS}" PARENT_SCOPE)
+    set(DEFAULT_OPTIONS
+        --config-file=${CMAKE_SOURCE_DIR}/.clang-tidy -extra-arg=-Wno-unknown-warning-option
+        -extra-arg=-Wno-ignored-optimization-argument -extra-arg=-Wno-unused-command-line-argument -p
+        ${CMAKE_BINARY_DIR})
+    set(OPTIONS
+        "${DEFAULT_OPTIONS}"
+        PARENT_SCOPE)
 endfunction()
 
 function(target_clangtidy target files)
     find_program(CLANGTIDY clang-tidy)
     if(CLANGTIDY)
         cmake_parse_arguments(ARGUMENTS "" "WARNINGS_AS_ERRORS;USE_ON_BUILD" "CLANGTIDY_OPTIONS" "${ARGV}")
-        
+
         get_target_property(TARGET_CXX_STANDARD ${target} CXX_STANDARD)
 
         if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
@@ -143,15 +145,11 @@ function(target_clangtidy target files)
 endfunction()
 
 function(get_default_iwyu_options OPTIONS)
-    set(DEFAULT_OPTIONS -Xiwyu
-                        --max_line_length=120
-                        -Xiwyu
-                        --no_comments
-                        -Xiwyu
-                        --no_fwd_decls)
-    set(OPTIONS "${DEFAULT_OPTIONS}" PARENT_SCOPE)
+    set(DEFAULT_OPTIONS -Xiwyu --max_line_length=120 -Xiwyu --no_comments -Xiwyu --no_fwd_decls)
+    set(OPTIONS
+        "${DEFAULT_OPTIONS}"
+        PARENT_SCOPE)
 endfunction()
-
 
 function(target_include_what_you_use target files)
     find_package(Python3)
@@ -163,8 +161,8 @@ function(target_include_what_you_use target files)
         set(help_file IWYU_TOOL.out)
 
         cmake_parse_arguments(ARGUMENTS "" "USE_ON_BUILD" "IWYU_OPTIONS" "${ARGV}")
-        
-        if (ARGUMENTS_IWYU_OPTIONS)
+
+        if(ARGUMENTS_IWYU_OPTIONS)
             set(TARGET_IWYU_OPTIONS "${INCLUDE_WHAT_YOU_USE};${ARGUMENTS_IWYU_OPTIONS}")
         else()
             get_default_iwyu_options(OPTIONS)
@@ -172,7 +170,7 @@ function(target_include_what_you_use target files)
         endif()
 
         message(STATUS "include-what-you-use found and enabled with arguments ${TARGET_IWYU_OPTIONS}")
-        if (USE_ON_BUILD)
+        if(USE_ON_BUILD)
             set_target_properties(${target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE ${TARGET_IWYU_OPTIONS})
         endif()
 

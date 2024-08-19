@@ -17,7 +17,6 @@
                 "systemVars": false
             },
             "errors": {
-                "dev": true,
                 "deprecated": true
             }
         },
@@ -42,21 +41,21 @@
             "name": "iwyu",
             "hidden": true,
             "cacheVariables": {
-                "my_project_ENABLE_INCLUDE_WHAT_YOU_USE": "ON"
+                "my_project_ENABLE_IWYU_ON_BUILD": "ON"
             }
         },
         {
             "name": "cppcheck",
             "hidden": true,
             "cacheVariables": {
-                "my_project_ENABLE_CPPCHECK": "ON"
+                "my_project_ENABLE_CPPCHECK_ON_BUILD": "ON"
             }
         },
         {
             "name": "clang-tidy",
             "hidden": true,
             "cacheVariables": {
-                "my_project_ENABLE_CLANGTIDY": "ON"
+                "my_project_ENABLE_CLANGTIDY_ON_BUILD": "ON"
             }
         },
         {
@@ -165,12 +164,8 @@
             "inherits": "ci-linux",
             "hidden": true,
             "cacheVariables": {
-                "ENABLE_COVERAGE": "ON",
-                "CMAKE_BUILD_TYPE": "Coverage",
-                "CMAKE_CXX_FLAGS_COVERAGE": "-Og -g --coverage -fkeep-inline-functions -fkeep-static-functions",
-                "CMAKE_EXE_LINKER_FLAGS_COVERAGE": "--coverage",
-                "CMAKE_SHARED_LINKER_FLAGS_COVERAGE": "--coverage",
-                "CMAKE_MAP_IMPORTED_CONFIG_COVERAGE": "Coverage;RelWithDebInfo;Release;Debug;"
+                "my_project_ENABLE_COVERAGE": "ON",
+                "CMAKE_BUILD_TYPE": "Coverage"
             }
         },
         {

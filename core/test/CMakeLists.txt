@@ -31,6 +31,10 @@ endif()
 
 catch_discover_tests(${PROJECT_NAME})
 
+if(${MODULE_NAME}_ENABLE_COVERAGE)
+    coverage_target(${MODULE_NAME})
+endif()
+
 # ---- End-of-file commands ----
 
 add_folders(Test)

@@ -7,10 +7,11 @@ include(../cmake/linker.cmake)
 include(../cmake/sanitizers.cmake)
 include(../cmake/static-analyzers.cmake)
 
+set(MODULE_NAME core)
+
 include(cmake/options.cmake)
 include(cmake/dependencies.cmake)
 
-set(MODULE_NAME core)
 
 project(${MODULE_NAME}
         VERSION ${${MAIN_PROJECT_NAME}_VERSION_MAJOR}.${${MAIN_PROJECT_NAME}_VERSION_MINOR}.${${MAIN_PROJECT_NAME}_VERSION_PATCH}
@@ -19,13 +20,25 @@ project(${MODULE_NAME}
 # ---- Project options target
 
 add_library(${PROJECT_NAME}_options INTERFACE)
+
+# ---- Set c++ standard
+
 target_compile_features(${PROJECT_NAME}_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
+
+# ---- Add sanitizers
+
 target_sanitizers(${PROJECT_NAME}_options
-        SANITIZER_ADDRESS ${core_SANITIZER_ADDRESS}
-        SANITIZER_LEAK ${core_SANITIZER_LEAK}
-        SANITIZER_UNDEFINED_BEHAVIOR ${core_SANITIZER_UNDEFINED_BEHAVIOR}
-        SANITIZER_THREAD ${core_SANITIZER_THREAD}
-        SANITIZER_MEMORY ${core_SANITIZER_MEMORY})
+        SANITIZER_ADDRESS ${${PROJECT_NAME}_SANITIZER_ADDRESS}
+        SANITIZER_LEAK ${${PROJECT_NAME}_SANITIZER_LEAK}
+        SANITIZER_UNDEFINED_BEHAVIOR ${${PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR}
+        SANITIZER_THREAD ${${PROJECT_NAME}_SANITIZER_THREAD}
+        SANITIZER_MEMORY ${${PROJECT_NAME}_SANITIZER_MEMORY})
+
+# ---- Add coverage support
+
+if(${PROJECT_NAME}_ENABLE_COVERAGE)
+    target_add_coverage_flags(${PROJECT_NAME}_options INTERFACE)
+endif()
 
 # ---- Declare library precompiled headers
 
@@ -76,20 +89,26 @@ target_configure_linker(${PROJECT_NAME})
 # TODO mb better soultion to don't forget to add sources
 set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES} ${LIBRARY_SOURCES})
 
-target_clangtidy(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
-target_cppcheck(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
-target_include_what_you_use(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+if(${PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD)
+    target_clangtidy(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+endif()
+if(${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD)
+    target_cppcheck(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+endif()
+if(${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD)
+    target_include_what_you_use(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+endif()
 
 # ---- Build examples
 
-if(core_BUILD_EXAMPLES)
+if(${PROJECT_NAME}_BUILD_EXAMPLES)
     add_subdirectory(example)
 endif()
 
 # ---- Build tests
 
 include(CTest)
-if (BUILD_TESTING AND core_BUILD_TESTS)
+if (BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(test)
 endif()
 
