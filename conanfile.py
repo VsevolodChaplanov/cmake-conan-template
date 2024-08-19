@@ -2,7 +2,7 @@ from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
 
-class my_projectRecipe(ConanFile):
+class ProjectRecipe(ConanFile):
     name = "my_project"
     version = "0.1"
     package_type = "library"
@@ -11,7 +11,7 @@ class my_projectRecipe(ConanFile):
     license = "<Put the package license here>"
     author = "<Put your name here> <And your email here>"
     url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of my_project package here>"
+    description = "<Description of project package here>"
     topics = ("<Put some tag here>", "<here>", "<and here>")
 
     # Binary configuration
@@ -32,10 +32,10 @@ class my_projectRecipe(ConanFile):
         "cmake/*")
 
     @property
-    def _my_project_components(self):
+    def _project_components(self):
         def fmt(): return ['fmt::fmt']
 
-        my_project_components = [
+        project_components = [
             {
                 'target': 'core',
                 'lib': 'core',
@@ -43,7 +43,7 @@ class my_projectRecipe(ConanFile):
             }
         ]
 
-        return my_project_components
+        return project_components
 
     def requirements(self):
         self.requires("fmt/[10.2.1]", transitive_headers=True)
@@ -95,9 +95,9 @@ class my_projectRecipe(ConanFile):
                 requires = component['requires']
                 lib_name = get_lib_name(component['lib'])
                 self.cpp_info.components[conan_component].set_property(
-                    'cmake_target_name', 'my_project::' + cmake_target,
+                    'cmake_target_name', f'{self.name}::' + cmake_target,
                 )
                 self.cpp_info.components[conan_component].requires = requires
                 self.cpp_info.components[conan_component].libs = [lib_name]
 
-        add_components(self._my_project_components)
+        add_components(self._project_components)

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(my_project-tests LANGUAGES CXX)
+project(${MAIN_PROJECT_NAME}-tests LANGUAGES CXX)
 
 include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
@@ -9,7 +9,7 @@ include(../../cmake/static-analyzers.cmake)
 # ---- Dependencies ----
 
 if(PROJECT_IS_TOP_LEVEL)
-    find_package(my_project REQUIRED)
+    find_package(${MAIN_PROJECT_NAME} REQUIRED)
     enable_testing()
 endif()
 
@@ -18,8 +18,8 @@ include(Catch)
 
 # ---- Tests ----
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/source/my_project_test.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE my_project::core Catch2::Catch2WithMain)
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/source/${MAIN_PROJECT_NAME}_test.cpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${MAIN_PROJECT_NAME}::core Catch2::Catch2WithMain)
 
 option(LINT_TESTS "enable static analyzers for tests" OFF)
 

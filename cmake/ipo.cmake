@@ -1,6 +1,7 @@
-option(my_project_ENABLE_IPO "enable interprocedural optimization can be enabled")
-macro(my_project_enable_ipo)
-    if(my_project_ENABLE_IPO)
+option(${MAIN_PROJECT_NAME}_ENABLE_IPO "enable interprocedural optimization can be enabled")
+
+macro(enable_ipo)
+    if(${MAIN_PROJECT_NAME}_ENABLE_IPO)
         include(CheckIPOSupported)
         check_ipo_supported(RESULT result OUTPUT output)
         if(result)

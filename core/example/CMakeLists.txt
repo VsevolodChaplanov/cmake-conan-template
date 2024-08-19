@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(my_projectExamples CXX)
+project(${MAIN_PROJECT_NAME}Examples CXX)
 
 include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
 include(../../cmake/static-analyzers.cmake)
 
 if(PROJECT_IS_TOP_LEVEL)
-    find_package(my_project-core REQUIRED)
+    find_package(${MAIN_PROJECT_NAME}-core REQUIRED)
 endif()
 
 add_custom_target(run-examples)
@@ -15,7 +15,7 @@ add_custom_target(run-examples)
 option(LINT_EXAMPLES "enable linters for examples" OFF)
 function(add_example NAME)
     add_executable("${NAME}" "${NAME}.cpp")
-    target_link_libraries("${NAME}" PRIVATE my_project::core)
+    target_link_libraries("${NAME}" PRIVATE ${MAIN_PROJECT_NAME}::core)
 
     add_custom_target(
         "run_${NAME}"

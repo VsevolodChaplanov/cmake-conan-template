@@ -13,7 +13,7 @@ include(cmake/dependencies.cmake)
 set(MODULE_NAME core)
 
 project(${MODULE_NAME}
-        VERSION ${my_project_VERSION_MAJOR}.${my_project_VERSION_MINOR}.${my_project_VERSION_PATCH}
+        VERSION ${${MAIN_PROJECT_NAME}_VERSION_MAJOR}.${${MAIN_PROJECT_NAME}_VERSION_MINOR}.${${MAIN_PROJECT_NAME}_VERSION_PATCH}
         LANGUAGES CXX)
 
 # ---- Project options target
@@ -36,11 +36,11 @@ target_link_libraries(${PROJECT_NAME}_PCH INTERFACE ${PROJECT_NAME}_options)
 # ---- Declare library ----
 
 add_library(${PROJECT_NAME})
-add_library(my_project::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(${MAIN_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
-generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/my_project/${PROJECT_NAME}/exports/exports.hpp)
+generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/${MAIN_PROJECT_NAME}/${PROJECT_NAME}/exports/exports.hpp)
 
 # ---- Set target export name
 
@@ -48,7 +48,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY EXPORT_NAME ${PROJECT_NAME})
 
 # ---- Collect sources
 
-file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/my_project/${PROJECT_NAME}/*.hpp)
+file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${MAIN_PROJECT_NAME}/${PROJECT_NAME}/*.hpp)
 file(GLOB LIBRARY_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 # ---- Set target sources
