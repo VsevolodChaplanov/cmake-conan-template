@@ -78,14 +78,26 @@ class my_projectRecipe(ConanFile):
         cmake.install()
 
     def package_info(self):
+        debug = (
+            'd'
+            if self.settings.build_type == 'Debug'
+            and self.settings.os == 'Windows'
+            else ''
+        )
+
+        def get_lib_name(module):
+            return f'{module}{debug}'
+    
         def add_components(components):
             for component in components:
                 conan_component = component['target']
                 cmake_target = component['target']
                 requires = component['requires']
+                lib_name = get_lib_name(component['lib'])
                 self.cpp_info.components[conan_component].set_property(
                     'cmake_target_name', 'my_project::' + cmake_target,
                 )
                 self.cpp_info.components[conan_component].requires = requires
+                self.cpp_info.components[conan_component].libs = [lib_name]
 
         add_components(self._my_project_components)

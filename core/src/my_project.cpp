@@ -1,11 +1,11 @@
-#include <core/core.hpp>
-#include <core/static_string.hpp> // for operator""_fs, static_string
-#include <fmt/core.h>             // for format
-#include <iostream>               // for basic_ostream, cout
-#include <string>                 // for operator<<
-#include <string_view>            // for basic_string_view
+#include <fmt/core.h> // for format
+#include <iostream>   // for basic_ostream, cout
+#include <my_project/core/core.hpp>
+#include <my_project/core/static_string.hpp> // for operator""_fs, static_string
+#include <string>                            // for operator<<
+#include <string_view>                       // for basic_string_view
 
-void MY_PROJECT_CORE_EXPORT hello_example() {
+void CORE_EXPORT hello_example() {
     constexpr auto greeting = "hello world"_fs;
     std::cout << fmt::format("{}\n", greeting.view());
 }

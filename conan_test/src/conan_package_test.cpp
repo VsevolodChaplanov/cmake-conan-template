@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
 
-#include <my_project/my_project.hpp>
+#include <my_project/core/core.hpp>
 
 int main() { hello_example(); }
