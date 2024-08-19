@@ -7,10 +7,6 @@
     "editor.formatOnSave": true,
     "cmake.copyCompileCommands": "${workspaceFolder}/build/compile_commands.json",
     "cmake.configureOnOpen": false,
-    "cmake.environment": {
-        "CMAKE_C_COMPILER": "D:\\programs\\llvm\\clang+llvm-18.1.7-x86_64-pc-windows-msvc\\bin\\clang-cl.exe",
-        "CMAKE_CXX_COMPILER": "D:\\programs\\llvm\\clang+llvm-18.1.7-x86_64-pc-windows-msvc\\bin\\clang-cl.exe"
-    },
     "clangd.path": "clangd",
     "clangd.checkUpdates": true,
     "clangd.onConfigChanged": "restart",

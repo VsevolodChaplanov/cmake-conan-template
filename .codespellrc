@@ -2,5 +2,5 @@
 builtin = clear,rare,en-GB_to_en-US,names,informal,code
 check-filenames =
 check-hidden =
-skip = */.git,*/build,*/prefix,*/CMakePresets.json,*/build,*/conan,*/pyproject.toml,*/CMakeLists.txt,*/CMakeUserPresets.json,*/conan_test,*/fetch_content_test,*/poetry.lock,*/.clang-format,*/.clang-tidy,*/.clangd,*/.gitignore,*/.mypy_cache,*/.vs,*/.vscode
+skip = */.idea,*/.git,*/build,*/prefix,*/CMakePresets.json,*/build,*/conan,*/pyproject.toml,*/CMakeLists.txt,*/CMakeUserPresets.json,*/conan_test,*/fetch_content_test,*/poetry.lock,*/.clang-format,*/.clang-tidy,*/.clangd,*/.gitignore,*/.mypy_cache,*/.vs,*/.vscode
 quiet-level = 2

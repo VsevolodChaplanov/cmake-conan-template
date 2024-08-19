@@ -152,11 +152,11 @@
                 "value": "x64",
                 "strategy": "external"
             },
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_C_COMPILER": "cl.exe",
-                "CMAKE_CXX_COMPILER": "cl.exe"
-            }
+            "environment": {
+                "UseMultiToolTask": "true",
+                "EnforceProcessCountAcrossBuilds": "true"
+            },
+            "hidden": true
         },
         {
             "name": "coverage-linux",
