@@ -40,7 +40,7 @@ add_library(my_project::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
-generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/exports/exports.hpp)
+generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/my_project/${PROJECT_NAME}/exports/exports.hpp)
 
 # ---- Set target export name
 
@@ -48,7 +48,7 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY EXPORT_NAME ${PROJECT_NAME})
 
 # ---- Collect sources
 
-file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${MODULE_NAME}/*.hpp)
+file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/my_project/${PROJECT_NAME}/*.hpp)
 file(GLOB LIBRARY_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 # ---- Set target sources

@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include <core/static_string.hpp>
+#include <my_project/core/static_string.hpp>
 #include <string>
 #include <string_view>
 
