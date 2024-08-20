@@ -41,7 +41,7 @@ macro(target_add_coverage_flags target)
         target_link_options(${target} ${VISIBILITY} --coverage)
         target_link_libraries(${target} ${VISIBILITY} gcov)
     else()
-        message(SEND_ERROR "failed to add coverage information generation compiler is not support coverage")
+        message(WARNING "failed to add coverage information generation compiler is not support coverage")
     endif()
 endmacro()
 

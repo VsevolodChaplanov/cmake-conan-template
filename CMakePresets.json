@@ -156,6 +156,10 @@
                 "UseMultiToolTask": "true",
                 "EnforceProcessCountAcrossBuilds": "true"
             },
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
+            },
             "hidden": true
         },
         {
@@ -163,9 +167,13 @@
             "binaryDir": "${sourceDir}/build/coverage",
             "inherits": "ci-linux",
             "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
             "cacheVariables": {
-                "my_project_ENABLE_COVERAGE": "ON",
-                "CMAKE_BUILD_TYPE": "Coverage"
+                "my_project_ENABLE_COVERAGE": "ON"
             }
         },
         {
