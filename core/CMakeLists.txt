@@ -8,14 +8,16 @@ include(../cmake/sanitizers.cmake)
 include(../cmake/static-analyzers.cmake)
 
 set(MODULE_NAME core)
+set(MODULE_FULL_NAME ${MAIN_PROJECT_NAME}-${MODULE_NAME})
 
 include(cmake/options.cmake)
 include(cmake/dependencies.cmake)
 
-
-project(${MODULE_NAME}
-        VERSION ${${MAIN_PROJECT_NAME}_VERSION_MAJOR}.${${MAIN_PROJECT_NAME}_VERSION_MINOR}.${${MAIN_PROJECT_NAME}_VERSION_PATCH}
-        LANGUAGES CXX)
+project(
+    ${MODULE_FULL_NAME}
+    VERSION
+        ${${MAIN_PROJECT_NAME}_VERSION_MAJOR}.${${MAIN_PROJECT_NAME}_VERSION_MINOR}.${${MAIN_PROJECT_NAME}_VERSION_PATCH}
+    LANGUAGES CXX)
 
 # ---- Project options target
 
@@ -27,12 +29,18 @@ target_compile_features(${PROJECT_NAME}_options INTERFACE cxx_std_${CMAKE_CXX_ST
 
 # ---- Add sanitizers
 
-target_sanitizers(${PROJECT_NAME}_options
-        SANITIZER_ADDRESS ${${PROJECT_NAME}_SANITIZER_ADDRESS}
-        SANITIZER_LEAK ${${PROJECT_NAME}_SANITIZER_LEAK}
-        SANITIZER_UNDEFINED_BEHAVIOR ${${PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR}
-        SANITIZER_THREAD ${${PROJECT_NAME}_SANITIZER_THREAD}
-        SANITIZER_MEMORY ${${PROJECT_NAME}_SANITIZER_MEMORY})
+target_sanitizers(
+    ${PROJECT_NAME}_options
+    SANITIZER_ADDRESS
+    ${${PROJECT_NAME}_SANITIZER_ADDRESS}
+    SANITIZER_LEAK
+    ${${PROJECT_NAME}_SANITIZER_LEAK}
+    SANITIZER_UNDEFINED_BEHAVIOR
+    ${${PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR}
+    SANITIZER_THREAD
+    ${${PROJECT_NAME}_SANITIZER_THREAD}
+    SANITIZER_MEMORY
+    ${${PROJECT_NAME}_SANITIZER_MEMORY})
 
 # ---- Add coverage support
 
@@ -49,11 +57,12 @@ target_link_libraries(${PROJECT_NAME}_PCH INTERFACE ${PROJECT_NAME}_options)
 # ---- Declare library ----
 
 add_library(${PROJECT_NAME})
-add_library(${MAIN_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(${MAIN_PROJECT_NAME}::${MODULE_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
-generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME ${PROJECT_BINARY_DIR}/include/${MAIN_PROJECT_NAME}/${PROJECT_NAME}/exports/exports.hpp)
+generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME
+                       ${PROJECT_BINARY_DIR}/include/${MAIN_PROJECT_NAME}/${MODULE_NAME}/exports/exports.hpp)
 
 # ---- Set target export name
 
@@ -73,11 +82,12 @@ target_sources(
 
 # ---- Set target include dirs
 
-target_include_directories(${PROJECT_NAME} ${warning_guard} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                                                                   $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
-                                                                   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_include_directories(
+    ${PROJECT_NAME} ${warning_guard}
+    PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+           $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-# ---- Add libraries 
+# ---- Add libraries
 
 target_link_libraries(
     ${PROJECT_NAME}
@@ -108,7 +118,7 @@ endif()
 # ---- Build tests
 
 include(CTest)
-if (BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTS)
+if(BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(test)
 endif()
 

@@ -7,6 +7,10 @@
     "editor.formatOnSave": true,
     "cmake.copyCompileCommands": "${workspaceFolder}/build/compile_commands.json",
     "cmake.configureOnOpen": false,
+    "cmake.environment": {
+        "CMAKE_CXX_COMPILER": "cl.exe",
+        "CMAKE_C_COMPILER": "cl.exe",
+    },
     "clangd.path": "clangd",
     "clangd.checkUpdates": true,
     "clangd.onConfigChanged": "restart",

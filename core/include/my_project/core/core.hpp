@@ -8,7 +8,7 @@
 
 template<static_string V = "hello world"> constexpr auto hello_world() { fmt::println("{}\n", V); }
 
-void CORE_EXPORT hello_example();
+void MY_PROJECT_CORE_EXPORT hello_example();
 
 inline void HelloWorld() {}
 

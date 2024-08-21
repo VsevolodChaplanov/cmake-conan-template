@@ -19,7 +19,7 @@ include(Catch)
 # ---- Tests ----
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/source/${MAIN_PROJECT_NAME}_test.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${MAIN_PROJECT_NAME}::core Catch2::Catch2WithMain)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${MAIN_PROJECT_NAME}::${MODULE_NAME} Catch2::Catch2WithMain)
 
 option(LINT_TESTS "enable static analyzers for tests" OFF)
 
@@ -31,8 +31,8 @@ endif()
 
 catch_discover_tests(${PROJECT_NAME})
 
-if(${MODULE_NAME}_ENABLE_COVERAGE)
-    coverage_target(${MODULE_NAME})
+if(${MODULE_FULL_NAME}_ENABLE_COVERAGE)
+    coverage_target(${PROJECT_NAME})
 endif()
 
 # ---- End-of-file commands ----

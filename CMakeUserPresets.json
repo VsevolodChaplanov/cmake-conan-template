@@ -12,7 +12,10 @@
             "inherits": [
                 "dev-mode",
                 "conan"
-            ]
+            ],
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
         },
         {
             "name": "dev-linux",
@@ -47,8 +50,7 @@
                 "ci-darwin"
             ],
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
@@ -89,7 +91,9 @@
                 "EnforceProcessCountAcrossBuilds": "true"
             },
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe"
             }
         },
         {
@@ -102,6 +106,7 @@
             },
             "inherits": [
                 "dev-mode",
+                "dev-linux",
                 "coverage-linux",
                 "conan"
             ]

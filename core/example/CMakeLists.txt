@@ -15,7 +15,7 @@ add_custom_target(run-examples)
 option(LINT_EXAMPLES "enable linters for examples" OFF)
 function(add_example NAME)
     add_executable("${NAME}" "${NAME}.cpp")
-    target_link_libraries("${NAME}" PRIVATE ${MAIN_PROJECT_NAME}::core)
+    target_link_libraries("${NAME}" PRIVATE ${MAIN_PROJECT_NAME}::${MODULE_NAME})
 
     add_custom_target(
         "run_${NAME}"
@@ -24,8 +24,10 @@ function(add_example NAME)
     add_dependencies("run_${NAME}" "${NAME}")
     add_dependencies(run-examples "run_${NAME}")
 
-    if (BUILD_SHARED_LIBS)
-        add_custom_command(TARGET ${NAME} POST_BUILD 
+    if(BUILD_SHARED_LIBS)
+        add_custom_command(
+            TARGET ${NAME}
+            POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_RUNTIME_DLLS:${NAME}> $<TARGET_FILE_DIR:${NAME}>)
     endif()
 endfunction()

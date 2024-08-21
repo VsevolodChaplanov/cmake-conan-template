@@ -25,8 +25,7 @@
             "hidden": true,
             "inherits": "cmake-pedantic",
             "cacheVariables": {
-                "my_project_DEVELOPER_MODE": "ON",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+                "my_project_DEVELOPER_MODE": "ON"
             }
         },
         {
@@ -131,6 +130,11 @@
                 "flags-msvc",
                 "ci-std"
             ],
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
             "generator": "Visual Studio 17 2022",
             "architecture": "x64",
             "hidden": true
@@ -143,6 +147,11 @@
                 "cppcheck",
                 "clang-tidy"
             ],
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
             "generator": "Ninja",
             "toolset": {
                 "value": "v143,host=x64",
@@ -163,6 +172,11 @@
             "binaryDir": "${sourceDir}/build/coverage",
             "inherits": "ci-linux",
             "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
             "cacheVariables": {
                 "my_project_ENABLE_COVERAGE": "ON",
                 "CMAKE_BUILD_TYPE": "Coverage"
@@ -242,11 +256,11 @@
             "inherits": [
                 "ci-build",
                 "ci-linux",
-                "clang-tidy",
                 "conan",
+                "dev-mode",
+                "clang-tidy",
                 "cppcheck",
-                "iwyu",
-                "dev-mode"
+                "iwyu"
             ]
         },
         {
@@ -275,10 +289,13 @@
             },
             "inherits": [
                 "ci-build",
-                "ci-win64-ninja",
                 "dev-mode",
+                "ci-win64-ninja",
                 "ci-multi-config",
-                "conan"
+                "conan",
+                "clang-tidy",
+                "cppcheck",
+                "iwyu"
             ]
         }
     ]

@@ -24,10 +24,13 @@ RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
     software-properties-common wget apt-utils file zip \
     openssh-client gpg-agent socat rsync \
-    make ninja-build git lcov gcovr
+    make ninja-build git lcov gcovr && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt install python3 python3-pip python3-dev -y
-RUN pip3 install conan numpy codespell cmakelang
+RUN apt update -qq && apt install python3 python3-pip python3-dev -y && rm -rf /var/lib/apt/lists/*
+
+# boost has build issues with numpy2.0
+RUN pip3 install conan numpy==1.26 codespell cmakelang
 
 
 # User-settable versions:
@@ -36,15 +39,14 @@ ARG GCC_VER="13"
 RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && \
     apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
-    gcc-${GCC_VER} g++-${GCC_VER} gdb gcov-{GCC_VER} && \
+    gcc-${GCC_VER} g++-${GCC_VER} gdb && \
     rm -rf /var/lib/apt/lists/*
 
-
-# Set gcc-${GCC_VER} as default gcc
-RUN update-alternatives --install /usr/bin/gcc gcc $(which gcc-${GCC_VER}) 100 && \
-    update-alternatives --install /usr/bin/g++ g++ $(which g++-${GCC_VER}) 100 && \
-    update-alternatives --install /usr/bin/gcov gcov $(which gcov-${GCC_VER}) 100
-
+RUN update-alternatives \
+    --verbose \
+    --install /usr/bin/gcc gcc $(which gcc-${GCC_VER}) 20 \
+    --slave   /usr/bin/g++ g++ $(which g++-${GCC_VER}) \
+    --slave   /usr/bin/gcov gcov $(which gcov-${GCC_VER})
 
 ARG LLVM_VER="18"
 # Add clang-${LLVM_VER}
@@ -55,7 +57,7 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - 2>/dev/
     apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
     clang-${LLVM_VER} lldb-${LLVM_VER} lld-${LLVM_VER} clangd-${LLVM_VER} \
-    llvm-${LLVM_VER}-dev libclang-${LLVM_VER}-dev clang-tidy-${LLVM_VER} \
+    llvm-${LLVM_VER}-dev libclang-${LLVM_VER}-dev libclang-rt-${LLVM_VER}-dev clang-tidy-${LLVM_VER} \
     clang-format-${LLVM_VER} && \
     rm -rf /var/lib/apt/lists/*
 
@@ -63,51 +65,52 @@ RUN wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - 2>/dev/
 # Set the default clang-tidy, so CMake can find it
 RUN update-alternatives \
     --verbose \
-    --install /usr/bin/llvm-config       llvm-config      /usr/bin/llvm-config-${LLVM_VER} 20 \
-    --slave   /usr/bin/llvm-ar           llvm-ar          /usr/bin/llvm-ar-${LLVM_VER} \
-    --slave   /usr/bin/llvm-as           llvm-as          /usr/bin/llvm-as-${LLVM_VER} \
-    --slave   /usr/bin/llvm-bcanalyzer   llvm-bcanalyzer  /usr/bin/llvm-bcanalyzer-${LLVM_VER} \
-    --slave   /usr/bin/llvm-cov          llvm-cov         /usr/bin/llvm-cov-${LLVM_VER} \
-    --slave   /usr/bin/llvm-diff         llvm-diff        /usr/bin/llvm-diff-${LLVM_VER} \
-    --slave   /usr/bin/llvm-dis          llvm-dis         /usr/bin/llvm-dis-${LLVM_VER} \
-    --slave   /usr/bin/llvm-dwarfdump    llvm-dwarfdump   /usr/bin/llvm-dwarfdump-${LLVM_VER} \
-    --slave   /usr/bin/llvm-extract      llvm-extract     /usr/bin/llvm-extract-${LLVM_VER} \
-    --slave   /usr/bin/llvm-link         llvm-link        /usr/bin/llvm-link-${LLVM_VER} \
-    --slave   /usr/bin/llvm-mc           llvm-mc          /usr/bin/llvm-mc-${LLVM_VER} \
-    --slave   /usr/bin/llvm-nm           llvm-nm          /usr/bin/llvm-nm-${LLVM_VER} \
-    --slave   /usr/bin/llvm-objdump      llvm-objdump     /usr/bin/llvm-objdump-${LLVM_VER} \
-    --slave   /usr/bin/llvm-ranlib       llvm-ranlib      /usr/bin/llvm-ranlib-${LLVM_VER} \
-    --slave   /usr/bin/llvm-readobj      llvm-readobj     /usr/bin/llvm-readobj-${LLVM_VER} \
-    --slave   /usr/bin/llvm-rtdyld       llvm-rtdyld      /usr/bin/llvm-rtdyld-${LLVM_VER} \
-    --slave   /usr/bin/llvm-size         llvm-size        /usr/bin/llvm-size-${LLVM_VER} \
-    --slave   /usr/bin/llvm-stress       llvm-stress      /usr/bin/llvm-stress-${LLVM_VER} \
-    --slave   /usr/bin/llvm-symbolizer   llvm-symbolizer  /usr/bin/llvm-symbolizer-${LLVM_VER} \
-    --slave   /usr/bin/llvm-tblgen       llvm-tblgen      /usr/bin/llvm-tblgen-${LLVM_VER} \
-    --slave   /usr/bin/llvm-objcopy      llvm-objcopy     /usr/bin/llvm-objcopy-${LLVM_VER} \
-    --slave   /usr/bin/llvm-strip        llvm-strip       /usr/bin/llvm-strip-${LLVM_VER}
+    --install /usr/bin/llvm-config       llvm-config      $(which llvm-config-${LLVM_VER}) 20 \
+    --slave   /usr/bin/llvm-ar           llvm-ar          $(which llvm-ar-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-as           llvm-as          $(which llvm-as-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-bcanalyzer   llvm-bcanalyzer  $(which llvm-bcanalyzer-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-cov          llvm-cov         $(which llvm-cov-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-diff         llvm-diff        $(which llvm-diff-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-dis          llvm-dis         $(which llvm-dis-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-dwarfdump    llvm-dwarfdump   $(which llvm-dwarfdump-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-extract      llvm-extract     $(which llvm-extract-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-link         llvm-link        $(which llvm-link-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-mc           llvm-mc          $(which llvm-mc-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-nm           llvm-nm          $(which llvm-nm-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-objdump      llvm-objdump     $(which llvm-objdump-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-ranlib       llvm-ranlib      $(which llvm-ranlib-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-readobj      llvm-readobj     $(which llvm-readobj-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-rtdyld       llvm-rtdyld      $(which llvm-rtdyld-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-size         llvm-size        $(which llvm-size-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-stress       llvm-stress      $(which llvm-stress-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-symbolizer   llvm-symbolizer  $(which llvm-symbolizer-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-tblgen       llvm-tblgen      $(which llvm-tblgen-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-objcopy      llvm-objcopy     $(which llvm-objcopy-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-strip        llvm-strip       $(which llvm-strip-${LLVM_VER}) \
+    --slave   /usr/bin/llvm-profdata     llvm-profdata    $(which llvm-profdata-${LLVM_VER})
 
 RUN update-alternatives \
     --verbose \
-    --install /usr/bin/clang                 clang                 /usr/bin/clang-${LLVM_VER} 20 \
-    --slave   /usr/bin/clang++               clang++               /usr/bin/clang++-${LLVM_VER}  \
-    --slave   /usr/bin/asan_symbolize        asan_symbolize        /usr/bin/asan_symbolize-${LLVM_VER} \
-    --slave   /usr/bin/clang-cpp             clang-cpp             /usr/bin/clang-cpp-${LLVM_VER} \
-    --slave   /usr/bin/clang-check           clang-check           /usr/bin/clang-check-${LLVM_VER} \
-    --slave   /usr/bin/clang-cl              clang-cl              /usr/bin/clang-cl-${LLVM_VER} \
-    --slave   /usr/bin/ld.lld                ld.lld                /usr/bin/ld.lld-${LLVM_VER} \
-    --slave   /usr/bin/lld                   lld                   /usr/bin/lld-${LLVM_VER} \
-    --slave   /usr/bin/lld-link              lld-link              /usr/bin/lld-link-${LLVM_VER} \
-    --slave   /usr/bin/clang-format          clang-format          /usr/bin/clang-format-${LLVM_VER} \
-    --slave   /usr/bin/clang-format-diff     clang-format-diff     /usr/bin/clang-format-diff-${LLVM_VER} \
-    --slave   /usr/bin/clang-include-fixer   clang-include-fixer   /usr/bin/clang-include-fixer-${LLVM_VER} \
-    --slave   /usr/bin/clang-offload-bundler clang-offload-bundler /usr/bin/clang-offload-bundler-${LLVM_VER} \
-    --slave   /usr/bin/clang-query           clang-query           /usr/bin/clang-query-${LLVM_VER} \
-    --slave   /usr/bin/clang-rename          clang-rename          /usr/bin/clang-rename-${LLVM_VER} \
-    --slave   /usr/bin/clang-reorder-fields  clang-reorder-fields  /usr/bin/clang-reorder-fields-${LLVM_VER} \
-    --slave   /usr/bin/clang-tidy            clang-tidy            /usr/bin/clang-tidy-${LLVM_VER} \
-    --slave   /usr/bin/lldb                  lldb                  /usr/bin/lldb-${LLVM_VER} \
-    --slave   /usr/bin/lldb-server           lldb-server           /usr/bin/lldb-server-${LLVM_VER} \
-    --slave   /usr/bin/clangd                clangd                /usr/bin/clangd-${LLVM_VER}
+    --install /usr/bin/clang                 clang                 $(which clang-${LLVM_VER}) 20 \
+    --slave   /usr/bin/clang++               clang++               $(which clang++-${LLVM_VER}) \
+    --slave   /usr/bin/asan_symbolize        asan_symbolize        $(which asan_symbolize-${LLVM_VER}) \
+    --slave   /usr/bin/clang-cpp             clang-cpp             $(which clang-cpp-${LLVM_VER}) \
+    --slave   /usr/bin/clang-check           clang-check           $(which clang-check-${LLVM_VER}) \
+    --slave   /usr/bin/clang-cl              clang-cl              $(which clang-cl-${LLVM_VER}) \
+    --slave   /usr/bin/ld.lld                ld.lld                $(which ld.lld-${LLVM_VER}) \
+    --slave   /usr/bin/lld                   lld                   $(which lld-${LLVM_VER}) \
+    --slave   /usr/bin/lld-link              lld-link              $(which lld-link-${LLVM_VER}) \
+    --slave   /usr/bin/clang-format          clang-format          $(which clang-format-${LLVM_VER}) \
+    --slave   /usr/bin/clang-format-diff     clang-format-diff     $(which clang-format-diff-${LLVM_VER}) \
+    --slave   /usr/bin/clang-include-fixer   clang-include-fixer   $(which clang-include-fixer-${LLVM_VER}) \
+    --slave   /usr/bin/clang-offload-bundler clang-offload-bundler $(which clang-offload-bundler-${LLVM_VER}) \
+    --slave   /usr/bin/clang-query           clang-query           $(which clang-query-${LLVM_VER}) \
+    --slave   /usr/bin/clang-rename          clang-rename          $(which clang-rename-${LLVM_VER}) \
+    --slave   /usr/bin/clang-reorder-fields  clang-reorder-fields  $(which clang-reorder-fields-${LLVM_VER}) \
+    --slave   /usr/bin/clang-tidy            clang-tidy            $(which clang-tidy-${LLVM_VER}) \
+    --slave   /usr/bin/lldb                  lldb                  $(which lldb-${LLVM_VER}) \
+    --slave   /usr/bin/lldb-server           lldb-server           $(which lldb-server-${LLVM_VER}) \
+    --slave   /usr/bin/clangd                clangd                $(which clangd-${LLVM_VER})
 
 
 # cmake install stage
@@ -138,7 +141,7 @@ RUN mkdir -p ${IWYU_BUILD} && \
 RUN CC=clang-${LLVM_VER} CXX=clang++-${LLVM_VER} cmake -S ${IWYU_SRC} \
     -B ${IWYU_BUILD} \
     -G "Unix Makefiles" -DCMAKE_PREFIX_PATH=/usr/lib/llvm-${LLVM_VER} && \
-    cmake --build ${IWYU_BUILD} -j && \
+    cmake --build ${IWYU_BUILD} --parallel 4 && \
     cmake --install ${IWYU_BUILD}
 
 # Per https://github.com/include-what-you-use/include-what-you-use#how-to-install:
