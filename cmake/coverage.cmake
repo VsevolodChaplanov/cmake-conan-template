@@ -39,7 +39,7 @@ function(target_add_coverage_flags target)
             target_compile_options(${target} ${VISIBILITY} -fprofile-instr-generate -fcoverage-mapping)
         endif()
     else()
-        message(SEND_ERROR "failed to add coverage information generation compiler is not support coverage")
+        message(WARNING "failed to add coverage information generation compiler is not support coverage")
     endif()
 endfunction()
 
