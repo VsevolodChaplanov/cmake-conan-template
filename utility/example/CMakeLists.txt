@@ -2,18 +2,12 @@ cmake_minimum_required(VERSION 3.14)
 
 project(${MODULE_FULL_NAME}-examples CXX)
 
-include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
 include(../../cmake/static-analyzers.cmake)
-
-if(PROJECT_IS_TOP_LEVEL)
-    find_package(${MAIN_PROJECT_NAME}-core REQUIRED)
-endif()
 
 add_custom_target(${PROJECT_NAME}-run-examples)
 
 option(LINT_EXAMPLES "enable linters for examples" OFF)
-
 function(add_example file)
     get_filename_component(NAME ${file} NAME_WE)
 

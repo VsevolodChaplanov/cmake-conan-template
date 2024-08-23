@@ -4,7 +4,7 @@
 #include <fmt/core.h>
 
 #include <my_project/core/exports/exports.hpp>
-#include <my_project/core/static_string.hpp>
+#include <my_project/utility/static_string.hpp>
 
 template<static_string V = "hello world"> constexpr auto hello_world() { fmt::println("{}\n", V); }
 

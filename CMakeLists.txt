@@ -34,6 +34,7 @@ endif()
 
 enable_ipo()
 
+add_subdirectory(utility)
 add_subdirectory(core)
 
 # ---- Developer mode ----

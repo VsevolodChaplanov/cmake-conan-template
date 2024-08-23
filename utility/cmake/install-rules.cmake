@@ -5,11 +5,8 @@ include(GNUInstallDirs)
 set(package ${PROJECT_NAME})
 
 install(
-    TARGETS ${package} ${package}_pch ${package}_options
+    TARGETS ${package} ${package}_options
     EXPORT ${package}Targets
-    RUNTIME COMPONENT ${package}_Runtime
-    LIBRARY COMPONENT ${package}_Runtime NAMELINK_COMPONENT ${package}_Development
-    ARCHIVE COMPONENT ${package}_Development
     PUBLIC_HEADER FILE_SET HEADERS COMPONENT ${package}_Development)
 
 install(IMPORTED_RUNTIME_ARTIFACTS)
@@ -26,8 +23,6 @@ mark_as_advanced(${package}_INSTALL_CMAKEDIR)
 
 configure_package_config_file(cmake/install-config.cmake.in ${PROJECT_NAME}Config.cmake
                               INSTALL_DESTINATION ${${package}_INSTALL_CMAKEDIR})
-
-install(DIRECTORY ${PROJECT_BINARY_DIR}/include/${MAIN_PROJECT_NAME} DESTINATION include)
 
 install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
         DESTINATION ${${package}_INSTALL_CMAKEDIR})

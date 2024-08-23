@@ -32,7 +32,7 @@ function(target_add_coverage_flags target)
             set(VISIBILITY PRIVATE)
         endif()
 
-        target_compile_options(${target} ${VISIBILITY} --coverage)
+        target_compile_options(${target} ${VISIBILITY} --coverage -fno-inline)
         target_link_options(${target} ${VISIBILITY} --coverage)
 
         if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")

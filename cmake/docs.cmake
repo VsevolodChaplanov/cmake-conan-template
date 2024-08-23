@@ -1,41 +1,59 @@
 # ---- Dependencies ----
 
-set(extract_timestamps "")
-if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.24")
-    set(extract_timestamps DOWNLOAD_EXTRACT_TIMESTAMP YES)
-endif()
+function(wrap_doxygen_add_docs target)
+    find_package(Doxygen)
 
-include(FetchContent)
-FetchContent_Declare(
-    mcss
-    URL https://github.com/friendlyanon/m.css/releases/download/release-1/mcss.zip
-    URL_MD5 00cd2757ebafb9bcba7f5d399b3bec7f
-    SOURCE_DIR "${PROJECT_BINARY_DIR}/mcss"
-    UPDATE_DISCONNECTED YES
-    ${extract_timestamps})
-FetchContent_MakeAvailable(mcss)
+    if(NOT Doxygen_FOUND)
+        return()
+    endif()
 
-find_package(Python3 3.6 REQUIRED)
+    include(CMakeParseArguments)
+    cmake_parse_arguments(ARGUMENTS "" "" "SOURCE_DIRS;OUTPUT" "${ARGV}")
 
-# ---- Declare documentation target ----
+    set(DOXYGEN_GENERATE_HTML YES)
 
-set(DOXYGEN_OUTPUT_DIRECTORY
-    "${PROJECT_BINARY_DIR}/docs"
-    CACHE PATH "Path for the generated Doxygen documentation")
+    if(ARGUMENTS_OUTPUT)
+        set(DOXYGEN_HTML_OUTPUT ${PROJECT_BINARY_DIR}/${ARGUMENTS_OUTPUT})
+    else()
+        set(DOXYGEN_HTML_OUTPUT ${PROJECT_BINARY_DIR}/documentation)
+    endif()
 
-set(working_dir "${PROJECT_BINARY_DIR}/docs")
+    if(ARGUMENTS_SOURCE_DIRS)
+        set(FILES_FOR_DOC_SOURCE_DIR ${ARGUMENTS_SOURCE_DIRS})
+    else()
+        set(FILES_FOR_DOC_SOURCE_DIR ${PROJECT_SOURCE_DIR})
+    endif()
 
-foreach(file IN ITEMS Doxyfile conf.py)
-    configure_file("docs/${file}.in" "${working_dir}/${file}" @ONLY)
-endforeach()
+    doxygen_styling(${target})
 
-set(mcss_script "${mcss_SOURCE_DIR}/documentation/doxygen.py")
-set(config "${working_dir}/conf.py")
+    doxygen_add_docs("${target}-doxygen" "${FILES_FOR_DOC_SOURCE_DIR}"
+                     COMMENT "Generate HTML documentation for ${target}")
+endfunction()
 
-add_custom_target(
-    docs
-    COMMAND "${CMAKE_COMMAND}" -E remove_directory "${DOXYGEN_OUTPUT_DIRECTORY}/html" "${DOXYGEN_OUTPUT_DIRECTORY}/xml"
-    COMMAND "${Python3_EXECUTABLE}" "${mcss_script}" "${config}"
-    COMMENT "Building documentation using Doxygen and m.css"
-    WORKING_DIRECTORY "${working_dir}"
-    VERBATIM)
+macro(doxygen_styling target)
+    include(FetchContent)
+
+    FetchContent_Declare(
+        doxygen-awesome-css
+        GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
+        GIT_TAG v2.3.3)
+    FetchContent_MakeAvailable(doxygen-awesome-css)
+
+    set(DOXYGEN_GENERATE_TREEVIEW YES)
+    set(DOXYGEN_HAVE_DOT YES)
+    set(DOXYGEN_DOT_IMAGE_FORMAT svg)
+    set(DOXYGEN_DOT_TRANSPARENT YES)
+    set(DOXYGEN_HTML_EXTRA_STYLESHEET ${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome.css)
+
+    set(DOXYGEN_HTML_EXTRA_FILES
+        ${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-darkmode-toggle.js
+        ${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-fragment-copy-button.js
+        ${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-paragraph-link.js
+        ${doxygen-awesome-css_SOURCE_DIR}/doxygen-awesome-interactive-toc.js)
+
+    execute_process(COMMAND doxygen -w html header.html footer.html style.css WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+    execute_process(COMMAND sed -i "/<\\/head>/r ${PROJECT_SOURCE_DIR}/cmake/doxygen_extra_headers" header.html
+                    WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+
+    set(DOXYGEN_HTML_HEADER ${PROJECT_BINARY_DIR}/header.html)
+endmacro()
