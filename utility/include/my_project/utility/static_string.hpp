@@ -7,9 +7,6 @@
 #include <string>
 #include <string_view>
 
-#include <fmt/core.h>
-#include <fmt/format.h>
-
 /**
  * @brief class for compile time struct tagging
  */
@@ -64,20 +61,36 @@ template<std::size_t N> struct static_string final {
 
     constexpr ~static_string() noexcept = default;
 
-    friend constexpr auto operator<=>(const static_string&, const static_string&) noexcept = default;
+    template<std::size_t K, std::size_t M>
+    friend constexpr auto operator<=>(const static_string<K>& self, const static_string<M>& other) noexcept;
 
     template<std::size_t K, std::size_t M>
-    friend constexpr auto operator<=>(const static_string<K>& lhs, const char (&rhs)[M]) noexcept {
-        return lhs <=> static_string{rhs};
-    }
+    friend constexpr auto operator<=>(const static_string<K>& lhs, const char (&rhs)[M]) noexcept;
 
     template<std::size_t K, std::size_t M>
-    friend constexpr auto operator<=>(const char (&lhs)[K], const static_string<M>& rhs) noexcept {
-        return static_string{lhs} <=> static_string{rhs};
-    }
+    friend constexpr auto operator<=>(const char (&lhs)[K], const static_string<M>& rhs) noexcept;
+
+    template<std::size_t K, std::size_t M>
+    friend constexpr auto operator==(const static_string<K>& self, const static_string<M>& other) noexcept;
+
+    template<std::size_t K, std::size_t M>
+    friend constexpr auto operator==(const static_string<K>& lhs, const char (&rhs)[M]) noexcept;
+
+    template<std::size_t K, std::size_t M>
+    friend constexpr auto operator==(const char (&lhs)[K], const static_string<M>& rhs) noexcept;
+
+    template<std::size_t K, std::size_t M>
+    friend constexpr auto operator!=(const static_string<K>& self, const static_string<M>& other) noexcept;
+
+    template<std::size_t K, std::size_t M>
+    friend constexpr auto operator!=(const static_string<K>& lhs, const char (&rhs)[M]) noexcept;
+
+    template<std::size_t K, std::size_t M>
+    friend constexpr auto operator!=(const char (&lhs)[K], const static_string<M>& rhs) noexcept;
 
     template<std::size_t K, std::size_t M>
     friend constexpr static_string<K + M> operator+(const static_string<K>& lhs, const static_string<M>& rhs);
+
     template<size_t K, size_t M>
     friend constexpr static_string<K - 1 + M> operator+(const char (&lhs)[K], const static_string<M>& rhs);
 
@@ -91,6 +104,55 @@ template<static_string VString> consteval auto operator""_fs() noexcept { return
 
 template<std::size_t N> constexpr auto format_as(const static_string<N>& string) -> std::string_view {
     return string.view();
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator<=>(const static_string<K>& self, const static_string<M>& other) noexcept {
+    return std::lexicographical_compare_three_way(self.begin(), self.end(), other.begin(), other.end());
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator<=>(const static_string<K>& lhs, const char (&rhs)[M]) noexcept {
+    return lhs <=> static_string{rhs};
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator<=>(const char (&lhs)[K], const static_string<M>& rhs) noexcept {
+    return static_string{lhs} <=> static_string{rhs};
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator==(const static_string<K>& self, const static_string<M>& other) noexcept {
+    if (K != M) {
+        return false;
+    }
+
+    return std::ranges::equal(self, other);
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator==(const static_string<K>& lhs, const char (&rhs)[M]) noexcept {
+    return lhs == static_string{rhs};
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator==(const char (&lhs)[K], const static_string<M>& rhs) noexcept {
+    return rhs == lhs;
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator!=(const static_string<K>& self, const static_string<M>& other) noexcept {
+    return !(self == other);
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator!=(const static_string<K>& lhs, const char (&rhs)[M]) noexcept {
+    return !(lhs == rhs);
+}
+
+template<std::size_t K, std::size_t M>
+constexpr auto operator!=(const char (&lhs)[K], const static_string<M>& rhs) noexcept {
+    return !(rhs == lhs);
 }
 
 template<std::size_t K, std::size_t M>
@@ -112,13 +174,6 @@ constexpr static_string<K + M - 1> operator+(const static_string<K>& lhs, const 
     static_string rhs2{rhs};
     return lhs + rhs2;
 }
-
-template<std::size_t N> struct fmt::formatter<static_string<N>> final : public fmt::formatter<std::string_view> {
-    using base = fmt::formatter<std::string_view>;
-    auto format(const static_string<N>& string, auto& ctx) const {
-        return fmt::formatter<std::string_view>::format(string.view(), ctx);
-    }
-};
 
 /** CTAD helpers for static_string */
 
