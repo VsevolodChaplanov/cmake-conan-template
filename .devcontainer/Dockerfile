@@ -24,7 +24,7 @@ RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \
     software-properties-common wget apt-utils file zip \
     openssh-client gpg-agent socat rsync \
-    make ninja-build git lcov gcovr && \
+    make ninja-build git lcov gcovr valgrind && \
     rm -rf /var/lib/apt/lists/*
 
 RUN apt update -qq && apt install python3 python3-pip python3-dev -y && rm -rf /var/lib/apt/lists/*

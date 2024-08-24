@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(${MAIN_PROJECT_NAME}-tests LANGUAGES CXX)
+project(${MODULE_FULL_NAME}-tests LANGUAGES CXX)
 
 include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
@@ -33,6 +33,14 @@ catch_discover_tests(${PROJECT_NAME})
 
 if(${MODULE_FULL_NAME}_ENABLE_COVERAGE)
     coverage_target(${PROJECT_NAME})
+endif()
+
+# ---- Add valgrind target
+
+option(${PROJECT_NAME}_VALGRIND "Add valgrind run target" ON)
+if(${PROJECT_NAME}_VALGRIND)
+    valgrind_target(${PROJECT_NAME})
+    memcheck_target(${PROJECT_NAME})
 endif()
 
 # ---- End-of-file commands ----
