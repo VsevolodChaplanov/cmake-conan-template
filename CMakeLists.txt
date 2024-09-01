@@ -40,6 +40,10 @@ register_module(core)
 add_library(${PROJECT_NAME} INTERFACE)
 target_link_libraries(${PROJECT_NAME} INTERFACE ${MODULES_REGISTRY})
 
+# ---- Install rules for project interface library
+
+include(cmake/install-rules.cmake)
+
 # ---- Developer mode ----
 
 if(NOT ${MAIN_PROJECT_NAME}_DEVELOPER_MODE)
