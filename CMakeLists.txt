@@ -38,6 +38,7 @@ register_module(core)
 # ---- Target to link with all library modules
 
 add_library(${PROJECT_NAME} INTERFACE)
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME} INTERFACE ${MODULES_REGISTRY})
 
 # ---- Install rules for project interface library
