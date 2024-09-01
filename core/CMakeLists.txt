@@ -93,6 +93,8 @@ target_link_libraries(
     ${PROJECT_NAME}_options 
     PRIVATE ${PROJECT_NAME}_pch)
 
+# ---- Configure linker
+
 target_configure_linker(${PROJECT_NAME})
 
 # TODO mb better soultion to don't forget to add sources
@@ -129,8 +131,12 @@ if(BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTS)
     add_subdirectory(test)
 endif()
 
+# ---- Configure install rules
+
 if(NOT CMAKE_SKIP_INSTALL_RULES)
     include(cmake/install-rules.cmake)
 endif()
+
+# ---- Project outline
 
 add_folders(${PROJECT_NAME})

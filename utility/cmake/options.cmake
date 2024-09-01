@@ -1,6 +1,7 @@
-option(${MODULE_FULL_NAME}_BUILD_EXAMPLES "Build examples for core part of project"
-       ${${MAIN_PROJECT_NAME}_DEVELOPER_MODE})
-option(${MODULE_FULL_NAME}_BUILD_TESTS "Build tests for core part of project" ${${MAIN_PROJECT_NAME}_DEVELOPER_MODE})
+option(${MODULE_FULL_NAME}_BUILD_EXAMPLES "Build examples for ${MODULE_NAME} part of project"
+       ${MAIN_PROJECT_NAME}_BUILD_EXAMPLES)
+option(${MODULE_FULL_NAME}_BUILD_TESTS "Build tests for ${MODULE_NAME} part of project"
+       ${MAIN_PROJECT_NAME}_BUILD_TESTS)
 
 option(${MODULE_FULL_NAME}_ENABLE_COVERAGE "Enable coverage flags" ${${MAIN_PROJECT_NAME}_ENABLE_COVERAGE})
 

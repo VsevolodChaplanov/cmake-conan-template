@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 include(cmake/prelude.cmake)
-
-set(MAIN_PROJECT_NAME
-    "my_project"
-    CACHE STRING "main project name")
+include(cmake/common_options.cmake)
 
 project(
     ${MAIN_PROJECT_NAME}
@@ -22,6 +19,7 @@ include(options.cmake)
 include(dependencies.cmake)
 
 include(cmake/project-is-top-level.cmake)
+include(cmake/module-registry.cmake)
 include(cmake/variables.cmake)
 include(cmake/ccache.cmake)
 include(cmake/linker.cmake)
@@ -34,8 +32,13 @@ endif()
 
 enable_ipo()
 
-add_subdirectory(utility)
-add_subdirectory(core)
+register_module(utility)
+register_module(core)
+
+# ---- Target to link with all library modules
+
+add_library(${PROJECT_NAME} INTERFACE)
+target_link_libraries(${PROJECT_NAME} INTERFACE ${MODULES_REGISTRY})
 
 # ---- Developer mode ----
 

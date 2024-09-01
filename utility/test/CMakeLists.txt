@@ -14,6 +14,8 @@ if(PROJECT_IS_TOP_LEVEL)
     enable_testing()
 endif()
 
+# ---- Find testing frameworks 
+
 find_package(Catch2 REQUIRED)
 include(Catch)
 
@@ -25,6 +27,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${MAIN_PROJECT_NAME}::${MODULE_NAM
 # ---- Static analyzers for test target
 
 option(LINT_TESTS "enable static analyzers for tests" OFF)
+
 if(LINT_TESTS)
     target_cppcheck(${PROJECT_NAME} ${WARNINGS_AS_ERRORS} "")
     target_clangtidy(${PROJECT_NAME} ${WARNINGS_AS_ERRORS})

@@ -13,6 +13,8 @@ if(PROJECT_IS_TOP_LEVEL)
     enable_testing()
 endif()
 
+# ---- Find testing frameworks 
+
 find_package(Catch2 REQUIRED)
 include(Catch)
 
@@ -29,7 +31,11 @@ if(LINT_TESTS)
     target_include_what_you_use(${PROJECT_NAME})
 endif()
 
+# ---- Discover Catch2 tests
+
 catch_discover_tests(${PROJECT_NAME})
+
+# ---- Add coverage
 
 if(${MODULE_FULL_NAME}_ENABLE_COVERAGE)
     coverage_target(${PROJECT_NAME})
