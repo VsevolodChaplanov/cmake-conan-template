@@ -37,6 +37,7 @@ function(wrap_doxygen_add_docs target)
         */.hg/*
         */CMakeFiles/*
         */build/*
+        */install/*
         */_CPack_Packages/*
         conanfile.py
         DartConfiguration.tcl

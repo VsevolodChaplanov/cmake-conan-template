@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+
+find_dependency(fmt REQUIRED)
+find_dependency(my_project-utility REQUIRED)
+find_dependency(my_project-core REQUIRED)
+
+include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
+check_required_components(@PROJECT_NAME@)

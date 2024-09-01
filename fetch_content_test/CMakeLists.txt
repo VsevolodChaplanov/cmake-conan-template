@@ -23,10 +23,12 @@ FetchContent_MakeAvailable(Catch2)
 include(Catch)
 
 FetchContent_Declare(
-    ${MAIN_PROJECT_NAME}
-    GIT_REPOSITORY https://github.com/VsevolodChaplanov/cmake-conan-template.git
-    GIT_TAG master)
+    ${MAIN_PROJECT_NAME} 
+    GIT_REPOSITORY https://github.com/VsevolodChaplanov/cmake-conan-template.git 
+    GIT_TAG master 
+    FIND_PACKAGE_ARGS NAMES ${MAIN_PROJECT_NAME}) 
 FetchContent_MakeAvailable(${MAIN_PROJECT_NAME})
+
 
 add_executable(${PROJECT_NAME} src/fetch_content_test.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${MAIN_PROJECT_NAME}::${MAIN_PROJECT_NAME} Catch2::Catch2WithMain)
