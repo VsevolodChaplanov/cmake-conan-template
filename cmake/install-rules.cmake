@@ -8,6 +8,9 @@ include(GNUInstallDirs)
 
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets)
 
+install(IMPORTED_RUNTIME_ARTIFACTS)
+install(RUNTIME_DEPENDENCY_SET ${package}_Dependency)
+
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
 # Allow package maintainers to freely override the path for the configs

@@ -22,5 +22,5 @@ class my_projectTestConan(ConanFile):
 
     def test(self):
         if can_run(self):
-            cmd = os.path.join(self.cpp.build.bindir, "my_projectTestPackage")
+            cmd = os.path.join(self.cpp.build.bindir, "conan_test_package")
             self.run(cmd, env="conanrun")

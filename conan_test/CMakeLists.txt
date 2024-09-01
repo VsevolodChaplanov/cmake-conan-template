@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
-project(my_projectTestPackage CXX)
+project(conan_test_package CXX)
 
-find_package(my_project CONFIG REQUIRED)
+include(../cmake/common_options.cmake)
+
+find_package(${MAIN_PROJECT_NAME} CONFIG REQUIRED)
 
 add_executable(${PROJECT_NAME} src/conan_package_test.cpp)
-target_link_libraries(${PROJECT_NAME} my_project::core)
+target_link_libraries(${PROJECT_NAME} ${MAIN_PROJECT_NAME}::${MAIN_PROJECT_NAME})
