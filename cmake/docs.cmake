@@ -24,6 +24,27 @@ function(wrap_doxygen_add_docs target)
         set(FILES_FOR_DOC_SOURCE_DIR ${PROJECT_SOURCE_DIR})
     endif()
 
+    set(EXCLUDE_PATTERNS
+        */.git/*
+        */.svn/*
+        */.idea/*
+        */.mypy_cache/*
+        */.vs/*
+        */cmake/*
+        */conan/*
+        */conan_test/*
+        */fetch_content_test/*
+        */.hg/*
+        */CMakeFiles/*
+        */build/*
+        */_CPack_Packages/*
+        conanfile.py
+        DartConfiguration.tcl
+        CMakeLists.txt
+        CMakeCache.txt)
+
+    set(DOXYGEN_EXCLUDE_PATTERNS "${EXCLUDE_PATTERNS}")
+
     doxygen_styling(${target})
 
     doxygen_add_docs("${target}-doxygen" "${FILES_FOR_DOC_SOURCE_DIR}"
