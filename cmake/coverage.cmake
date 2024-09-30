@@ -1,77 +1,77 @@
-# ---- Variables ----
-
-# # We use variables separate from what CTest uses, because those have customization issues set(COVERAGE_TRACE_COMMAND
-# lcov -c -q -o "${PROJECT_BINARY_DIR}/coverage.info" -d "${PROJECT_BINARY_DIR}" --include "${PROJECT_SOURCE_DIR}/*"
-# CACHE STRING "; separated command to generate a trace for the 'coverage' target")
-
-# set(COVERAGE_HTML_COMMAND genhtml --legend -f -q "${PROJECT_BINARY_DIR}/coverage.info" -p "${PROJECT_SOURCE_DIR}" -o
-# "${PROJECT_BINARY_DIR}/coverage_html" CACHE STRING "; separated command to generate an HTML report for the 'coverage'
-# target")
-
-# # ---- Coverage target ----
-
-# add_custom_target( coverage COMMAND ${COVERAGE_TRACE_COMMAND} COMMAND ${COVERAGE_HTML_COMMAND} COMMENT "Generating
-# coverage report" VERBATIM)
-
 # ---- Add coverage flags
 
 include(CMakeParseArguments)
 
 function(target_add_coverage_flags target)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-
-        cmake_parse_arguments(ARGUMENTS "PUBLIC;PRIVATE;INTERFACE" "" "" "${ARGV}")
-
-        if(ARGUMENTS_PUBLIC)
-            set(VISIBILITY PUBLIC)
-        elseif(ARGUMENTS_PRIVATE)
-            set(VISIBILITY PRIVATE)
-        elseif(ARGUMENTS_INTERFACE)
-            set(VISIBILITY INTERFACE)
-        else()
-            set(VISIBILITY PRIVATE)
-        endif()
-
-        target_compile_options(${target} ${VISIBILITY} --coverage -fno-inline)
-        target_link_options(${target} ${VISIBILITY} --coverage)
+        target_compile_options(${target} PRIVATE --coverage -fno-inline)
+        target_link_options(${target} PUBLIC --coverage)
 
         if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-            target_compile_options(${target} ${VISIBILITY} -fprofile-instr-generate -fcoverage-mapping)
+            target_compile_options(${target} PRIVATE -fprofile-instr-generate -fcoverage-mapping)
         endif()
     else()
         message(WARNING "failed to add coverage information generation compiler is not support coverage")
     endif()
 endfunction()
 
-function(coverage_target target_name)
+# add coverage check target for `target` library and its `test_target` test executable
+function(coverage_target coverage_target_prefix)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+        cmake_parse_arguments(ARGUMENTS "" "TEST_TARGET;WORKING_DIRECTORY" "" "${ARGV}")
+
+        if (NOT ARGUMENTS_TEST_TARGET)
+            message(FATAL_ERROR "TEST_TARGET variable must be set")
+        endif()
+
         find_program(LCOV lcov)
         find_program(GENHTML genhtml)
 
-        set_target_properties(${target_name} PROPERTIES ENVIRONMENT "LLVM_PROFILE_FILE=${target_name}.profraw")
+        if (NOT LCOV OR NOT GENHTML)
+            return()
+        endif()
+
+        if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+            set(LCOV_TOOL ${LCOV} --gcov-tool ${CMAKE_SOURCE_DIR}/cmake/gcov-llvm-wrapper.sh)
+            set_target_properties(${ARGUMENTS_TEST_TARGET} PROPERTIES ENVIRONMENT "LLVM_PROFILE_FILE=${coverage_target_prefix}.profraw")
+        else() 
+            set(LCOV_TOOL ${LCOV})
+        endif()
+
+        if(ARGUMENTS_WORKING_DIRECTORY)
+            set(_working_directory ${ARGUMENTS_WORKING_DIRECTORY})
+        else()
+            set(_working_directory $<TARGET_FILE_DIR:${ARGUMENTS_TEST_TARGET}>)
+        endif()
 
         add_custom_target(
-            ${target_name}-lcov
-            COMMAND ${LCOV} -d . --zerocounters
-            COMMAND ${CMAKE_CTEST_COMMAND}
-            COMMAND ${LCOV} -d . --capture -o coverage-${target_name}.info
-            COMMAND ${LCOV} -r coverage-${target_name}.info '/usr/include/*' -o filtered-${target_name}.info
-            WORKING_DIRECTORY $<TARGET_FILE_DIR:${target_name}>)
+            ${coverage_target_prefix}-lcov
+            COMMAND ${CMAKE_COMMAND} -E remove_directory coverage
+            COMMAND ${LCOV_TOOL} -d . --zerocounters
+            COMMAND $<TARGET_FILE:${ARGUMENTS_TEST_TARGET}>
+            COMMAND ${LCOV_TOOL} -d . --capture -o coverage-${coverage_target_prefix}.info
+            COMMAND ${LCOV_TOOL} -r coverage-${coverage_target_prefix}.info '/usr/include/*' '*.conan2*' '*_deps*' -o filtered-${coverage_target_prefix}.info
+            DEPENDS ${ARGUMENTS_TEST_TARGET}
+            WORKING_DIRECTORY ${_working_directory}
+            COMMENT "prepararing lcov analysis info for ${coverage_target_prefix}, working directory ${_working_directory}")
 
         add_custom_target(
-            ${target_name}-genhtml
-            COMMAND ${GENHTML} -o coverage filtered-${target_name}.info --legend
-            DEPENDS ${target_name}-lcov
-            WORKING_DIRECTORY $<TARGET_FILE_DIR:${target_name}>)
+            ${coverage_target_prefix}-genhtml
+            COMMAND ${GENHTML} -o coverage filtered-${coverage_target_prefix}.info --legend
+            DEPENDS ${coverage_target_prefix}-lcov
+            WORKING_DIRECTORY ${_working_directory}
+            COMMENT "prepararing html report for ${coverage_target_prefix}")
 
         add_custom_target(
-            ${target_name}-coverage
-            WORKING_DIRECTORY $<TARGET_FILE_DIR:${target_name}>
-            DEPENDS ${target_name}-genhtml)
+            ${coverage_target_prefix}-coverage
+            WORKING_DIRECTORY ${_working_directory}
+            DEPENDS ${coverage_target_prefix}-genhtml
+            COMMENT "running coverage for ${coverage_target_prefix}")
 
         add_custom_command(
-            TARGET ${target_name}-coverage
+            TARGET ${coverage_target_prefix}-coverage
             PRE_BUILD
-            COMMAND find $<TARGET_FILE_DIR:${target_name}> -type f -name '*.gcda' -exec rm {} +)
+            COMMAND find ${_working_directory} -type f -name '*.gcda' -exec rm {} +
+            COMMENT "removing old .gcda files for ${coverage_target_prefix}")
     endif()
 endfunction(coverage_target)

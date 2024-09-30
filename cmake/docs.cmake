@@ -30,6 +30,7 @@ function(wrap_doxygen_add_docs target)
         */.idea/*
         */.mypy_cache/*
         */.vs/*
+        */.cache/*
         */cmake/*
         */conan/*
         */conan_test/*

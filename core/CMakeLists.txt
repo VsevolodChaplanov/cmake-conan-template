@@ -39,12 +39,6 @@ target_sanitizers(
     SANITIZER_MEMORY
     ${${PROJECT_NAME}_SANITIZER_MEMORY})
 
-# ---- Add coverage support
-
-if(${PROJECT_NAME}_ENABLE_COVERAGE)
-    target_add_coverage_flags(${PROJECT_NAME}_options INTERFACE)
-endif()
-
 # ---- Declare library precompiled headers
 
 add_library(${PROJECT_NAME}_pch INTERFACE)
@@ -108,6 +102,12 @@ if(${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD)
 endif()
 if(${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD)
     target_include_what_you_use(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+endif()
+
+# ---- Add coverage support
+
+if(${PROJECT_NAME}_ENABLE_COVERAGE)
+    target_add_coverage_flags(${PROJECT_NAME})
 endif()
 
 # ---- Doxygen
