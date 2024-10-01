@@ -19,3 +19,12 @@ TEST_CASE("static string class unit tests") {
     REQUIRE(std::string{"my_package"_fs} == std::string{"my_package"});
     REQUIRE(std::string_view{"my_package"_fs} == std::string{"my_package"});
 }
+
+TEST_CASE("create static_string from pieces") {
+    constexpr auto first = "piece_1"_fs;
+    constexpr auto second = "piece_2"_fs;
+
+    constexpr auto merged = "<" + first + ">" + second + "</"_fs + first + ">"_fs;
+
+    STATIC_CHECK(merged == "<piece_1>piece_2</piece_1>");
+}
