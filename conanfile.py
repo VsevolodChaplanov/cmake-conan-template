@@ -47,7 +47,7 @@ class ProjectRecipe(ConanFile):
                 'target': 'core',
                 'lib': 'core',
                 'requires': (
-                    [f'utility'] 
+                    ['utility']
                     + fmt()
                 ),
             }
@@ -105,41 +105,10 @@ class ProjectRecipe(ConanFile):
             target = component["target"]
             lib = get_lib_name(component.get("lib", None))
 
-            self.cpp_info.components[target].set_property("cmake_target_name", f"{self.name}::{target}")
-            self.cpp_info.components[target].libs = [f"{self.name}-{lib}"] if lib else []
+            self.cpp_info.components[target].set_property(
+                "cmake_target_name", f"{self.name}::{target}")
+            self.cpp_info.components[target].libs = [
+                f"{self.name}-{lib}"] if lib else []
 
-        self.cpp_info.components['core'].requires = [f"utility", "fmt::fmt"]
-
-        # self.cpp_info.set_property("cmake_file_name", f'{self.name}')
-        # self.cpp_info.filenames["cmake_find_package"] = f'{self.name}'
-        # self.cpp_info.filenames["cmake_find_package_multi"] = f'{self.name}'
-        # self.cpp_info.names["cmake_find_package"] = f'{self.name}'
-        # self.cpp_info.names["cmake_find_package_multi"] = f'{self.name}'
-
-        # self.cpp_info.components['utility'].set_property("cmake_find_package", "utility") 
-        # self.cpp_info.components['utility'].set_property("cmake_find_package_multi", "utility") 
-        # self.cpp_info.components['utility'].set_property("cmake_target_name", f"${self.name}::utility")
-        # self.cpp_info.components['utility'].libs = []
-        # self.cpp_info.components['utility'].names = 'utility'
-
-        # self.cpp_info.components['core'].set_property("cmake_file_name", "core")
-        # self.cpp_info.components['core'].set_property("cmake_target_name", f"${self.name}::core")            
-        # self.cpp_info.components['core'].requires = [f'{self.name}::utility'] + ['fmt::fmt']
-        # self.cpp_info.components['core'].libs = [get_lib_name('core')]
-        # self.cpp_info.components['core'].names = 'core'
-
-        # def add_components(components):
-        #     for component in components:
-        #         conan_component = component['target']
-        #         cmake_target = component['target']
-        #         requires = component.get('requires', None)
-        #         lib_name = get_lib_name(component.get('lib', None))
-        #         self.cpp_info.components[conan_component].set_property(
-        #             'cmake_target_name', f'{self.name}::' + cmake_target,
-        #         )
-        #         if requires:
-        #             self.cpp_info.components[conan_component].requires = requires
-        #         if lib_name:
-        #             self.cpp_info.components[conan_component].libs = [lib_name]
-
-        # add_components(self._project_components)
+            requirements = component.get("requires", [])
+            self.cpp_info.components[target].requires = requirements

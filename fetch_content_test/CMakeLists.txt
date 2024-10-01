@@ -29,8 +29,12 @@ FetchContent_Declare(
     FIND_PACKAGE_ARGS NAMES ${MAIN_PROJECT_NAME})
 FetchContent_MakeAvailable(${MAIN_PROJECT_NAME})
 
+if(TARGET ${MAIN_PROJECT_NAME}::${MAIN_PROJECT_NAME})
+    message("sfsdfsd")
+endif()
+
 add_executable(${PROJECT_NAME} src/fetch_content_test.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE ${MAIN_PROJECT_NAME}::${MAIN_PROJECT_NAME} Catch2::Catch2WithMain)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${MAIN_PROJECT_NAME}::core Catch2::Catch2WithMain)
 
 enable_testing()
 catch_discover_tests(${PROJECT_NAME})

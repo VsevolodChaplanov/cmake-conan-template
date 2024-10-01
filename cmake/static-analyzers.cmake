@@ -1,6 +1,6 @@
 include(CMakeParseArguments)
 
-option(WARNINGS_AS_ERRORS "thread warnings as errors for static analyzers" OFF)
+option(WARNINGS_AS_ERRORS "treat warnings as errors for static analyzers" OFF)
 
 function(get_default_cppcheck_options OPTIONS TEMPLATE)
     # Enable all warnings that are actionable by the user of this toolset style should enable the other 3, but we'll be
@@ -61,7 +61,10 @@ function(target_cppcheck target files)
         message(STATUS "cppcheck options for target ${target}: ${TARGET_CXX_CPPCHECK}")
 
         if(ARGUMENTS_USE_ON_BUILD)
-            set_target_properties(${target} PROPERTIES CXX_CPPCHECK ${TARGET_CXX_CPPCHECK})
+            if(${ARGUMENTS_USE_ON_BUILD})
+                message(STATUS "using cppcheck analyzer on build for project ${target}")
+                set_target_properties(${target} PROPERTIES CXX_CPPCHECK "${TARGET_CXX_CPPCHECK}")
+            endif()
         endif()
 
         add_custom_target(

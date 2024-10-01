@@ -39,12 +39,6 @@ target_sanitizers(
     SANITIZER_MEMORY
     ${${PROJECT_NAME}_SANITIZER_MEMORY})
 
-# ---- Add coverage support
-
-if(${PROJECT_NAME}_ENABLE_COVERAGE)
-    target_add_coverage_flags(${PROJECT_NAME}_options INTERFACE)
-endif()
-
 # ---- Declare library precompiled headers
 
 # ---- Not needed for a library of type INTERFACE
