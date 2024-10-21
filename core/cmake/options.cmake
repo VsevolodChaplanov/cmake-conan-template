@@ -1,4 +1,5 @@
-option(${MODULE_FULL_NAME}_BUILD_EXAMPLES "Build examples for core part of project" ${${MAIN_PROJECT_NAME}_BUILD_EXAMPLES})
+option(${MODULE_FULL_NAME}_BUILD_EXAMPLES "Build examples for core part of project"
+       ${${MAIN_PROJECT_NAME}_BUILD_EXAMPLES})
 option(${MODULE_FULL_NAME}_BUILD_TESTS "Build tests for core part of project" ${${MAIN_PROJECT_NAME}_BUILD_TESTS})
 
 option(${MODULE_FULL_NAME}_ENABLE_COVERAGE "Enable coverage flags" ${${MAIN_PROJECT_NAME}_ENABLE_COVERAGE})
@@ -24,3 +25,9 @@ option(${MODULE_FULL_NAME}_SANITIZER_MEMORY "Enable SANITIZER_MEMORY for the ${M
 
 option(${MODULE_FULL_NAME}_BUILD_DOCS "Enable SANITIZER_MEMORY for the ${MODULE_NAME} project"
        ${${MAIN_PROJECT_NAME}_BUILD_DOCS})
+
+option(${MODULE_FULL_NAME}_SKIP_INSTALL_RULES "Skip install rules for the ${MODULE_NAME} project"
+       ${CMAKE_SKIP_INSTALL_RULES})
+
+option(${MODULE_FULL_NAME}_ENABLE_PCH "Enable precompiled headers for the ${MODULE_NAME} project" ON)
+option(${MODULE_FULL_NAME}_BUILD_SHARED_LIBS "Select library type for the ${MODULE_NAME} project" ${BUILD_SHARED_LIBS})

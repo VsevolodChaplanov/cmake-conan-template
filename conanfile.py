@@ -70,6 +70,7 @@ class ProjectRecipe(ConanFile):
     def layout(self):
         cmake_layout(self)
         os_name = self.settings.os
+        # separate linux and windows generated deps to easily swap between devcontainer and host
         self.folders.generators = f"conan/{os_name}"
 
     def generate(self):

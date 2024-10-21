@@ -1,6 +1,4 @@
-# support for old-style way to add valgring for targets
-# better way is to use memcheck option for ctest
-# ctest -T memcheck
+# support for old-style way to add valgring for targets better way is to use memcheck option for ctest ctest -T memcheck
 
 function(valgrind_target target)
     find_program(VALGRIND valgrind)
@@ -15,7 +13,7 @@ endfunction()
 
 function(memcheck_target target)
     find_program(VALGRIND valgrind)
-    
+
     if(VALGRIND)
         include(FetchContent)
         FetchContent_Declare(

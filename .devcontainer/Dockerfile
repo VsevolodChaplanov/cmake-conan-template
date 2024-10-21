@@ -14,9 +14,7 @@ ENV CONAN_SYSREQUIRES_SUDO 0
 ENV CONAN_SYSREQUIRES_MODE enabled
 
 # Env variables to up python
-ENV PYTHON_ENV = PYTHONFAULTHANDLER=1 \
-    PYTHONUNBUFFERED=1 \
-    PYTHONHASHSEED=random
+ENV PYTHONUNBUFFERED 1
 
 # up system env
 # Install necessary packages available from standard repos
@@ -110,7 +108,8 @@ RUN update-alternatives \
     --slave   /usr/bin/clang-tidy            clang-tidy            $(which clang-tidy-${LLVM_VER}) \
     --slave   /usr/bin/lldb                  lldb                  $(which lldb-${LLVM_VER}) \
     --slave   /usr/bin/lldb-server           lldb-server           $(which lldb-server-${LLVM_VER}) \
-    --slave   /usr/bin/clangd                clangd                $(which clangd-${LLVM_VER})
+    --slave   /usr/bin/clangd                clangd                $(which clangd-${LLVM_VER} \
+    --slave   /usr/bin/clang-apply-replacements clang-apply-replacements $(which clang-apply-replacements-${LLVM_VER})
 
 
 # cmake install stage

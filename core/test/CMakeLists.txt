@@ -13,7 +13,7 @@ if(PROJECT_IS_TOP_LEVEL)
     enable_testing()
 endif()
 
-# ---- Find testing frameworks 
+# ---- Find testing frameworks
 
 find_package(Catch2 REQUIRED)
 include(Catch)
@@ -43,10 +43,8 @@ catch_discover_tests(${PROJECT_NAME})
 # ---- Add coverage
 
 if(${MODULE_FULL_NAME}_ENABLE_COVERAGE)
-    target_add_coverage_flags(${PROJECT_NAME})
-    coverage_target(${MODULE_FULL_NAME} 
-                    TEST_TARGET ${PROJECT_NAME} 
-                    WORKING_DIRECTORY "$<TARGET_FILE_DIR:${MODULE_FULL_NAME}>")
+    add_coverage_lcov_target(${PROJECT_NAME})
+    add_coverage_llvm_target(${PROJECT_NAME})
 endif()
 
 # ---- Add valgrind target

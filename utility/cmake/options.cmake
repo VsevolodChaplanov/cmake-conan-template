@@ -26,3 +26,6 @@ option(${MODULE_FULL_NAME}_SANITIZER_MEMORY "Enable SANITIZER_MEMORY for the ${M
 
 option(${MODULE_FULL_NAME}_BUILD_DOCS "Enable SANITIZER_MEMORY for the ${MODULE_NAME} project"
        ${${MAIN_PROJECT_NAME}_BUILD_DOCS})
+
+option(${MODULE_FULL_NAME}_SKIP_INSTALL_RULES "Skip install rules for the ${MODULE_NAME} project"
+       ${CMAKE_SKIP_INSTALL_RULES})

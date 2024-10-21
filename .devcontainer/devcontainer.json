@@ -28,7 +28,7 @@
 			"editor.formatOnSave": true
 		}
 	},
-	"workspaceFolder": "/home/workspaces/${localWorkspaceFolderBasename}",
+	"workspaceFolder": "/home/workspaces/",
 	"features": {
 		"ghcr.io/devcontainers/features/git:1": {},
 		"git": "latest",

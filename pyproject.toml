@@ -4,14 +4,12 @@ version = "0.1.0"
 description = ""
 authors = ["VChaplanov"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.10"
 conan = "^2.6.0"
 cmakelang = "^0.6.13"
-cmake = "^3.30.2"
-clang-format = "^18.1.8"
-clang-tidy = "^18.1.8"
 codespell = "^2.3.0"
 
 [tool.poetry.group.dev.dependencies]

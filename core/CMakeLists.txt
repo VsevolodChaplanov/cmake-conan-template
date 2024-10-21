@@ -41,23 +41,25 @@ target_sanitizers(
 
 # ---- Declare library precompiled headers
 
-add_library(${PROJECT_NAME}_pch INTERFACE)
-target_precompile_headers(${PROJECT_NAME}_pch INTERFACE <string> <vector>)
-target_link_libraries(${PROJECT_NAME}_pch INTERFACE ${PROJECT_NAME}_options)
+add_library(${PROJECT_NAME}_pch INTERFACE) # declare library if pch is off prevent install rule error for unknown target
+if(${MODULE_FULL_NAME}_ENABLE_PCH)
+    target_precompile_headers(${PROJECT_NAME}_pch INTERFACE <string> <vector>)
+    target_link_libraries(${PROJECT_NAME}_pch INTERFACE ${PROJECT_NAME}_options)
+endif()
 
 # ---- Declare library ----
 
-add_library(${PROJECT_NAME})
+if(${MODULE_FULL_NAME}_BUILD_SHARED_LIBS)
+    add_library(${PROJECT_NAME} SHARED)
+else()
+    add_library(${PROJECT_NAME} STATIC)
+endif()
 add_library(${MAIN_PROJECT_NAME}::${MODULE_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
 generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME
                        ${PROJECT_BINARY_DIR}/include/${MAIN_PROJECT_NAME}/${MODULE_NAME}/exports/exports.hpp)
-
-# ---- Set target export name
-
-set_property(TARGET ${PROJECT_NAME} PROPERTY EXPORT_NAME ${PROJECT_NAME})
 
 # ---- Collect sources
 
@@ -82,27 +84,34 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PUBLIC fmt::fmt 
-    ${MAIN_PROJECT_NAME}::utility
-    ${PROJECT_NAME}_options 
-    PRIVATE ${PROJECT_NAME}_pch)
+    PUBLIC fmt::fmt ${MAIN_PROJECT_NAME}::utility
+    PRIVATE ${PROJECT_NAME}_pch ${PROJECT_NAME}_options)
 
 # ---- Configure linker
 
 target_configure_linker(${PROJECT_NAME})
 
-# TODO mb better soultion to don't forget to add sources
-set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES} ${LIBRARY_SOURCES})
+# ---- Collect all sources for static analysis
 
-if(${PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD)
-    target_clangtidy(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
-endif()
-if(${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD)
-    target_cppcheck(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
-endif()
-if(${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD)
-    target_include_what_you_use(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
-endif()
+set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES})
+
+# ---- Clang-tidy target
+
+target_clangtidy(${PROJECT_NAME} "${ALL_SOURCE_FILES}" WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}" USE_ON_BUILD
+                 "${PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD")
+
+# ---- Cppcheck target
+
+target_cppcheck(${PROJECT_NAME} "${ALL_SOURCE_FILES}" WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}" USE_ON_BUILD
+                "${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD")
+
+# ---- IWYU target
+
+target_include_what_you_use(${PROJECT_NAME} "${ALL_SOURCE_FILES}" USE_ON_BUILD "${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD")
+
+# ---- Clang-format target
+
+target_clang_format(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
 
 # ---- Add coverage support
 
@@ -114,8 +123,7 @@ endif()
 
 if(${MODULE_FULL_NAME}_BUILD_DOCS)
     include(../cmake/docs.cmake)
-    wrap_doxygen_add_docs(${MODULE_FULL_NAME} SOURCE_DIRS "${ALL_SOURCE_FILES}"
-                          OUTPUT "doxygen")
+    wrap_doxygen_add_docs(${MODULE_FULL_NAME} SOURCE_DIRS "${ALL_SOURCE_FILES}" OUTPUT "doxygen")
 endif()
 
 # ---- Build examples
@@ -133,7 +141,7 @@ endif()
 
 # ---- Configure install rules
 
-if(NOT CMAKE_SKIP_INSTALL_RULES)
+if(NOT CMAKE_SKIP_INSTALL_RULES AND NOT ${MODULE_FULL_NAME}_SKIP_INSTALL_RULES)
     include(cmake/install-rules.cmake)
 endif()
 

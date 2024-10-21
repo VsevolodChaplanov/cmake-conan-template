@@ -4,16 +4,14 @@ services:
   cppapp:
     container_name: cppapp
     build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
+      context: .
+      dockerfile: Dockerfile
       args:
         - VARIANT=jammy
         - GCC_VER=13
         - LLVM_VER=18
-        # - USE_CLANG=1
+        - USE_CLANG=1
     command: sleep infinity
     volumes:
-      - ../..:/home/workspaces/:cached
+      - ..:/home/workspaces/:cached
 
-volumes:
-  pgdata: {}

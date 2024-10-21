@@ -1,33 +1,21 @@
-set(FORMAT_PATTERNS
-    source/*.cpp
-    source/*.hpp
-    include/*.hpp
-    test/*.cpp
-    test/*.hpp
-    example/*.cpp
-    example/*.hpp
-    CACHE STRING "; separated patterns relative to the project source dir to format")
+function(target_clang_format target files)
+    find_program(CLANG_FORMAT NAMES clang-format clang-format.exe)
 
-find_program(CLANG_FORMAT NAMES clang-format clang-format.exe)
+    if(CLANG_FORMAT)
+        cmake_parse_arguments(ARGUMENTS "" "CONFIG_FILE" "" "${ARGN}")
 
-if(CLANG_FORMAT)
-    message(STATUS "clang-format found, formatting targets added")
+        if(ARGUMENTS_CONFIG_FILE)
+            set(_config ${ARGUMENTS_CONFIG_FILE})
+        else()
+            set(_config ${CMAKE_SOURCE_DIR}/.clang-format)
+        endif()
 
-    add_custom_target(
-        format-check
-        COMMAND "${CMAKE_COMMAND}" -D "FORMAT_COMMAND=${CLANG_FORMAT}" -D "PATTERNS=${FORMAT_PATTERNS}" -P
-                "${PROJECT_SOURCE_DIR}/cmake/lint.cmake"
-        WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-        COMMENT "Linting the code"
-        VERBATIM)
-
-    add_custom_target(
-        format-fix
-        COMMAND "${CMAKE_COMMAND}" -D "FORMAT_COMMAND=${CLANG_FORMAT}" -D "PATTERNS=${FORMAT_PATTERNS}" -D FIX=YES -P
-                "${PROJECT_SOURCE_DIR}/cmake/lint.cmake"
-        WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-        COMMENT "Fixing the code"
-        VERBATIM)
-else()
-    message(STATUS "clang-format is not found, formatting targets not added")
-endif()
+        add_custom_target(
+            ${target}-clang-format
+            COMMAND ${CLANG_FORMAT} --style="file:${_config}" -i "${files}"
+            COMMAND_EXPAND_LISTS
+            COMMENT "[Rcs] run clang-format for ${target}")
+    else()
+        message("[Rcs] clang-format target requested but clang-format executable not found")
+    endif()
+endfunction(target_clang_format target)
