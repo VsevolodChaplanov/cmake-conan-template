@@ -47,13 +47,15 @@ function(wrap_doxygen_add_docs target)
 
     set(DOXYGEN_EXCLUDE_PATTERNS "${EXCLUDE_PATTERNS}")
 
-    doxygen_styling(${target})
+    if (NOT (CMAKE_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_GENERATOR STREQUAL "Ninja"))
+        doxygen_styling()
+    endif()
 
     doxygen_add_docs("${target}-doxygen" "${FILES_FOR_DOC_SOURCE_DIR}"
                      COMMENT "Generate HTML documentation for ${target}")
 endfunction()
 
-macro(doxygen_styling target)
+macro(doxygen_styling)
     include(FetchContent)
 
     FetchContent_Declare(
