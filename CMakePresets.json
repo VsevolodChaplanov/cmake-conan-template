@@ -198,7 +198,7 @@
                 "conan"
             ],
             "cacheVariables": {
-                "my_project_ENABLE_COVERAGE": ""
+                "my_project_ENABLE_COVERAGE": "ON"
             }
         },
         {
