@@ -8,17 +8,14 @@ include(../cmake/sanitizers.cmake)
 include(../cmake/static-analyzers.cmake)
 include(../cmake/lint-targets.cmake)
 
-set(MODULE_NAME utility)
-set(MODULE_FULL_NAME ${MAIN_PROJECT_NAME}-${MODULE_NAME})
-
-include(cmake/options.cmake)
-include(cmake/dependencies.cmake)
-
 project(
-    ${MODULE_FULL_NAME}
+    utility
     VERSION
         ${${MAIN_PROJECT_NAME}_VERSION_MAJOR}.${${MAIN_PROJECT_NAME}_VERSION_MINOR}.${${MAIN_PROJECT_NAME}_VERSION_PATCH}
     LANGUAGES CXX)
+
+include(cmake/options.cmake)
+include(cmake/dependencies.cmake)
 
 # ---- Project options target
 
@@ -50,7 +47,7 @@ target_sanitizers(
 # ---- Declare library ----
 
 add_library(${PROJECT_NAME} INTERFACE)
-add_library(${MAIN_PROJECT_NAME}::${MODULE_NAME} ALIAS ${PROJECT_NAME})
+add_library(${MAIN_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
@@ -58,7 +55,7 @@ add_library(${MAIN_PROJECT_NAME}::${MODULE_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Collect sources
 
-file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${MAIN_PROJECT_NAME}/${MODULE_NAME}/*.hpp)
+file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${MAIN_PROJECT_NAME}/${PROJECT_NAME}/*.hpp)
 
 # ---- Set target sources
 
@@ -84,17 +81,21 @@ set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES})
 
 # ---- Clang-tidy target
 
-target_clangtidy(${PROJECT_NAME} "${ALL_SOURCE_FILES}" WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}" USE_ON_BUILD
-                 "${PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD")
+if(${PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD)
+    target_clangtidy(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
+endif()
 
 # ---- Cppcheck target
 
-target_cppcheck(${PROJECT_NAME} "${ALL_SOURCE_FILES}" WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}" USE_ON_BUILD
-                "${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD")
+if(${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD)
+    target_cppcheck(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
+endif()
 
 # ---- IWYU target
 
-target_include_what_you_use(${PROJECT_NAME} "${ALL_SOURCE_FILES}" USE_ON_BUILD "${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD")
+if(${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD)
+    target_include_what_you_use(${PROJECT_NAME} USE_ON_BUILD)
+endif()
 
 # ---- Clang-format target
 
@@ -102,9 +103,9 @@ target_clang_format(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
 
 # ---- Doxygen
 
-if(${MODULE_FULL_NAME}_BUILD_DOCS)
+if(${PROJECT_NAME}_BUILD_DOCS)
     include(../cmake/docs.cmake)
-    wrap_doxygen_add_docs(${MODULE_FULL_NAME} SOURCE_DIRS "${ALL_SOURCE_FILES}" OUTPUT "doxygen")
+    wrap_doxygen_add_docs(${PROJECT_NAME} SOURCE_DIRS "${ALL_SOURCE_FILES}" OUTPUT "doxygen")
 endif()
 
 # ---- Build examples
@@ -122,7 +123,7 @@ endif()
 
 # ---- Configure install rules
 
-if(NOT CMAKE_SKIP_INSTALL_RULES AND NOT ${MODULE_FULL_NAME}_SKIP_INSTALL_RULES)
+if(NOT CMAKE_SKIP_INSTALL_RULES AND NOT ${PROJECT_NAME}_SKIP_INSTALL_RULES)
     include(cmake/install-rules.cmake)
 endif()
 

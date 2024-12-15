@@ -14,8 +14,8 @@ function(target_clang_format target files)
             ${target}-clang-format
             COMMAND ${CLANG_FORMAT} --style="file:${_config}" -i "${files}"
             COMMAND_EXPAND_LISTS
-            COMMENT "[Rcs] run clang-format for ${target}")
+            COMMENT "run clang-format for ${target}")
     else()
-        message("[Rcs] clang-format target requested but clang-format executable not found")
+        message("clang-format target requested but clang-format executable not found")
     endif()
 endfunction(target_clang_format target)

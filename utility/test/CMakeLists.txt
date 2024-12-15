@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(${MODULE_FULL_NAME}-tests LANGUAGES CXX)
+project(utility-tests LANGUAGES CXX)
 
 include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
@@ -33,9 +33,9 @@ target_sources(${PROJECT_NAME} PRIVATE ${TEST_SOURCES})
 option(LINT_TESTS "enable static analyzers for tests" OFF)
 
 if(LINT_TESTS)
-    target_cppcheck(${PROJECT_NAME} "${TEST_SOURCES}")
-    target_clangtidy(${PROJECT_NAME} "${TEST_SOURCES}")
-    target_include_what_you_use(${PROJECT_NAME} "${TEST_SOURCES}")
+    target_cppcheck(${PROJECT_NAME})
+    target_clangtidy(${PROJECT_NAME})
+    target_include_what_you_use(${PROJECT_NAME})
 endif()
 
 # ---- Discover Catch2 tests
@@ -44,7 +44,7 @@ catch_discover_tests(${PROJECT_NAME})
 
 # ---- Add coverage
 
-if(${MODULE_FULL_NAME}_ENABLE_COVERAGE)
+if(${PROJECT_NAME}_ENABLE_COVERAGE)
     add_coverage_lcov_target(${PROJECT_NAME})
     add_coverage_llvm_target(${PROJECT_NAME})
 endif()

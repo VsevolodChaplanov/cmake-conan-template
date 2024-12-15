@@ -29,7 +29,7 @@ function(get_default_cppcheck_options OPTIONS TEMPLATE)
         PARENT_SCOPE)
 endfunction()
 
-function(target_cppcheck target files)
+function(target_cppcheck target)
     find_program(CPPCHECK cppcheck)
     if(CPPCHECK)
         cmake_parse_arguments(ARGUMENTS "" "WARNINGS_AS_ERRORS;USE_ON_BUILD" "CPPCHECK_OPTIONS" "${ARGV}")
@@ -60,19 +60,8 @@ function(target_cppcheck target files)
             endif()
         endif()
 
-        message(STATUS "cppcheck options for target ${target}: ${TARGET_CXX_CPPCHECK}")
-
-        if(ARGUMENTS_USE_ON_BUILD)
-            if(${ARGUMENTS_USE_ON_BUILD})
-                message(STATUS "[Rcs] using cppcheck analyzer on build for project ${target}")
-                set_target_properties(${target} PROPERTIES CXX_CPPCHECK "${TARGET_CXX_CPPCHECK}")
-            endif()
-        endif()
-
-        add_custom_target(
-            ${target}-cppcheck
-            COMMAND ${TARGET_CXX_CPPCHECK} ${files}
-            COMMENT "running ${target}-cppcheck")
+        message(STATUS "using cppcheck analyzer on build for project ${target}")
+        set_target_properties(${target} PROPERTIES CXX_CPPCHECK "${TARGET_CXX_CPPCHECK}")
     else()
         message(WARNING "cppcheck requested but executable not found")
     endif()
@@ -88,7 +77,7 @@ function(get_clang_tidy_default_options OPTIONS)
         PARENT_SCOPE)
 endfunction()
 
-function(target_clangtidy target files)
+function(target_clangtidy target)
     find_program(CLANGTIDY clang-tidy)
     if(CLANGTIDY)
         cmake_parse_arguments(ARGUMENTS "" "WARNINGS_AS_ERRORS;USE_ON_BUILD" "CLANGTIDY_OPTIONS" "${ARGV}")
@@ -136,42 +125,8 @@ function(target_clangtidy target files)
             endif()
         endif()
 
-        message(STATUS "clang-tidy options for target ${target}: ${TARGET_CXX_CLANGTIDY}")
-        if(ARGUMENTS_USE_ON_BUILD)
-            if(${ARGUMENTS_USE_ON_BUILD})
-                message(STATUS "[Rcs] using clang-tidy analyzer on build for project ${target}")
-                set_target_properties(${target} PROPERTIES CXX_CLANG_TIDY "${TARGET_CXX_CLANGTIDY}")
-            endif()
-        endif()
-
-        # "cache" results not used for each source file because it overwrite last possible refactoring
-        set(TARGET_CXX_CLANGTIDY ${TARGET_CXX_CLANGTIDY} --export-fixes=${PROJECT_BINARY_DIR}/clang-tidy-fixes.yml)
-
-        add_custom_target(
-            ${target}-clang-tidy
-            COMMAND ${TARGET_CXX_CLANGTIDY} ${files}
-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-            COMMAND_EXPAND_LISTS
-            COMMENT "running ${target}-clang-tidy")
-
-        add_custom_target(
-            ${target}-clang-tidy-fix
-            COMMAND ${CMAKE_COMMAND} -E echo "run ${target}-clang-tidy-fix"
-            COMMAND "${TARGET_CXX_CLANGTIDY};-fix-errors;--fix" ${files}
-            COMMAND ${CMAKE_COMMAND} -E echo "finished ${target}-clang-tidy-fix"
-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-            COMMAND_EXPAND_LISTS
-            COMMENT "running ${target}-clang-tidy")
-
-        find_program(CLANG_APPLY_REPLACEMENTS NAMES clang-apply-replacements clang-apply-replacements.exe)
-
-        if(CLANG_APPLY_REPLACEMENTS)
-            add_custom_target(
-                ${target}-clang-tidy-ar
-                COMMAND ${CLANG_APPLY_REPLACEMENTS} .
-                WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
-                COMMENT "applying replacements from clang-tidy build")
-        endif()
+        message(STATUS "using clang-tidy analyzer on build for project ${target}")
+        set_target_properties(${target} PROPERTIES CXX_CLANG_TIDY "${TARGET_CXX_CLANGTIDY}")
     else()
         message(WARNING "clang-tidy requested but executable not found")
     endif()
@@ -191,15 +146,10 @@ function(get_default_iwyu_options OPTIONS)
         PARENT_SCOPE)
 endfunction()
 
-function(target_include_what_you_use target files)
-    find_package(Python3)
+function(target_include_what_you_use target)
     find_program(INCLUDE_WHAT_YOU_USE include-what-you-use)
-    find_program(IWYU_TOOL NAMES iwyu_tool.py)
-    find_program(IWYU_FIX NAMES fix_includes.py)
 
-    if(INCLUDE_WHAT_YOU_USE AND Python3_EXECUTABLE)
-        set(help_file IWYU_TOOL.out)
-
+    if(INCLUDE_WHAT_YOU_USE)
         cmake_parse_arguments(ARGUMENTS "" "USE_ON_BUILD" "IWYU_OPTIONS" "${ARGV}")
 
         if(ARGUMENTS_IWYU_OPTIONS)
@@ -209,34 +159,9 @@ function(target_include_what_you_use target files)
             set(TARGET_IWYU_OPTIONS "${OPTIONS}")
         endif()
 
-        message(STATUS "include-what-you-use found and enabled with arguments ${TARGET_IWYU_OPTIONS}")
-        if(ARGUMENTS_USE_ON_BUILD)
-            if(${ARGUMENTS_USE_ON_BUILD})
-                message(STATUS "[Rcs] using iwyu analyzer on build for project ${target}")
-                set_target_properties(${target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
-                                                           "${INCLUDE_WHAT_YOU_USE};${TARGET_IWYU_OPTIONS}")
-            endif()
-        endif()
-
-        add_custom_target(
-            ${target}-iwyu-tool
-            COMMAND ${Python3_EXECUTABLE} ${IWYU_TOOL} --jobs 8 -p ${CMAKE_BINARY_DIR} "${files}" --
-                    ${TARGET_IWYU_OPTIONS} > ${help_file}
-            WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>
-            COMMAND_EXPAND_LISTS
-            COMMENT "run ${target}-iwyu-tool")
-
-        add_custom_target(
-            ${target}-iwyu-fix
-            COMMAND ${Python3_EXECUTABLE} ${IWYU_FIX} < ${help_file}
-            DEPENDS ${target}-iwyu-tool
-            WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>
-            COMMENT "run ${target}-iwyu-fix")
-
-        add_custom_target(
-            ${target}-iwyu
-            DEPENDS ${target}-iwyu-fix
-            COMMENT "run ${target}-iwyu")
+        message(STATUS "using iwyu analyzer on build for project ${target}")
+        set_target_properties(${target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
+                                                   "${INCLUDE_WHAT_YOU_USE};${TARGET_IWYU_OPTIONS}")
     else()
         message(WARNING "include-what-you-use requested but executable not found")
     endif()

@@ -32,7 +32,7 @@
             "name": "conan",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/conan/${hostSystemName}/conan_toolchain.cmake",
+                "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/cmake/conan_provider.cmake",
                 "CMAKE_POLICY_DEFAULT_CMP0091": "NEW"
             }
         },

@@ -47,7 +47,7 @@ function(add_coverage_lcov_target target)
             COMMENT "Removing all .gcda files before build"
             WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>/../)
     else()
-        message(WARNING "[Rcs] lcov_coverage_target requested, but compiler do not match GNU or Clang")
+        message(WARNING "lcov_coverage_target requested, but compiler do not match GNU or Clang")
     endif()
 endfunction()
 
@@ -57,7 +57,7 @@ function(add_coverage_llvm_target target)
         find_program(LLVM_PROFDATA_PATH llvm-profdata)
 
         if(NOT LLVM_COV_PATH OR NOT LLVM_PROFDATA_PATH)
-            message(WARNING "[Rcs] llvm_coverage_target requested, but llvm-cov or llvm-profdata not found")
+            message(WARNING "llvm_coverage_target requested, but llvm-cov or llvm-profdata not found")
             return()
         endif()
 
@@ -75,6 +75,6 @@ function(add_coverage_llvm_target target)
 
         set_target_properties(${target} PROPERTIES ENVIRONMENT "LLVM_PROFILE_FILE=default.profraw")
     else()
-        message(WARNING "[Rcs] llvm_coverage_target requested, but compiler do not match Clang")
+        message(WARNING "llvm_coverage_target requested, but compiler do not match Clang")
     endif()
 endfunction()

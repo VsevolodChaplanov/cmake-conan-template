@@ -97,21 +97,21 @@ set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES})
 
 # ---- Clang-tidy target
 
-target_clangtidy(${PROJECT_NAME} "${ALL_SOURCE_FILES}" WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}" USE_ON_BUILD
-                 "${PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD")
+if(${PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD)
+    target_clangtidy(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
+endif()
 
 # ---- Cppcheck target
 
-target_cppcheck(${PROJECT_NAME} "${ALL_SOURCE_FILES}" WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}" USE_ON_BUILD
-                "${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD")
+if(${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD)
+    target_cppcheck(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
+endif()
 
 # ---- IWYU target
 
-target_include_what_you_use(${PROJECT_NAME} "${ALL_SOURCE_FILES}" USE_ON_BUILD "${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD")
-
-# ---- Clang-format target
-
-target_clang_format(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+if(${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD)
+    target_include_what_you_use(${PROJECT_NAME} USE_ON_BUILD)
+endif()
 
 # ---- Add coverage support
 

@@ -56,7 +56,7 @@ class ProjectRecipe(ConanFile):
         return project_components
 
     def requirements(self):
-        self.requires("fmt/[10.2.1]", transitive_headers=True)
+        self.requires("fmt/[11.0.2]", transitive_headers=True)
         self.test_requires("catch2/3.5.3")
 
     def config_options(self):

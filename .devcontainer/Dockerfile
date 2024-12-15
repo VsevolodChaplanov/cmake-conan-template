@@ -108,7 +108,7 @@ RUN update-alternatives \
     --slave   /usr/bin/clang-tidy            clang-tidy            $(which clang-tidy-${LLVM_VER}) \
     --slave   /usr/bin/lldb                  lldb                  $(which lldb-${LLVM_VER}) \
     --slave   /usr/bin/lldb-server           lldb-server           $(which lldb-server-${LLVM_VER}) \
-    --slave   /usr/bin/clangd                clangd                $(which clangd-${LLVM_VER} \
+    --slave   /usr/bin/clangd                clangd                $(which clangd-${LLVM_VER}) \
     --slave   /usr/bin/clang-apply-replacements clang-apply-replacements $(which clang-apply-replacements-${LLVM_VER})
 
 
