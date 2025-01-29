@@ -3,7 +3,7 @@ from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
 
 class ProjectRecipe(ConanFile):
-    name = "my_project"
+    name = "pybinf_tatneft"
     version = "0.1"
     package_type = "library"
 
@@ -56,6 +56,7 @@ class ProjectRecipe(ConanFile):
         return project_components
 
     def requirements(self):
+        self.requires("boost/1.86.0")
         self.requires("fmt/[11.0.2]", transitive_headers=True)
         self.test_requires("catch2/3.5.3")
 

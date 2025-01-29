@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include <my_project/utility/static_string.hpp>
+#include <pybinf_tatneft/utility/static_string.hpp>
 #include <string>
 #include <string_view>
 

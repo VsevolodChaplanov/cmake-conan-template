@@ -1,4 +1,4 @@
-#include <my_project/core/core.hpp>
+#include <pybinf_tatneft/core/core.hpp>
 #include <iostream>
 
 auto main() -> int {
