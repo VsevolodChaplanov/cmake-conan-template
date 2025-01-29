@@ -3,7 +3,7 @@ from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
 
 class ProjectRecipe(ConanFile):
-    name = "pybinf_tatneft"
+    name = "monitor-backend"
     version = "0.1"
     package_type = "library"
 
