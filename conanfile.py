@@ -1,18 +1,12 @@
+import os
+
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
 
 class ProjectRecipe(ConanFile):
     name = "monitor-backend"
-    version = "0.1"
     package_type = "library"
-
-    # Optional metadata
-    license = "<Put the package license here>"
-    author = "<Put your name here> <And your email here>"
-    url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of project package here>"
-    topics = ("<Put some tag here>", "<here>", "<and here>")
 
     # Binary configuration
     settings = "os", "compiler", "build_type", "arch"
@@ -54,6 +48,18 @@ class ProjectRecipe(ConanFile):
         ]
 
         return project_components
+    
+    def set_version(self):
+        cmakelists_path = os.path.join(self.recipe_folder, "CMakeLists.txt")
+        with open(cmakelists_path, "r") as f:
+            cmake_content = f.read()
+
+        # Extract version from `project()` statement
+        match = re.search(r"VERSION\s+(\d+\.\d+\.\d+)\s*", cmake_content)
+        if match:
+            self.version = match.group(1)
+        else:
+            raise ValueError("Version not found in CMakeLists.txt")
 
     def requirements(self):
         self.requires("boost/1.86.0")
