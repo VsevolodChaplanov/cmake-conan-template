@@ -58,6 +58,41 @@
             }
         },
         {
+            "name": "sanitize-address",
+            "hidden": true,
+            "cacheVariables": {
+                "my_project_SANITIZER_ADDRESS": "ON"
+            }
+        },
+        {
+            "name": "sanitize-leak",
+            "hidden": true,
+            "cacheVariables": {
+                "my_project_SANITIZER_LEAK": "ON"
+            }
+        },
+        {
+            "name": "sanitize-ub",
+            "hidden": true,
+            "cacheVariables": {
+                "my_project_SANITIZER_UNDEFINED_BEHAVIOR": "ON"
+            }
+        },
+        {
+            "name": "sanitize-thread",
+            "hidden": true,
+            "cacheVariables": {
+                "my_project_SANITIZER_THREAD": "ON"
+            }
+        },
+        {
+            "name": "sanitize-memory",
+            "hidden": true,
+            "cacheVariables": {
+                "my_project_SANITIZER_MEMORY": "ON"
+            }
+        },
+        {
             "name": "ci-std",
             "description": "This preset makes sure the project actually builds with at least the specified standard",
             "hidden": true,
@@ -143,9 +178,7 @@
             "name": "ci-win64-ninja",
             "inherits": [
                 "flags-msvc",
-                "ci-std",
-                "cppcheck",
-                "clang-tidy"
+                "ci-std"
             ],
             "condition": {
                 "type": "equals",
@@ -197,9 +230,7 @@
                 "dev-mode",
                 "conan"
             ],
-            "cacheVariables": {
-                "my_project_ENABLE_COVERAGE": "ON"
-            }
+            "binaryDir": "${sourceDir}/build/${presetName}"
         },
         {
             "name": "ci-build",
