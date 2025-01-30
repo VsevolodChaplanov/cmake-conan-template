@@ -1,20 +1,11 @@
-[tool.poetry]
+[project]
 name = "my_project"
 version = "0.1.0"
-description = ""
-authors = ["VChaplanov"]
+description = "Add your description here"
 readme = "README.md"
-package-mode = false
-
-[tool.poetry.dependencies]
-python = "^3.10"
-conan = "^2.6.0"
-cmakelang = "^0.6.13"
-codespell = "^2.3.0"
-
-[tool.poetry.group.dev.dependencies]
-ipdb = "^0.13.13"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires-python = ">=3.12"
+dependencies = [
+    "cmakelang>=0.6.13",
+    "codespell>=2.4.1",
+    "conan>=2.12.1",
+]

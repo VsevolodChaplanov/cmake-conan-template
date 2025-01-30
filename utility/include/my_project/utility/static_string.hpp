@@ -18,13 +18,13 @@ template<std::size_t N> struct static_string final {
     constexpr static_string& operator=(const static_string&) noexcept = default;
     constexpr static_string& operator=(static_string&&) noexcept = default;
 
-    constexpr explicit(false) static_string(const char (&data)[N + 1]) noexcept {
+    constexpr explicit(false) static_string(const char (&data)[N + 1]) noexcept { // NOLINT (hicpp-avoid-c-arrays)
         std::ranges::copy(data, m_data.begin());
     }
 
     template<char... Data> constexpr explicit static_string() noexcept : m_data({Data...}) {}
 
-    constexpr explicit static_string(const char* const data, std::integral_constant<std::size_t, N>) noexcept {
+    constexpr explicit static_string(const char* const data, std::integral_constant<std::size_t, N> /** N */) noexcept {
         std::ranges::copy_n(data, N, begin());
     }
 
@@ -49,9 +49,9 @@ template<std::size_t N> struct static_string final {
 
     constexpr auto end() noexcept { return m_data.end(); }
 
-    constexpr std::string_view view() const noexcept { return {data(), N}; }
+    constexpr auto view() const noexcept -> std::string_view { return {data(), N}; }
 
-    constexpr std::string string() const { return std::string(begin(), begin() + N); }
+    constexpr auto string() const -> std::string { return std::string(begin(), begin() + N); }
 
     constexpr explicit operator std::string_view() const noexcept { return view(); }
 
@@ -65,39 +65,48 @@ template<std::size_t N> struct static_string final {
     friend constexpr auto operator<=>(const static_string<K>& self, const static_string<M>& other) noexcept;
 
     template<std::size_t K, std::size_t M>
-    friend constexpr auto operator<=>(const static_string<K>& lhs, const char (&rhs)[M]) noexcept;
+    friend constexpr auto operator<=>(const static_string<K>& lhs,
+                                      const char (&rhs)[M]) noexcept; // NOLINT hicpp-avoid-c-arrays
 
     template<std::size_t K, std::size_t M>
-    friend constexpr auto operator<=>(const char (&lhs)[K], const static_string<M>& rhs) noexcept;
+    friend constexpr auto operator<=>(const char (&lhs)[K], // NOLINT hicpp-avoid-c-arrays
+                                      const static_string<M>& rhs) noexcept;
 
     template<std::size_t K, std::size_t M>
     friend constexpr auto operator==(const static_string<K>& self, const static_string<M>& other) noexcept;
 
     template<std::size_t K, std::size_t M>
-    friend constexpr auto operator==(const static_string<K>& lhs, const char (&rhs)[M]) noexcept;
+    friend constexpr auto operator==(const static_string<K>& lhs,
+                                     const char (&rhs)[M]) noexcept; // NOLINT hicpp-avoid-c-arrays
 
     template<std::size_t K, std::size_t M>
-    friend constexpr auto operator==(const char (&lhs)[K], const static_string<M>& rhs) noexcept;
+    friend constexpr auto operator==(const char (&lhs)[K], // NOLINT hicpp-avoid-c-arrays
+                                     const static_string<M>& rhs) noexcept;
 
     template<std::size_t K, std::size_t M>
     friend constexpr auto operator!=(const static_string<K>& self, const static_string<M>& other) noexcept;
 
     template<std::size_t K, std::size_t M>
-    friend constexpr auto operator!=(const static_string<K>& lhs, const char (&rhs)[M]) noexcept;
+    friend constexpr auto operator!=(const static_string<K>& lhs,
+                                     const char (&rhs)[M]) noexcept; // NOLINT hicpp-avoid-c-arrays
 
     template<std::size_t K, std::size_t M>
-    friend constexpr auto operator!=(const char (&lhs)[K], const static_string<M>& rhs) noexcept;
+    friend constexpr auto operator!=(const char (&lhs)[K], // NOLINT hicpp-avoid-c-arrays
+                                     const static_string<M>& rhs) noexcept;
 
     template<std::size_t K, std::size_t M>
     friend constexpr static_string<K + M> operator+(const static_string<K>& lhs, const static_string<M>& rhs);
 
     template<size_t K, size_t M>
-    friend constexpr static_string<K - 1 + M> operator+(const char (&lhs)[K], const static_string<M>& rhs);
+    friend constexpr static_string<K - 1 + M> operator+(const char (&lhs)[K], // NOLINT hicpp-avoid-c-arrays
+                                                        const static_string<M>& rhs);
 
     template<size_t K, size_t M>
-    friend constexpr static_string<K + M - 1> operator+(const static_string<K>& lhs, const char (&rhs)[M]);
+    friend constexpr static_string<K + M - 1> operator+(const static_string<K>& lhs,
+                                                        const char (&rhs)[M]); // NOLINT hicpp-avoid-c-arrays
 
-    std::array<char, N + 1> m_data{};
+    /** @brief public -> nttp parameter */
+    std::array<char, N + 1> m_data{}; // NOLINT misc-non-private-member-variables-in-classes
 };
 
 template<static_string VString> consteval auto operator""_fs() noexcept { return VString; }
@@ -112,18 +121,18 @@ constexpr auto operator<=>(const static_string<K>& self, const static_string<M>&
 }
 
 template<std::size_t K, std::size_t M>
-constexpr auto operator<=>(const static_string<K>& lhs, const char (&rhs)[M]) noexcept {
+constexpr auto operator<=>(const static_string<K>& lhs, const char (&rhs)[M]) noexcept { // NOLINT hicpp-avoid-c-arrays
     return lhs <=> static_string{rhs};
 }
 
 template<std::size_t K, std::size_t M>
-constexpr auto operator<=>(const char (&lhs)[K], const static_string<M>& rhs) noexcept {
+constexpr auto operator<=>(const char (&lhs)[K], const static_string<M>& rhs) noexcept { // NOLINT hicpp-avoid-c-arrays
     return static_string{lhs} <=> static_string{rhs};
 }
 
 template<std::size_t K, std::size_t M>
 constexpr auto operator==(const static_string<K>& self, const static_string<M>& other) noexcept {
-    if (K != M) {
+    if constexpr (K != M) {
         return false;
     }
 
@@ -131,12 +140,12 @@ constexpr auto operator==(const static_string<K>& self, const static_string<M>& 
 }
 
 template<std::size_t K, std::size_t M>
-constexpr auto operator==(const static_string<K>& lhs, const char (&rhs)[M]) noexcept {
+constexpr auto operator==(const static_string<K>& lhs, const char (&rhs)[M]) noexcept { // NOLINT hicpp-avoid-c-arrays
     return lhs == static_string{rhs};
 }
 
 template<std::size_t K, std::size_t M>
-constexpr auto operator==(const char (&lhs)[K], const static_string<M>& rhs) noexcept {
+constexpr auto operator==(const char (&lhs)[K], const static_string<M>& rhs) noexcept { // NOLINT hicpp-avoid-c-arrays
     return rhs == lhs;
 }
 
@@ -146,17 +155,17 @@ constexpr auto operator!=(const static_string<K>& self, const static_string<M>& 
 }
 
 template<std::size_t K, std::size_t M>
-constexpr auto operator!=(const static_string<K>& lhs, const char (&rhs)[M]) noexcept {
+constexpr auto operator!=(const static_string<K>& lhs, const char (&rhs)[M]) noexcept { // NOLINT hicpp-avoid-c-arrays
     return !(lhs == rhs);
 }
 
 template<std::size_t K, std::size_t M>
-constexpr auto operator!=(const char (&lhs)[K], const static_string<M>& rhs) noexcept {
+constexpr auto operator!=(const char (&lhs)[K], const static_string<M>& rhs) noexcept { // NOLINT hicpp-avoid-c-arrays
     return !(rhs == lhs);
 }
 
 template<std::size_t K, std::size_t M>
-constexpr static_string<K + M> operator+(const static_string<K>& lhs, const static_string<M>& rhs) {
+constexpr auto operator+(const static_string<K>& lhs, const static_string<M>& rhs) -> static_string<K + M> {
     static_string<K + M> result;
     std::ranges::copy(lhs, result.begin());
     std::ranges::copy(rhs, result.begin() + K);
@@ -164,20 +173,22 @@ constexpr static_string<K + M> operator+(const static_string<K>& lhs, const stat
 }
 
 template<size_t K, size_t M>
-constexpr static_string<K - 1 + M> operator+(const char (&lhs)[K], const static_string<M>& rhs) {
+constexpr auto operator+(const char (&lhs)[K], // NOLINT hicpp-avoid-c-arrays
+                         const static_string<M>& rhs) -> static_string<K - 1 + M> {
     static_string lhs2{lhs};
     return lhs2 + rhs;
 }
 
 template<size_t K, size_t M>
-constexpr static_string<K + M - 1> operator+(const static_string<K>& lhs, const char (&rhs)[M]) {
+constexpr auto operator+(const static_string<K>& lhs,
+                         const char (&rhs)[M]) -> static_string<K + M - 1> { // NOLINT hicpp-avoid-c-arrays
     static_string rhs2{rhs};
     return lhs + rhs2;
 }
 
 /** CTAD helpers for static_string */
 
-template<std::size_t N> static_string(const char (&)[N]) -> static_string<N - 1>;
+template<std::size_t N> static_string(const char (&)[N]) -> static_string<N - 1>; // NOLINT hicpp-avoid-c-arrays
 
 template<std::size_t N> static_string(const char*, std::integral_constant<std::size_t, N>) -> static_string<N - 1>;
 

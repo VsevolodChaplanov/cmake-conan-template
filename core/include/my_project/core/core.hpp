@@ -10,6 +10,4 @@ template<static_string V = "hello world"> constexpr auto hello_world() { fmt::pr
 
 void CORE_EXPORT hello_example();
 
-inline void HelloWorld() {}
-
 #endif

@@ -255,8 +255,8 @@
             "inherits": [
                 "ci-build",
                 "ci-darwin",
-                "dev-mode",
                 "ci-multi-config",
+                "dev-mode",
                 "conan"
             ]
         },
@@ -272,10 +272,7 @@
                 "ci-build",
                 "ci-linux",
                 "conan",
-                "dev-mode",
-                "clang-tidy",
-                "cppcheck",
-                "iwyu"
+                "dev-mode"
             ]
         },
         {
@@ -289,8 +286,8 @@
             "inherits": [
                 "ci-build",
                 "ci-win64",
-                "dev-mode",
                 "ci-multi-config",
+                "dev-mode",
                 "conan"
             ]
         },
@@ -304,13 +301,10 @@
             },
             "inherits": [
                 "ci-build",
-                "dev-mode",
                 "ci-win64-ninja",
                 "ci-multi-config",
-                "conan",
-                "clang-tidy",
-                "cppcheck",
-                "iwyu"
+                "dev-mode",
+                "conan"
             ]
         }
     ]

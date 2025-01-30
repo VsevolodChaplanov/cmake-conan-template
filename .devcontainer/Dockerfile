@@ -27,10 +27,6 @@ RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
 
 RUN apt update -qq && apt install python3 python3-pip python3-dev -y && rm -rf /var/lib/apt/lists/*
 
-# boost has build issues with numpy2.0
-RUN pip3 install conan numpy==1.26 codespell cmakelang
-
-
 # User-settable versions:
 ARG GCC_VER="13"
 # Add gcc-${GCC_VER}

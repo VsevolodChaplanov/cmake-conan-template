@@ -7,6 +7,13 @@
     },
     "configurePresets": [
         {
+            "name": "pass-conan",
+            "hidden": true,
+            "cacheVariables": {
+                "CONAN_COMMAND": "${sourceDir}/.venv/bin/conan"
+            }
+        },
+        {
             "name": "dev-common",
             "hidden": true,
             "inherits": [
@@ -29,9 +36,7 @@
             "inherits": [
                 "dev-common",
                 "ci-linux",
-                "cppcheck",
-                "clang-tidy",
-                "iwyu"
+                "pass-conan"
             ],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
@@ -82,9 +87,7 @@
             },
             "inherits": [
                 "dev-common",
-                "ci-win64-ninja",
-                "clang-tidy",
-                "cppcheck"
+                "ci-win64-ninja"
             ],
             "environment": {
                 "UseMultiToolTask": "true",

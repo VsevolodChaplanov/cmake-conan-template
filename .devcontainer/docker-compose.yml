@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  cppapp:
-    container_name: cppapp
+  my_project:
+    container_name: my_project
     build:
       context: .
       dockerfile: Dockerfile

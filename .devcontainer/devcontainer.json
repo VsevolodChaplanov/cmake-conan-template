@@ -3,7 +3,7 @@
 {
 	"name": "cpp-cmake-conan",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "cppapp",
+	"service": "my_project",
 	"customizations": {
 		"vscode": {
 			"extensions": [
