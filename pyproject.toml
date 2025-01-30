@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "my_project"
+name = "pybinf_tatneft"
 version = "0.1.0"
 description = ""
 authors = ["VChaplanov"]

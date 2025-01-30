@@ -25,7 +25,7 @@
             "hidden": true,
             "inherits": "cmake-pedantic",
             "cacheVariables": {
-                "my_project_DEVELOPER_MODE": "ON"
+                "pybinf_tatneft_DEVELOPER_MODE": "ON"
             }
         },
         {
@@ -40,21 +40,21 @@
             "name": "iwyu",
             "hidden": true,
             "cacheVariables": {
-                "my_project_ENABLE_IWYU_ON_BUILD": "ON"
+                "pybinf_tatneft_ENABLE_IWYU_ON_BUILD": "ON"
             }
         },
         {
             "name": "cppcheck",
             "hidden": true,
             "cacheVariables": {
-                "my_project_ENABLE_CPPCHECK_ON_BUILD": "ON"
+                "pybinf_tatneft_ENABLE_CPPCHECK_ON_BUILD": "ON"
             }
         },
         {
             "name": "clang-tidy",
             "hidden": true,
             "cacheVariables": {
-                "my_project_ENABLE_CLANGTIDY_ON_BUILD": "ON"
+                "pybinf_tatneft_ENABLE_CLANGTIDY_ON_BUILD": "ON"
             }
         },
         {
@@ -182,7 +182,7 @@
                 "rhs": "Linux"
             },
             "cacheVariables": {
-                "my_project_ENABLE_COVERAGE": "ON"
+                "pybinf_tatneft_ENABLE_COVERAGE": "ON"
             }
         },
         {
@@ -198,7 +198,7 @@
                 "conan"
             ],
             "cacheVariables": {
-                "my_project_ENABLE_COVERAGE": "ON"
+                "pybinf_tatneft_ENABLE_COVERAGE": "ON"
             }
         },
         {

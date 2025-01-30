@@ -7,7 +7,7 @@ include(../../cmake/folders.cmake)
 include(../../cmake/static-analyzers.cmake)
 
 if(PROJECT_IS_TOP_LEVEL)
-    find_package(my_project REQUIRED)
+    find_package(pybinf_tatneft REQUIRED)
 endif()
 
 add_custom_target(${PROJECT_NAME}-run-examples)
