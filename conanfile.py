@@ -5,7 +5,6 @@ from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
 
 class ProjectRecipe(ConanFile):
-    name = "my_project"
     package_type = "library"
 
     # Binary configuration
