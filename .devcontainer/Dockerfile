@@ -129,6 +129,12 @@ RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
     doxygen graphviz ccache cppcheck && \
     rm -rf /var/lib/apt/lists/*
 
+# Install pipx
+RUN apt-get update -qq && export DEBIAN_FRONTEND=noninteractive && \
+    apt-get install -y --no-install-recommends pipx && \
+    pipx ensurepath && \
+    rm -rf /var/lib/apt/lists/*
+
 # Install include-what-you-use
 ENV IWYU /home/iwyu
 ENV IWYU_BUILD ${IWYU}/build

@@ -8,7 +8,7 @@ include(../cmake/sanitizers.cmake)
 include(../cmake/static-analyzers.cmake)
 
 set(MODULE_NAME core)
-set(MODULE_FULL_NAME ${MAIN_PROJECT_NAME}-${MODULE_NAME})
+set(MODULE_FULL_NAME my_project-${MODULE_NAME})
 
 include(cmake/options.cmake)
 include(cmake/dependencies.cmake)
@@ -16,7 +16,7 @@ include(cmake/dependencies.cmake)
 project(
     ${MODULE_FULL_NAME}
     VERSION
-        ${${MAIN_PROJECT_NAME}_VERSION_MAJOR}.${${MAIN_PROJECT_NAME}_VERSION_MINOR}.${${MAIN_PROJECT_NAME}_VERSION_PATCH}
+        ${my_project_VERSION_MAJOR}.${my_project_VERSION_MINOR}.${my_project_VERSION_PATCH}
     LANGUAGES CXX)
 
 # ---- Project options target
@@ -54,16 +54,16 @@ if(${MODULE_FULL_NAME}_BUILD_SHARED_LIBS)
 else()
     add_library(${PROJECT_NAME} STATIC)
 endif()
-add_library(${MAIN_PROJECT_NAME}::${MODULE_NAME} ALIAS ${PROJECT_NAME})
+add_library(my_project::${MODULE_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
 generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME
-                       ${PROJECT_BINARY_DIR}/include/${MAIN_PROJECT_NAME}/${MODULE_NAME}/exports/exports.hpp)
+                       ${PROJECT_BINARY_DIR}/include/my_project/${MODULE_NAME}/exports/exports.hpp)
 
 # ---- Collect sources
 
-file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${MAIN_PROJECT_NAME}/${MODULE_NAME}/*.hpp)
+file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/my_project/${MODULE_NAME}/*.hpp)
 file(GLOB LIBRARY_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 # ---- Set target sources
@@ -84,7 +84,7 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PUBLIC fmt::fmt ${MAIN_PROJECT_NAME}::utility
+    PUBLIC fmt::fmt my_project::utility
     PRIVATE ${PROJECT_NAME}_pch ${PROJECT_NAME}_options)
 
 # ---- Configure linker

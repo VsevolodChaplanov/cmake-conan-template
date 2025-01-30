@@ -7,9 +7,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - VARIANT=jammy
+        - VARIANT=noble
         - GCC_VER=13
-        - LLVM_VER=18
+        - LLVM_VER=19
         - USE_CLANG=1
     command: sleep infinity
     volumes:

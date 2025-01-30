@@ -12,12 +12,11 @@ run_vcvarsall()
 
 include(cmake/cpm.cmake)
 
-project(
-    ${MAIN_PROJECT_NAME}
-    VERSION 0.1.0
-    DESCRIPTION "Short description"
-    HOMEPAGE_URL "https://example.com/"
-    LANGUAGES CXX)
+project(my_project
+        VERSION 0.1.0
+        DESCRIPTION "Short description"
+        HOMEPAGE_URL "https://example.com/"
+        LANGUAGES CXX)
 
 include(cmake/common_options.cmake)
 include(options.cmake)
@@ -31,7 +30,7 @@ include(cmake/linker.cmake)
 include(cmake/ipo.cmake)
 include(cmake/coverage.cmake)
 
-if(${MAIN_PROJECT_NAME}_ENABLE_CCACHE)
+if(my_project_ENABLE_CCACHE)
     enable_ccache()
 endif()
 
@@ -52,10 +51,10 @@ include(cmake/install-rules.cmake)
 
 # ---- Developer mode ----
 
-if(NOT ${MAIN_PROJECT_NAME}_DEVELOPER_MODE)
+if(NOT my_project_DEVELOPER_MODE)
     return()
 elseif(NOT PROJECT_IS_TOP_LEVEL)
-    message(AUTHOR_WARNING "Developer mode is intended for developers of ${MAIN_PROJECT_NAME}")
+    message(AUTHOR_WARNING "Developer mode is intended for developers of my_project")
 endif()
 
 include(cmake/dev-mode.cmake)

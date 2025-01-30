@@ -10,7 +10,7 @@ include(../../cmake/memory.cmake)
 # ---- Dependencies ----
 
 if(PROJECT_IS_TOP_LEVEL)
-    find_package(${MAIN_PROJECT_NAME} REQUIRED)
+    find_package(my_project REQUIRED)
 endif()
 
 # ---- Find testing frameworks
@@ -25,7 +25,7 @@ file(GLOB TEST_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 # ---- Tests ----
 
 add_executable(${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} PRIVATE ${MAIN_PROJECT_NAME}::${MODULE_NAME} Catch2::Catch2WithMain)
+target_link_libraries(${PROJECT_NAME} PRIVATE my_project::${MODULE_NAME} Catch2::Catch2WithMain)
 target_sources(${PROJECT_NAME} PRIVATE ${TEST_SOURCES})
 
 # ---- Static analyzers for test target

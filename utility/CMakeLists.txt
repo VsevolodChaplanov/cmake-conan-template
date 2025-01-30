@@ -11,7 +11,7 @@ include(../cmake/lint-targets.cmake)
 project(
     utility
     VERSION
-        ${${MAIN_PROJECT_NAME}_VERSION_MAJOR}.${${MAIN_PROJECT_NAME}_VERSION_MINOR}.${${MAIN_PROJECT_NAME}_VERSION_PATCH}
+        ${my_project_VERSION_MAJOR}.${my_project_VERSION_MINOR}.${my_project_VERSION_PATCH}
     LANGUAGES CXX)
 
 include(cmake/options.cmake)
@@ -47,7 +47,7 @@ target_sanitizers(
 # ---- Declare library ----
 
 add_library(${PROJECT_NAME} INTERFACE)
-add_library(${MAIN_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(my_project::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
@@ -55,7 +55,7 @@ add_library(${MAIN_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Collect sources
 
-file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${MAIN_PROJECT_NAME}/${PROJECT_NAME}/*.hpp)
+file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/my_project/${PROJECT_NAME}/*.hpp)
 
 # ---- Set target sources
 

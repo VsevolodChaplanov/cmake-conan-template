@@ -18,7 +18,7 @@ function(add_example file)
     get_filename_component(NAME ${file} NAME_WE)
 
     add_executable(${NAME} ${file})
-    target_link_libraries(${NAME} PRIVATE ${MAIN_PROJECT_NAME}:utility)
+    target_link_libraries(${NAME} PRIVATE my_project:utility)
 
     add_custom_target(
         ${PROJECT_NAME}-run-${NAME}

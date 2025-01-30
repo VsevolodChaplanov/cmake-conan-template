@@ -1,10 +1,11 @@
+import os
+import re
 from conan import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
 
 
 class ProjectRecipe(ConanFile):
     name = "my_project"
-    version = "0.1"
     package_type = "library"
 
     # Optional metadata
@@ -54,6 +55,31 @@ class ProjectRecipe(ConanFile):
         ]
 
         return project_components
+    
+    def set_name(self):
+        cmakelists_path = os.path.join(self.recipe_folder, "CMakeLists.txt")
+        with open(cmakelists_path, "r") as f:
+            cmake_content = f.read()
+
+            # Extract version from `project()` statement
+            match = re.search(r"project\(\s*([\w\-]+)", cmake_content)
+            if match:
+                self.name = match.group(1)
+                print(self.name)
+            else:
+                raise ValueError("`NAME` not found in CMakeLists.txt")
+    
+    def set_version(self):
+        cmakelists_path = os.path.join(self.recipe_folder, "CMakeLists.txt")
+        with open(cmakelists_path, "r") as f:
+            cmake_content = f.read()
+
+            # Extract version from `project()` statement
+            match = re.search(r"VERSION\s+(\d+\.\d+\.\d+)\s*", cmake_content)
+            if match:
+                self.version = match.group(1)
+            else:
+                raise ValueError("Version not found in CMakeLists.txt")
 
     def requirements(self):
         self.requires("fmt/[11.0.2]", transitive_headers=True)
@@ -113,3 +139,7 @@ class ProjectRecipe(ConanFile):
 
             requirements = component.get("requires", [])
             self.cpp_info.components[target].requires = requirements
+        
+        # this approach can be used if package consumed only by cmake projects
+        # self.cpp_info.builddirs.append(os.path.join('share', f'{self.name}'))
+        # self.cpp_info.set_property("cmake_find_mode", "none")

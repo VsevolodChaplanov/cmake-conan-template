@@ -4,7 +4,7 @@
 # Targets necessary to build the project must be provided unconditionally, so consumers can trivially build and package
 # the project
 if(PROJECT_IS_TOP_LEVEL)
-    option(${MAIN_PROJECT_NAME}_DEVELOPER_MODE "Enable developer mode" OFF)
+    option(my_project_DEVELOPER_MODE "Enable developer mode" OFF)
 endif()
 
 # ---- Warning guard ----
@@ -14,9 +14,9 @@ endif()
 # add_subdirectory or FetchContent is used to consume this project
 set(warning_guard "")
 if(NOT PROJECT_IS_TOP_LEVEL)
-    option(${MAIN_PROJECT_NAME}_INCLUDES_WITH_SYSTEM "Use SYSTEM modifier for project includes, disabling warnings" ON)
-    mark_as_advanced(${MAIN_PROJECT_NAME}_INCLUDES_WITH_SYSTEM)
-    if(${MAIN_PROJECT_NAME}_INCLUDES_WITH_SYSTEM)
+    option(my_project_INCLUDES_WITH_SYSTEM "Use SYSTEM modifier for project includes, disabling warnings" ON)
+    mark_as_advanced(my_project_INCLUDES_WITH_SYSTEM)
+    if(my_project_INCLUDES_WITH_SYSTEM)
         set(warning_guard SYSTEM)
     endif()
 endif()

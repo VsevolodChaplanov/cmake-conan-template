@@ -1,30 +1,30 @@
 option(${MODULE_FULL_NAME}_BUILD_EXAMPLES "Build examples for core part of project"
-       ${${MAIN_PROJECT_NAME}_BUILD_EXAMPLES})
-option(${MODULE_FULL_NAME}_BUILD_TESTS "Build tests for core part of project" ${${MAIN_PROJECT_NAME}_BUILD_TESTS})
+       ${my_project_BUILD_EXAMPLES})
+option(${MODULE_FULL_NAME}_BUILD_TESTS "Build tests for core part of project" ${my_project_BUILD_TESTS})
 
-option(${MODULE_FULL_NAME}_ENABLE_COVERAGE "Enable coverage flags" ${${MAIN_PROJECT_NAME}_ENABLE_COVERAGE})
+option(${MODULE_FULL_NAME}_ENABLE_COVERAGE "Enable coverage flags" ${my_project_ENABLE_COVERAGE})
 
 option(${MODULE_FULL_NAME}_ENABLE_CLANGTIDY_ON_BUILD "Enable clang-tidy during the build"
-       ${${MAIN_PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD})
+       ${my_project_ENABLE_CLANGTIDY_ON_BUILD})
 option(${MODULE_FULL_NAME}_ENABLE_CPPCHECK_ON_BUILD "Enable cppcheck during the build"
-       ${${MAIN_PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD})
+       ${my_project_ENABLE_CPPCHECK_ON_BUILD})
 option(${MODULE_FULL_NAME}_ENABLE_IWYU_ON_BUILD "Enable include-what-you-use during the build"
-       ${${MAIN_PROJECT_NAME}_ENABLE_IWYU_ON_BUILD})
+       ${my_project_ENABLE_IWYU_ON_BUILD})
 
 option(${MODULE_FULL_NAME}_SANITIZER_ADDRESS "Enable SANITIZER_ADDRESS for the ${MODULE_NAME} project"
-       ${${MAIN_PROJECT_NAME}_SANITIZER_ADDRESS})
+       ${my_project_SANITIZER_ADDRESS})
 option(${MODULE_FULL_NAME}_SANITIZER_LEAK "Enable SANITIZER_LEAK for the ${MODULE_NAME} project"
-       ${${MAIN_PROJECT_NAME}_SANITIZER_LEAK})
+       ${my_project_SANITIZER_LEAK})
 option(${MODULE_FULL_NAME}_SANITIZER_UNDEFINED_BEHAVIOR
        "Enable SANITIZER_UNDEFINED_BEHAVIOR for the ${MODULE_NAME} project"
-       ${${MAIN_PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR})
+       ${my_project_SANITIZER_UNDEFINED_BEHAVIOR})
 option(${MODULE_FULL_NAME}_SANITIZER_THREAD "Enable SANITIZER_THREAD for the ${MODULE_NAME} project"
-       ${${MAIN_PROJECT_NAME}_SANITIZER_THREAD})
+       ${my_project_SANITIZER_THREAD})
 option(${MODULE_FULL_NAME}_SANITIZER_MEMORY "Enable SANITIZER_MEMORY for the ${MODULE_NAME} project"
-       ${${MAIN_PROJECT_NAME}_SANITIZER_MEMORY})
+       ${my_project_SANITIZER_MEMORY})
 
 option(${MODULE_FULL_NAME}_BUILD_DOCS "Enable SANITIZER_MEMORY for the ${MODULE_NAME} project"
-       ${${MAIN_PROJECT_NAME}_BUILD_DOCS})
+       ${my_project_BUILD_DOCS})
 
 option(${MODULE_FULL_NAME}_SKIP_INSTALL_RULES "Skip install rules for the ${MODULE_NAME} project"
        ${CMAKE_SKIP_INSTALL_RULES})
