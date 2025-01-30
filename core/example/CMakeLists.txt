@@ -1,14 +1,10 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(${MODULE_FULL_NAME}-examples CXX)
+project(${CMAKE_PROJECT_NAME}-examples CXX)
 
 include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
 include(../../cmake/static-analyzers.cmake)
-
-if(PROJECT_IS_TOP_LEVEL)
-    find_package(my_project-${MODULE_NAME} REQUIRED)
-endif()
 
 add_custom_target(${PROJECT_NAME}-run-examples)
 
@@ -18,7 +14,7 @@ function(add_example file)
     get_filename_component(NAME ${file} NAME_WE)
 
     add_executable(${NAME} ${file})
-    target_link_libraries(${NAME} PRIVATE my_project::${MODULE_NAME})
+    target_link_libraries(${NAME} PRIVATE my_project::${CMAKE_PROJECT_NAME})
 
     add_custom_target(
         ${PROJECT_NAME}-run-${NAME}

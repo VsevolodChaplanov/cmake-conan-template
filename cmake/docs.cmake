@@ -47,7 +47,7 @@ function(wrap_doxygen_add_docs target)
 
     set(DOXYGEN_EXCLUDE_PATTERNS "${EXCLUDE_PATTERNS}")
 
-    if (NOT (CMAKE_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_GENERATOR STREQUAL "Ninja"))
+    if(NOT (CMAKE_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_GENERATOR STREQUAL "Ninja"))
         doxygen_styling()
     endif()
 

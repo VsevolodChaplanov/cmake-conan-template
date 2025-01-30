@@ -5,20 +5,23 @@ if(POLICY CMP0167)
 endif()
 
 include(cmake/prelude.cmake)
-include(cmake/common_options.cmake)
 include(cmake/vsenvironment.cmake)
 
 run_vcvarsall()
 
 include(cmake/cpm.cmake)
 
+# cmake-format: off
 project(my_project
         VERSION 0.1.0
         DESCRIPTION "Short description"
         HOMEPAGE_URL "https://example.com/"
         LANGUAGES CXX)
+# cmake-format: on
 
-include(cmake/common_options.cmake)
+include(CTest)
+include(GNUInstallDirs)
+
 include(options.cmake)
 include(dependencies.cmake)
 
@@ -29,12 +32,41 @@ include(cmake/ccache.cmake)
 include(cmake/linker.cmake)
 include(cmake/ipo.cmake)
 include(cmake/coverage.cmake)
+include(cmake/sanitizers.cmake)
+
 
 if(my_project_ENABLE_CCACHE)
     enable_ccache()
 endif()
 
 enable_ipo()
+
+# ---- Project options
+
+add_library(${PROJECT_NAME}-options INTERFACE)
+
+# ---- Compile options
+
+target_compile_options(${PROJECT_NAME}-options INTERFACE $<$<CXX_COMPILER_ID:MSVC>:/bigobj>)
+
+# ---- Set cxx standard project wide
+
+target_compile_features(${PROJECT_NAME}-options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
+
+# ---- Project wide sanitizers enable
+
+target_sanitizers(
+    ${PROJECT_NAME}-options
+    SANITIZER_ADDRESS
+    ${${PROJECT_NAME}_SANITIZER_ADDRESS}
+    SANITIZER_LEAK
+    ${${PROJECT_NAME}_SANITIZER_LEAK}
+    SANITIZER_UNDEFINED_BEHAVIOR
+    ${${PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR}
+    SANITIZER_THREAD
+    ${${PROJECT_NAME}_SANITIZER_THREAD}
+    SANITIZER_MEMORY
+    ${${PROJECT_NAME}_SANITIZER_MEMORY})
 
 register_module(utility)
 register_module(core)

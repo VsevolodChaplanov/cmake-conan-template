@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(conan_test_package CXX)
 
-include(../cmake/common_options.cmake)
+include(../cmake/common-options.cmake)
 
 find_package(my_project CONFIG REQUIRED)
 

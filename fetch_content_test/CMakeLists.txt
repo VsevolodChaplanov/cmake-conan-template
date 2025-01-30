@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(fetch_content_test LANGUAGES CXX)
 
-include(../cmake/common_options.cmake)
+include(../cmake/common-options.cmake)
 include(FetchContent)
 
 set(CMAKE_CXX_STANDARD 20)

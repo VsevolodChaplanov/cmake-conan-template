@@ -1,10 +1,10 @@
 include(CMakeParseArguments)
 
 function(target_sanitizers target)
-    set(sanitizers_options SANITIZER_ADDRESS SANITIZER_LEAK SANITIZER_UNDEFINED_BEHAVIOR SANITIZER_THREAD
+    set(sanitizers-options SANITIZER_ADDRESS SANITIZER_LEAK SANITIZER_UNDEFINED_BEHAVIOR SANITIZER_THREAD
                            SANITIZER_MEMORY)
 
-    cmake_parse_arguments(ENABLE "" "${sanitizers_options}" "" "${ARGV}")
+    cmake_parse_arguments(ENABLE "" "${sanitizers-options}" "" "${ARGV}")
 
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
         set(SANITIZERS "")

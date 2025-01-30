@@ -25,7 +25,9 @@ file(GLOB TEST_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 # ---- Tests ----
 
 add_executable(${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} PRIVATE my_project::${MODULE_NAME} Catch2::Catch2WithMain)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE my_project::${CMAKE_PROJECT_NAME} Catch2::Catch2WithMain)
+
 target_sources(${PROJECT_NAME} PRIVATE ${TEST_SOURCES})
 
 # ---- Static analyzers for test target

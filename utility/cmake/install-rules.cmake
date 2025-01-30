@@ -5,12 +5,9 @@ include(GNUInstallDirs)
 set(package ${PROJECT_NAME})
 
 install(
-    TARGETS ${package} ${package}_options
+    TARGETS ${package}
     EXPORT ${package}Targets
-    PUBLIC_HEADER FILE_SET HEADERS COMPONENT ${package}_Development)
-
-install(IMPORTED_RUNTIME_ARTIFACTS)
-install(RUNTIME_DEPENDENCY_SET ${package}_Dependency)
+    PUBLIC_HEADER FILE_SET ${package}_Headers COMPONENT ${package}_Development)
 
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
@@ -21,10 +18,10 @@ set(${package}_INSTALL_CMAKEDIR
 set_property(CACHE ${package}_INSTALL_CMAKEDIR PROPERTY TYPE PATH)
 mark_as_advanced(${package}_INSTALL_CMAKEDIR)
 
-configure_package_config_file(cmake/install-config.cmake.in ${PROJECT_NAME}Config.cmake
+configure_package_config_file(cmake/install-config.cmake.in ${package}Config.cmake
                               INSTALL_DESTINATION ${${package}_INSTALL_CMAKEDIR})
 
-install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+install(FILES ${PROJECT_BINARY_DIR}/${package}Config.cmake ${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake
         DESTINATION ${${package}_INSTALL_CMAKEDIR})
 
 install(
@@ -34,7 +31,7 @@ install(
 
 install(
     EXPORT ${package}Targets
-    NAMESPACE ${package}::
+    NAMESPACE my_project::
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
     COMPONENT ${package}_Development)
 

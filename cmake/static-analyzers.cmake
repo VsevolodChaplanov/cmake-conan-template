@@ -32,7 +32,7 @@ endfunction()
 function(target_cppcheck target)
     find_program(CPPCHECK cppcheck)
     if(CPPCHECK)
-        cmake_parse_arguments(ARGUMENTS "" "WARNINGS_AS_ERRORS;USE_ON_BUILD" "CPPCHECK_OPTIONS" "${ARGV}")
+        cmake_parse_arguments(ARGUMENTS "" "WARNINGS_AS_ERRORS" "CPPCHECK_OPTIONS" "${ARGV}")
 
         get_target_property(TARGET_CXX_STANDARD ${target} CXX_STANDARD)
 
@@ -85,13 +85,13 @@ function(target_clangtidy target)
         get_target_property(TARGET_CXX_STANDARD ${target} CXX_STANDARD)
 
         if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-            get_target_property(TARGET_PCH ${target} INTERFACE_PRECOMPILE_HEADERS)
+            get_target_property(TARGET-pch ${target} INTERFACE_PRECOMPILE_HEADERS)
 
-            if("${TARGET_PCH}" STREQUAL "TARGET_PCH-NOTFOUND")
-                get_target_property(TARGET_PCH ${target} PRECOMPILE_HEADERS)
+            if("${TARGET-pch}" STREQUAL "TARGET-pch-NOTFOUND")
+                get_target_property(TARGET-pch ${target} PRECOMPILE_HEADERS)
             endif()
 
-            if(NOT ("${TARGET_PCH}" STREQUAL "TARGET_PCH-NOTFOUND"))
+            if(NOT ("${TARGET-pch}" STREQUAL "TARGET-pch-NOTFOUND"))
                 message(
                     SEND_ERROR
                         "clang-tidy cannot be enabled with non-clang compiler and PCH, clang-tidy fails to handle gcc's PCH file"
@@ -150,7 +150,7 @@ function(target_include_what_you_use target)
     find_program(INCLUDE_WHAT_YOU_USE include-what-you-use)
 
     if(INCLUDE_WHAT_YOU_USE)
-        cmake_parse_arguments(ARGUMENTS "" "USE_ON_BUILD" "IWYU_OPTIONS" "${ARGV}")
+        cmake_parse_arguments(ARGUMENTS "" "" "IWYU_OPTIONS" "${ARGV}")
 
         if(ARGUMENTS_IWYU_OPTIONS)
             set(TARGET_IWYU_OPTIONS "${ARGUMENTS_IWYU_OPTIONS}")

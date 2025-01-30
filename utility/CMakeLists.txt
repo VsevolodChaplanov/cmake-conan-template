@@ -10,25 +10,23 @@ include(../cmake/lint-targets.cmake)
 
 project(
     utility
-    VERSION
-        ${my_project_VERSION_MAJOR}.${my_project_VERSION_MINOR}.${my_project_VERSION_PATCH}
+    VERSION ${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.${CMAKE_PROJECT_VERSION_PATCH}
     LANGUAGES CXX)
 
 include(cmake/options.cmake)
-include(cmake/dependencies.cmake)
 
 # ---- Project options target
 
-add_library(${PROJECT_NAME}_options INTERFACE)
+add_library(${PROJECT_NAME}-options INTERFACE)
 
-# ---- Set compile features
+# ---- Link with project wide options
 
-target_compile_features(${PROJECT_NAME}_options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
+target_link_libraries(${PROJECT_NAME}-options INTERFACE $<BUILD_INTERFACE:${CMAKE_PROJECT_NAME}-options>)
 
 # ---- Add sanitizers
 
 target_sanitizers(
-    ${PROJECT_NAME}_options
+    ${PROJECT_NAME}-options
     SANITIZER_ADDRESS
     ${${PROJECT_NAME}_SANITIZER_ADDRESS}
     SANITIZER_LEAK
@@ -47,7 +45,7 @@ target_sanitizers(
 # ---- Declare library ----
 
 add_library(${PROJECT_NAME} INTERFACE)
-add_library(my_project::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(${CMAKE_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
@@ -59,8 +57,16 @@ file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/my_project/${PROJECT_NA
 
 # ---- Set target sources
 
-target_sources(${PROJECT_NAME} PUBLIC FILE_SET HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES
-                                      ${LIBRARY_INCLUDES})
+target_sources(
+    ${PROJECT_NAME}
+    PUBLIC FILE_SET
+           ${PROJECT_NAME}_Headers
+           TYPE
+           HEADERS
+           BASE_DIRS
+           ${PROJECT_SOURCE_DIR}/include
+           FILES
+           ${LIBRARY_INCLUDES})
 
 # ---- Set target include dirs
 
@@ -69,7 +75,7 @@ target_include_directories(${PROJECT_NAME} ${warning_guard} INTERFACE $<BUILD_IN
 
 # ---- Add libraries
 
-target_link_libraries(${PROJECT_NAME} INTERFACE ${PROJECT_NAME}_options)
+target_link_libraries(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_NAME}-options>)
 
 # ---- Configure linker
 
@@ -81,19 +87,19 @@ set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES})
 
 # ---- Clang-tidy target
 
-if(${PROJECT_NAME}_ENABLE_CLANGTIDY_ON_BUILD)
+if(${PROJECT_NAME}_ENABLE_CLANGTIDY)
     target_clangtidy(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
 endif()
 
 # ---- Cppcheck target
 
-if(${PROJECT_NAME}_ENABLE_CPPCHECK_ON_BUILD)
+if(${PROJECT_NAME}_ENABLE_CPPCHECK)
     target_cppcheck(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
 endif()
 
 # ---- IWYU target
 
-if(${PROJECT_NAME}_ENABLE_IWYU_ON_BUILD)
+if(${PROJECT_NAME}_ENABLE_IWYU)
     target_include_what_you_use(${PROJECT_NAME} USE_ON_BUILD)
 endif()
 
@@ -117,7 +123,7 @@ endif()
 # ---- Build tests
 
 include(CTest)
-if(BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTS)
+if(BUILD_TESTING AND ${PROJECT_NAME}_BUILD_TESTING)
     add_subdirectory(test)
 endif()
 

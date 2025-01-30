@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(utility-examples CXX)
+project(${CMAKE_PROJECT_NAME}-examples CXX)
 
 include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
 include(../../cmake/static-analyzers.cmake)
 
 if(PROJECT_IS_TOP_LEVEL)
-    find_package(pybinf_tatneft REQUIRED)
+    find_package(my_project REQUIRED)
 endif()
 
 add_custom_target(${PROJECT_NAME}-run-examples)

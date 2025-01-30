@@ -112,13 +112,13 @@ jobs:
       - name: Test
         working-directory: build/sanitize
         env:
-          ASAN_OPTIONS: "strict_string_checks=1:\
+          ASAN-options: "strict_string_checks=1:\
           detect_stack_use_after_return=1:\
           check_initialization_order=1:\
           strict_init_order=1:\
           detect_leaks=1:\
           halt_on_error=1"
-          UBSAN_OPTIONS: "print_stacktrace=1:\
+          UBSAN-options: "print_stacktrace=1:\
           halt_on_error=1"
         run: ctest --output-on-failure --no-tests=error -j 2
 

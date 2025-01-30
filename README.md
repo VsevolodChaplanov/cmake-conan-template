@@ -19,5 +19,5 @@ Thats is a small template to quick start a new cmake project with a lot features
 
 # quick start
 
-Change pybinf_tatneft -> to your project name and start to develop
+Change my_project -> to your project name and start to develop
 
