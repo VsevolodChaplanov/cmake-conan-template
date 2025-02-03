@@ -2,7 +2,7 @@ include(CMakeParseArguments)
 
 function(target_sanitizers target)
     set(sanitizers-options SANITIZER_ADDRESS SANITIZER_LEAK SANITIZER_UNDEFINED_BEHAVIOR SANITIZER_THREAD
-                           SANITIZER_MEMORY)
+                           SANITIZER_MEMORY SANITIZER_SAFE_STACK)
 
     cmake_parse_arguments(ENABLE "" "${sanitizers-options}" "" "${ARGV}")
 
@@ -19,6 +19,10 @@ function(target_sanitizers target)
 
         if(ENABLE_SANITIZER_UNDEFINED_BEHAVIOR)
             list(APPEND SANITIZERS "undefined")
+        endif()
+
+        if(ENABLE_SANITIZER_SAFE_STACK AND CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+            list(APPEND SANITIZERS "safe-stack")
         endif()
 
         if(ENABLE_SANITIZER_THREAD)
@@ -43,6 +47,7 @@ function(target_sanitizers target)
                 list(APPEND SANITIZERS "memory")
             endif()
         endif()
+
     elseif(MSVC)
         if(ENABLE_SANITIZER_ADDRESS)
             list(APPEND SANITIZERS "address")
