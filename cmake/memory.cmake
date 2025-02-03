@@ -13,7 +13,13 @@ endfunction()
 
 function(memcheck_target target)
     find_program(VALGRIND valgrind)
+    find_program(GAWK gawk)
 
+    if (NOT GAWK)
+        message(WARNING "gawk not found - valgrind html report generator can't be executed")
+        return()
+    endif()
+    
     if(VALGRIND)
         include(FetchContent)
         FetchContent_Declare(
@@ -25,12 +31,17 @@ function(memcheck_target target)
 
         set(MEMCHECK ${memcheck-cover_SOURCE_DIR}/bin)
 
+        add_custom_command(OUTPUT memcheck-cover.config
+            COMMAND ${MEMCHECK}/generate_html_report.sh --generate-config
+            WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>)
+
         add_custom_target(
             ${target}-memcheck-cover
             COMMAND ${MEMCHECK}/memcheck_runner.sh -o $<TARGET_FILE_DIR:${target}>/valgrind/report --
-                    $<TARGET_FILE_DIR:${target}>
+                    $<TARGET_FILE:${target}>
             COMMAND ${MEMCHECK}/generate_html_report.sh -i $<TARGET_FILE_DIR:${target}>/valgrind -o
-                    $<TARGET_FILE_DIR:${target}>/valgrind
-            WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>)
+                    $<TARGET_FILE_DIR:${target}>/valgrind/report/ --config $<TARGET_FILE_DIR:${target}>/memcheck-cover.config
+            WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>
+            DEPENDS memcheck-cover.config)
     endif()
 endfunction()
