@@ -35,7 +35,7 @@ include(cmake/coverage.cmake)
 include(cmake/sanitizers.cmake)
 
 
-if(my_project_ENABLE_CCACHE)
+if(${PROJECT_NAME}_ENABLE_CCACHE)
     enable_ccache()
 endif()
 
@@ -83,7 +83,7 @@ include(cmake/install-rules.cmake)
 
 # ---- Developer mode ----
 
-if(NOT my_project_DEVELOPER_MODE)
+if(NOT ${PROJECT_NAME}_DEVELOPER_MODE)
     return()
 elseif(NOT PROJECT_IS_TOP_LEVEL)
     message(AUTHOR_WARNING "Developer mode is intended for developers of my_project")

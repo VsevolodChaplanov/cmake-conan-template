@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(${CMAKE_PROJECT_NAME}-tests LANGUAGES CXX)
+set(PARENT_PROJECT_NAME ${PROJECT_NAME})
+
+project(${PARENT_PROJECT_NAME}-tests LANGUAGES CXX)
 
 include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
@@ -25,7 +27,7 @@ file(GLOB TEST_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 # ---- Tests ----
 
 add_executable(${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} PRIVATE my_project::${CMAKE_PROJECT_NAME} Catch2::Catch2WithMain)
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PARENT_PROJECT_NAME} Catch2::Catch2WithMain)
 target_sources(${PROJECT_NAME} PRIVATE ${TEST_SOURCES})
 
 option(LINT_TESTS "enable static analyzers for tests" OFF)
@@ -42,7 +44,7 @@ catch_discover_tests(${PROJECT_NAME})
 
 # ---- Add coverage
 
-if(${CMAKE_PROJECT_NAME}_ENABLE_COVERAGE)
+if(${PARENT_PROJECT_NAME}_ENABLE_COVERAGE)
     add_coverage_lcov_target(${PROJECT_NAME})
     add_coverage_llvm_target(${PROJECT_NAME})
 endif()

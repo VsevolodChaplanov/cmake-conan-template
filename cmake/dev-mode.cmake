@@ -1,6 +1,6 @@
 include(cmake/folders.cmake)
 
-if(my_project_BUILD_DOCS)
+if(${PROJECT_NAME}_BUILD_DOCS)
     include(cmake/docs.cmake)
 
     wrap_doxygen_add_docs(${PROJECT_NAME})

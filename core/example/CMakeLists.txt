@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(${CMAKE_PROJECT_NAME}-examples CXX)
+set(PARENT_PROJECT_NAME ${PROJECT_NAME})
+
+project(${PARENT_PROJECT_NAME}-examples CXX)
 
 include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
@@ -14,7 +16,7 @@ function(add_example file)
     get_filename_component(NAME ${file} NAME_WE)
 
     add_executable(${NAME} ${file})
-    target_link_libraries(${NAME} PRIVATE my_project::${CMAKE_PROJECT_NAME})
+    target_link_libraries(${NAME} PRIVATE ${PARENT_PROJECT_NAME})
 
     add_custom_target(
         ${PROJECT_NAME}-run-${NAME}

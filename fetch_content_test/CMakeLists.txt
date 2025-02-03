@@ -29,10 +29,6 @@ FetchContent_Declare(
     FIND_PACKAGE_ARGS NAMES my_project)
 FetchContent_MakeAvailable(my_project)
 
-if(TARGET my_project::my_project)
-    message("sfsdfsd")
-endif()
-
 add_executable(${PROJECT_NAME} src/fetch_content_test.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE my_project::core Catch2::Catch2WithMain)
 

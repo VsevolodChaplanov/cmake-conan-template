@@ -8,6 +8,8 @@ include(../cmake/sanitizers.cmake)
 include(../cmake/static-analyzers.cmake)
 include(../cmake/lint-targets.cmake)
 
+set(PARENT_PROJECT_NAME ${PROJECT_NAME})
+
 project(
     utility
     VERSION ${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.${CMAKE_PROJECT_VERSION_PATCH}
@@ -21,7 +23,7 @@ add_library(${PROJECT_NAME}-options INTERFACE)
 
 # ---- Link with project wide options
 
-target_link_libraries(${PROJECT_NAME}-options INTERFACE $<BUILD_INTERFACE:${CMAKE_PROJECT_NAME}-options>)
+target_link_libraries(${PROJECT_NAME}-options INTERFACE $<BUILD_INTERFACE:${PARENT_PROJECT_NAME}-options>)
 
 # ---- Add sanitizers
 
@@ -45,7 +47,7 @@ target_sanitizers(
 # ---- Declare library ----
 
 add_library(${PROJECT_NAME} INTERFACE)
-add_library(${CMAKE_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+add_library(${PARENT_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 # ---- Generate export header
 
