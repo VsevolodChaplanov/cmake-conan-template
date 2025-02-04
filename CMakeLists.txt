@@ -41,6 +41,10 @@ endif()
 
 enable_ipo()
 
+file(RELATIVE_PATH origin_relative ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}
+     ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+set(CMAKE_INSTALL_RPATH $ORIGIN $ORIGIN/${origin_relative})
+
 # ---- Project options
 
 add_library(${PROJECT_NAME}-options INTERFACE)

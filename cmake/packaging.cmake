@@ -1,0 +1,2 @@
+set(CPACK_PACKAGE_CONTACT "<contact>")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "<maintainer>")

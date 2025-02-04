@@ -316,6 +316,11 @@
         },
         {
             "name": "ci-ubuntu-release",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
             "inherits": [
                 "ci-build-common"
             ],
@@ -327,6 +332,11 @@
             "inherits": [
                 "ci-build-common"
             ],
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
             "configurePreset": "ci-windows",
             "configuration": "Release"
         }
@@ -399,7 +409,10 @@
             ],
             "generators": [
                 "DEB"
-            ]
+            ],
+            "variables": {
+                "CPACK_DEBIAN_PACKAGE_SHLIBDEPS": "ON"
+            }
         }
     ]
 }
