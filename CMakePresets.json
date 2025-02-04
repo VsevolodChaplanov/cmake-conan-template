@@ -307,5 +307,99 @@
                 "conan"
             ]
         }
+    ],
+    "buildPresets": [
+        {
+            "name": "ci-build-common",
+            "hidden": true,
+            "jobs": 2
+        },
+        {
+            "name": "ci-ubuntu-release",
+            "inherits": [
+                "ci-build-common"
+            ],
+            "configurePreset": "ci-ubuntu",
+            "configuration": "Release"
+        },
+        {
+            "name": "ci-windows-release",
+            "inherits": [
+                "ci-build-common"
+            ],
+            "configurePreset": "ci-windows",
+            "configuration": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "ci-test-common",
+            "hidden": true,
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "jobs": 2
+            }
+        },
+        {
+            "name": "ci-windows-test-release",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "configurePreset": "ci-windows",
+            "configuration": "Release",
+            "inherits": [
+                "ci-test-common"
+            ]
+        },
+        {
+            "name": "ci-ubuntu-test-release",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "configurePreset": "ci-ubuntu",
+            "configuration": "Release",
+            "inherits": [
+                "ci-test-common"
+            ]
+        }
+    ],
+    "packagePresets": [
+        {
+            "name": "ci-windows-package",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "configurePreset": "ci-windows",
+            "configurations": [
+                "Release"
+            ],
+            "generators": [
+                "ZIP;NSIS"
+            ]
+        },
+        {
+            "name": "ci-ubuntu-package",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "configurePreset": "ci-ubuntu",
+            "configurations": [
+                "Release"
+            ],
+            "generators": [
+                "DEB"
+            ]
+        }
     ]
 }
