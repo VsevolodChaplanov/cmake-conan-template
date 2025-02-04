@@ -393,7 +393,7 @@
                 "Release"
             ],
             "generators": [
-                "ZIP;NSIS"
+                "ZIP"
             ]
         },
         {
