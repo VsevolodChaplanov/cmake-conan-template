@@ -40,7 +40,7 @@ jobs:
     - name: Configure CMake
       run: |
         ${{ matrix.activate_cmd }}
-        cmake --preset ci-${{ matrix.ci_os }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        cmake --preset ci-${{ matrix.ci_os }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -D CONAN_COMMAND=${{ github.workspace }}\.venv\Scripts\conan.exe
 
     - name: Build
       run: |
