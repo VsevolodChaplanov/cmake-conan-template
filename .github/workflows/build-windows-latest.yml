@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
 
     strategy:
       # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations. Consider changing this to true when your workflow is stable.
@@ -16,8 +16,7 @@ jobs:
 
       matrix:
         include:
-          - os: windows-latest
-            c_compiler: cl
+          - c_compiler: cl
             cpp_compiler: cl
             ci_os: windows
             activate_cmd: .venv\Scripts\activate.bat
@@ -46,15 +45,15 @@ jobs:
     - name: Build
       run: |
         ${{ matrix.activate_cmd }}
-        cmake --build --preset ci-${{ matrix.ci_build_presets }}-release
+        cmake --build --preset ci-${{ matrix.ci_os }}-release
 
     - name: Test
       run: |
         ${{ matrix.activate_cmd }}
-        ctest --preset ci-${{ matrix.ci_test_presets }}-test-release
+        ctest --preset ci-${{ matrix.ci_os }}-test-release
 
     - name: Package
       run: |
         ${{ matrix.activate_cmd }}
-        cpack --preset ci-${{ matrix.ci_pack_presets }}-package
+        cpack --preset ci-${{ matrix.ci_os }}-package
       
