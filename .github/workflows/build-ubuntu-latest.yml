@@ -37,7 +37,7 @@ jobs:
         version: "latest"
         enable-cache: true
         cache-dependency-glob: "**/pyproject.toml"
-    - run: uv sync --frozen --no-install-project
+    - run: uv venv && uv sync --frozen --no-install-project
 
     - name: Configure CMake
       run: |
