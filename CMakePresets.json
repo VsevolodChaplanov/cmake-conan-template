@@ -541,7 +541,7 @@
             ]
         },
         {
-            "name": "ci-ubuntu-package",
+            "name": "ci-ubuntu-release-package",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",

@@ -15,7 +15,9 @@ jobs:
       fail-fast: false
 
       matrix:
-        c_compiler: [gcc, clang]
+        compiler:
+          - gcc-13
+          - llvm-18
         ci_preset_suffix: [ubuntu-debug-sanitize-thread, ubuntu-debug-sanitize-alub, ubuntu-release]
         include:
           - os: ubuntu-latest
@@ -28,11 +30,41 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ./build/
+          ~/vcpkg
+          ~/.cache/vcpkg/archives
+          ~/.conan2/
+          ${{ env.LOCALAPPDATA }}/vcpkg/archives
+          ${{ env.APPDATA }}/vcpkg/archives
+          ${{ env.XDG_CACHE_HOME }}/vcpkg/archives
+          ~/.cache/ccache
+          ~/.ccache
+          ~/.config/ccache
+          ~/Library/Caches/ccache
+          ${{ env.LOCALAPPDATA }}/ccache
+          ${{ env.XDG_CACHE_HOME }}/ccache
+        key: ${{ runner.os }}-${{ matrix.compiler }}-${{ env.BUILD_TYPE }}-${{ hashFiles('**/CMakeLists.txt', './vcpkg.json') }}
+        restore-keys: |
+          ${{ runner.os }}-${{ env.BUILD_TYPE }}-
+
     - name: Install uv
       uses: astral-sh/setup-uv@v5
       with:
         version: "latest"
     - run: uv sync --frozen --no-install-project
+
+    - name: Setup Cpp
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          cmake: true
+          cppcheck: true
+          ccache: true
+          clang-tidy: 18
 
     - name: Configure CMake
       run: |
@@ -44,7 +76,3 @@ jobs:
 
     - name: Test
       run: ctest --preset ci-${{ matrix.ci_preset_suffix }}
-
-    - name: Package
-      run: cpack --preset ci-${{ matrix.ci_preset_suffix }}-package
-      
