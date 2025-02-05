@@ -24,7 +24,7 @@ function(add_coverage_lcov_target target)
         endif()
 
         if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-            set(LCOV_TOOL ${LCOV} --gcov-tool ${CMAKE_SOURCE_DIR}/cmake/gcov-llvm-wrapper.sh)
+            set(LCOV_TOOL ${LCOV} --gcov-tool ${CMAKE_SOURCE_DIR}/cmake/llvm-gcov-wrapper.sh)
         else()
             set(LCOV_TOOL ${LCOV})
         endif()
@@ -34,8 +34,8 @@ function(add_coverage_lcov_target target)
             COMMAND ${CMAKE_COMMAND} -E remove_directory coverage
             COMMAND ${LCOV_TOOL} -d . --zerocounters
             COMMAND $<TARGET_FILE:${target}>
-            COMMAND ${LCOV_TOOL} -d . --capture -o coverage-${target}.info
-            COMMAND ${LCOV_TOOL} -r coverage-${target}.info '/usr/include/*' 'boost/*' '*.conan2*' -o
+            COMMAND ${LCOV_TOOL} -d . --capture -o coverage-${target}.info --ignore-errors inconsistent
+            COMMAND ${LCOV_TOOL} -r coverage-${target}.info '/usr/include/*' '*.conan2*' -o
                     filtered-${target}.info
             COMMAND ${GENHTML} -o coverage-lcov filtered-${target}.info --legend
             WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>/../)
@@ -51,6 +51,7 @@ function(add_coverage_lcov_target target)
     endif()
 endfunction()
 
+# Add special target for coverage from passed target
 function(add_coverage_llvm_target target)
     if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
         find_program(LLVM_COV_PATH llvm-cov)
@@ -68,7 +69,7 @@ function(add_coverage_llvm_target target)
             COMMAND
                 ${LLVM_COV_PATH} show $<TARGET_FILE:${target}> -instr-profile=default.profdata
                 -ignore-filename-regex='.*/tests/.*' -show-line-counts-or-regions -use-color -show-instantiation-summary
-                -show-branches=count -format=html -output-dir=./../coverage-llvm
+                -show-branches=count -format=text -output-dir=./../coverage-llvm
             COMMAND ${LLVM_COV_PATH} report $<TARGET_FILE:${target}> -instr-profile=default.profdata
                     -ignore-filename-regex='.*/tests/.*' -show-region-summary=false -show-branch-summary=false
             WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>)
