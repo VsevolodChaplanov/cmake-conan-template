@@ -21,6 +21,6 @@ option(${PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR
 option(${PROJECT_NAME}_SANITIZER_THREAD "Enable SANITIZER_THREAD for the `${PROJECT_NAME}` project" OFF)
 option(${PROJECT_NAME}_SANITIZER_MEMORY "Enable SANITIZER_MEMORY for the `${PROJECT_NAME}` project" OFF)
 
-option(${PROJECT_NAME}_BUILD_DOCS "Generate docs using Doxygen and doxygen-awesome-css" OFF)
+option(${PROJECT_NAME}_BUILD_DOCS "Generate docs using Doxygen and doxygen-awesome-css" ON)
 
 option(${PROJECT_NAME}_ENABLE_PCH "Enable precompiled headers for the ${PROJECT_NAME} project" ON)
