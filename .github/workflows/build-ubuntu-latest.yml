@@ -31,36 +31,24 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install pipx and uv
-      run: |
-        python -m pip install --user pipx
-        python -m pipx ensurepath
-        pipx install uv
-      shell: bash
-
-    - name: Install Conan via uv
-      run: |
-        uv venv 
-        uv sync
-      shell: bash
+    - name: Define a cache dependency glob
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "latest"
+        enable-cache: true
+        cache-dependency-glob: "**/pyproject.toml"
 
     - name: Configure CMake
       run: |
         ${{ matrix.activate_cmd }}
-        cmake --preset ci-${{ matrix.ci_os }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        cmake --preset ci-${{ matrix.ci_os }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -D CONAN_COMMAND=${{ github.workspace }}\.venv\Scripts\conan.exe
 
     - name: Build
-      run: |
-        ${{ matrix.activate_cmd }}
-        cmake --build --preset ci-${{ matrix.ci_os }}-release
+      run: cmake --build --preset ci-${{ matrix.ci_os }}-release
 
     - name: Test
-      run: |
-        ${{ matrix.activate_cmd }}
-        ctest --preset ci-${{ matrix.ci_os }}-test-release
+      run: ctest --preset ci-${{ matrix.ci_os }}-test-release
 
     - name: Package
-      run: |
-        ${{ matrix.activate_cmd }}
-        cpack --preset ci-${{ matrix.ci_os }}-package
+      run: cpack --preset ci-${{ matrix.ci_os }}-package
       
