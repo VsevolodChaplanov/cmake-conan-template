@@ -58,13 +58,13 @@ jobs:
     - run: uv sync --frozen --no-install-project
 
     - name: Setup Cpp
-        uses: aminya/setup-cpp@v1
-        with:
-          compiler: ${{ matrix.compiler }}
-          cmake: true
-          cppcheck: true
-          ccache: true
-          clang-tidy: 18
+      uses: aminya/setup-cpp@v1
+      with:
+        compiler: ${{ matrix.compiler }}
+        cmake: true
+        cppcheck: true
+        ccache: true
+        clang-tidy: 18
 
     - name: Configure CMake
       run: |
