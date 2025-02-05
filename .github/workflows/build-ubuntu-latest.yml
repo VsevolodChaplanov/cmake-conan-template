@@ -21,12 +21,10 @@ jobs:
             c_compiler: gcc
             cpp_compiler: g++
             ci_os: ubuntu
-            activate_cmd: source .venv/bin/activate
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
             ci_os: ubuntu
-            activate_cmd: source .venv/bin/activate
 
     steps:
     - uses: actions/checkout@v4
@@ -35,11 +33,11 @@ jobs:
       uses: astral-sh/setup-uv@v5
       with:
         version: "latest"
-    - run: uv venv && uv sync --frozen --no-install-project
+    - run: uv sync --frozen --no-install-project
 
     - name: Configure CMake
       run: |
-        ${{ matrix.activate_cmd }}
+        source .venv/bin/activate
         cmake --preset ci-${{ matrix.ci_os }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -D CONAN_COMMAND=${{ github.workspace }}\.venv\Scripts\conan.exe
 
     - name: Build

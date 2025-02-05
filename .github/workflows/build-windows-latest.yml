@@ -28,7 +28,7 @@ jobs:
       uses: astral-sh/setup-uv@v5
       with:
         version: "latest"
-    - run: uv venv && uv sync --frozen --no-install-project
+    - run: uv sync --frozen --no-install-project
 
     - name: Configure CMake
       run: |

@@ -32,7 +32,6 @@
             "name": "conan",
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_PROJECT_TOP_LEVEL_INCLUDES": "${sourceDir}/cmake/conan_provider.cmake",
                 "CMAKE_POLICY_DEFAULT_CMP0091": "NEW"
             }
         },

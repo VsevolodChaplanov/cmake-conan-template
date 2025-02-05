@@ -10,6 +10,7 @@ include(cmake/vsenvironment.cmake)
 run_vcvarsall()
 
 include(cmake/cpm.cmake)
+include(cmake/conan_provider.cmake)
 
 # cmake-format: off
 project(my_project
