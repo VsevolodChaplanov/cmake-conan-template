@@ -1,3 +1,5 @@
+include_guard(GLOBAL)
+
 set(_script_path "${CMAKE_BINARY_DIR}/cmake/conan_provider.cmake")
 set(_link "https://github.com/conan-io/cmake-conan/raw/refs/heads/develop2/conan_provider.cmake")
 if(NOT EXISTS "${_script_path}")

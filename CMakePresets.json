@@ -29,6 +29,41 @@
             }
         },
         {
+            "name": "cpm-common",
+            "hidden": true,
+            "environment": {
+                "CPM_USE_LOCAL_PACKAGES": "ON",
+                "CPM_LOCAL_PACKAGES_ONLY": "OFF",
+                "CPM_USE_NAMED_CACHE_DIRECTORIES": "ON"
+            }
+        },
+        {
+            "name": "cpm-windows",
+            "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            },
+            "inherits": "cpm-common",
+            "environment": {
+                "CPM_SOURCE_CACHE": "$env{USERPROFILE}\\.cache\\.cpm"
+            }
+        },
+        {
+            "name": "cpm-unix",
+            "hidden": true,
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "inherits": "cpm-common",
+            "environment": {
+                "CPM_SOURCE_CACHE": "$env{HOME}\\.cache\\.cpm"
+            }
+        },
+        {
             "name": "conan",
             "hidden": true,
             "cacheVariables": {
@@ -256,6 +291,7 @@
                 "ci-darwin",
                 "ci-multi-config",
                 "dev-mode",
+                "cpm-unix",
                 "conan"
             ]
         },
@@ -271,6 +307,7 @@
                 "ci-build",
                 "ci-linux",
                 "conan",
+                "cpm-unix",
                 "dev-mode"
             ]
         },
@@ -287,6 +324,7 @@
                 "ci-win64",
                 "ci-multi-config",
                 "dev-mode",
+                "cpm-windows",
                 "conan"
             ]
         },
@@ -303,6 +341,7 @@
                 "ci-win64-ninja",
                 "ci-multi-config",
                 "dev-mode",
+                "cpm-windows",
                 "conan"
             ]
         }
