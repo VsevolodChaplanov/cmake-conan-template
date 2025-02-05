@@ -174,9 +174,26 @@
                 "ci-std"
             ],
             "generator": "Unix Makefiles",
+            "hidden": true
+        },
+        {
+            "name": "ci-linux-release",
             "hidden": true,
+            "inherits": [
+                "ci-linux"
+            ],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
+            }
+        },
+        {
+            "name": "ci-linux-debug",
+            "hidden": true,
+            "inherits": [
+                "ci-linux"
+            ],
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
@@ -296,7 +313,17 @@
             ]
         },
         {
-            "name": "ci-ubuntu",
+            "name": "ci-ubuntu-common",
+            "hidden": true,
+            "inherits": [
+                "ci-build",
+                "conan",
+                "cpm-unix",
+                "dev-mode"
+            ]
+        },
+        {
+            "name": "ci-ubuntu-release",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "condition": {
                 "type": "equals",
@@ -304,11 +331,38 @@
                 "rhs": "Linux"
             },
             "inherits": [
-                "ci-build",
-                "ci-linux",
-                "conan",
-                "cpm-unix",
-                "dev-mode"
+                "ci-ubuntu-common",
+                "ci-linux-release"
+            ]
+        },
+        {
+            "name": "ci-ubuntu-debug-sanitize-alub",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "inherits": [
+                "ci-ubuntu-common",
+                "ci-linux-debug",
+                "sanitize-address",
+                "sanitize-leak",
+                "sanitize-ub"
+            ]
+        },
+        {
+            "name": "ci-ubuntu-debug-sanitize-thread",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "inherits": [
+                "ci-ubuntu-common",
+                "ci-linux-debug",
+                "sanitize-thread"
             ]
         },
         {
@@ -362,8 +416,34 @@
             "inherits": [
                 "ci-build-common"
             ],
-            "configurePreset": "ci-ubuntu",
+            "configurePreset": "ci-ubuntu-release",
             "configuration": "Release"
+        },
+        {
+            "name": "ci-ubuntu-debug-sanitize-alub",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "inherits": [
+                "ci-build-common"
+            ],
+            "configurePreset": "ci-ubuntu-debug-sanitize-alub",
+            "configuration": "Debug"
+        },
+        {
+            "name": "ci-ubuntu-debug-sanitize-thread",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "inherits": [
+                "ci-build-common"
+            ],
+            "configurePreset": "ci-ubuntu-debug-sanitize-thread",
+            "configuration": "Debug"
         },
         {
             "name": "ci-windows-release",
@@ -405,14 +485,40 @@
             ]
         },
         {
-            "name": "ci-ubuntu-test-release",
+            "name": "ci-ubuntu-release",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Linux"
             },
-            "configurePreset": "ci-ubuntu",
+            "configurePreset": "ci-ubuntu-release",
             "configuration": "Release",
+            "inherits": [
+                "ci-test-common"
+            ]
+        },
+        {
+            "name": "ci-ubuntu-debug-sanitize-alub",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "configurePreset": "ci-ubuntu-debug-sanitize-alub",
+            "configuration": "Debug",
+            "inherits": [
+                "ci-test-common"
+            ]
+        },
+        {
+            "name": "ci-ubuntu-debug-sanitize-thread",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "configurePreset": "ci-ubuntu-debug-sanitize-thread",
+            "configuration": "Debug",
             "inherits": [
                 "ci-test-common"
             ]
@@ -441,7 +547,7 @@
                 "lhs": "${hostSystemName}",
                 "rhs": "Linux"
             },
-            "configurePreset": "ci-ubuntu",
+            "configurePreset": "ci-ubuntu-release",
             "configurations": [
                 "Release"
             ],

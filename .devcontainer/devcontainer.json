@@ -22,6 +22,11 @@
 				"streetsidesoftware.code-spell-checker",
 				"pokowaka.pokowaka-iwyu",
 				"cschlosser.doxdocgen",
+				"josetr.cmake-language-support-vscode",
+				"Codeium.codeium",
+				"vadimcn.vscode-lldb",
+				"ms-python.python",
+				"tal7aouy.rainbow-bracket"
 			]
 		},
 		"settings": {
