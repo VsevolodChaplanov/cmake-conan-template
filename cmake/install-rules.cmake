@@ -8,9 +8,6 @@ include(GNUInstallDirs)
 
 install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets)
 
-install(IMPORTED_RUNTIME_ARTIFACTS)
-install(RUNTIME_DEPENDENCY_SET ${package}_Dependency)
-
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
 # Allow package maintainers to freely override the path for the configs
@@ -29,13 +26,13 @@ install(FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake ${PROJECT_BINARY
 install(
     FILES ${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
-    COMPONENT ${package}_Development)
+    COMPONENT Development)
 
 install(
     EXPORT ${package}Targets
     NAMESPACE ${package}::
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
-    COMPONENT ${package}_Development)
+    COMPONENT Development)
 
 if(PROJECT_IS_TOP_LEVEL)
     include(cmake/packaging.cmake)

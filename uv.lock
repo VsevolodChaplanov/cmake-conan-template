@@ -173,14 +173,18 @@ wheels = [
 name = "my-project"
 version = "0.1.0"
 source = { virtual = "." }
-dependencies = [
+
+[package.dev-dependencies]
+dev = [
     { name = "cmakelang" },
     { name = "codespell" },
     { name = "conan" },
 ]
 
 [package.metadata]
-requires-dist = [
+
+[package.metadata.requires-dev]
+dev = [
     { name = "cmakelang", specifier = ">=0.6.13" },
     { name = "codespell", specifier = ">=2.4.1" },
     { name = "conan", specifier = ">=2.12.1" },

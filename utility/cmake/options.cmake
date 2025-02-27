@@ -1,27 +1,28 @@
-option(${PROJECT_NAME}_BUILD_EXAMPLES "Build examples for ${PROJECT_NAME} part of project" ${${PARENT_PROJECT_NAME}_BUILD_EXAMPLES})
-option(${PROJECT_NAME}_BUILD_TESTING "Build tests for ${PROJECT_NAME} part of project" ${${PARENT_PROJECT_NAME}_BUILD_TESTING})
+option(${PROJECT_NAME}_BUILD_EXAMPLES "Build examples for ${PROJECT_NAME} part of project"
+       ${${PARENT_PROJECT_NAME}_BUILD_EXAMPLES})
+option(${PROJECT_NAME}_BUILD_TESTING "Build tests for ${PROJECT_NAME} part of project"
+       ${${PARENT_PROJECT_NAME}_BUILD_TESTING})
 
 option(${PROJECT_NAME}_ENABLE_COVERAGE "Enable coverage flags" ${${PARENT_PROJECT_NAME}_ENABLE_COVERAGE})
 
-option(${PROJECT_NAME}_ENABLE_CLANGTIDY "Enable clang-tidy during the build"
-       ${${PARENT_PROJECT_NAME}_ENABLE_CLANGTIDY})
-option(${PROJECT_NAME}_ENABLE_CPPCHECK "Enable cppcheck during the build"
-       ${${PARENT_PROJECT_NAME}_ENABLE_CPPCHECK})
-option(${PROJECT_NAME}_ENABLE_IWYU "Enable include-what-you-use during the build"
-       ${${PARENT_PROJECT_NAME}_ENABLE_IWYU})
+option(${PROJECT_NAME}_ENABLE_CLANGTIDY "Enable clang-tidy during the build" ${${PARENT_PROJECT_NAME}_ENABLE_CLANGTIDY})
+option(${PROJECT_NAME}_ENABLE_CPPCHECK "Enable cppcheck during the build" ${${PARENT_PROJECT_NAME}_ENABLE_CPPCHECK})
+option(${PROJECT_NAME}_ENABLE_IWYU "Enable include-what-you-use during the build" ${${PARENT_PROJECT_NAME}_ENABLE_IWYU})
 
 option(${PROJECT_NAME}_SANITIZER_ADDRESS "Enable SANITIZER_ADDRESS for the ${PROJECT_NAME} project"
        ${${PARENT_PROJECT_NAME}_SANITIZER_ADDRESS})
 option(${PROJECT_NAME}_SANITIZER_LEAK "Enable SANITIZER_LEAK for the ${PROJECT_NAME} project"
        ${${PARENT_PROJECT_NAME}_SANITIZER_LEAK})
 option(${PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR
-       "Enable SANITIZER_UNDEFINED_BEHAVIOR for the ${PROJECT_NAME} project" ${${PARENT_PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR})
+       "Enable SANITIZER_UNDEFINED_BEHAVIOR for the ${PROJECT_NAME} project"
+       ${${PARENT_PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR})
 option(${PROJECT_NAME}_SANITIZER_THREAD "Enable SANITIZER_THREAD for the ${PROJECT_NAME} project"
        ${${PARENT_PROJECT_NAME}_SANITIZER_THREAD})
 option(${PROJECT_NAME}_SANITIZER_MEMORY "Enable SANITIZER_MEMORY for the ${PROJECT_NAME} project"
        ${${PARENT_PROJECT_NAME}_SANITIZER_MEMORY})
 
-option(${PROJECT_NAME}_BUILD_DOCS "Enable doxygen build for the ${PROJECT_NAME} project" ${${PARENT_PROJECT_NAME}_BUILD_DOCS})
+option(${PROJECT_NAME}_BUILD_DOCS "Enable doxygen build for the ${PROJECT_NAME} project"
+       ${${PARENT_PROJECT_NAME}_BUILD_DOCS})
 
 option(${PROJECT_NAME}_SKIP_INSTALL_RULES "Skip install rules for the ${PROJECT_NAME} project"
-       ${CMAKE_SKIP_INSTALL_RULES})
+       ${${PARENT_PROJECT_NAME}_SKIP_INSTALL_RULES})

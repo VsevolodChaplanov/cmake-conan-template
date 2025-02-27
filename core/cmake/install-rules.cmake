@@ -4,16 +4,16 @@ include(GNUInstallDirs)
 # find_package(<package>) call for consumers to find this project
 set(package ${PROJECT_NAME})
 
+# cmake-format: off
 install(
     TARGETS ${package}
     EXPORT ${package}Targets
-    RUNTIME COMPONENT ${package}_Runtime
-    LIBRARY COMPONENT ${package}_Runtime NAMELINK_COMPONENT ${package}_Development
-    ARCHIVE COMPONENT ${package}_Development
-    PUBLIC_HEADER FILE_SET ${package}_Headers COMPONENT ${package}_Development)
-
-install(IMPORTED_RUNTIME_ARTIFACTS)
-install(RUNTIME_DEPENDENCY_SET ${package}_Dependency)
+    RUNTIME COMPONENT Runtime
+    LIBRARY COMPONENT Runtime NAMELINK_COMPONENT Development
+    ARCHIVE COMPONENT Development
+    FILE_SET ${package}_Headers COMPONENT Development
+    FILE_SET ${package}_GeneratedHeaders COMPONENT Development)
+# cmake-format: on
 
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
@@ -27,21 +27,19 @@ mark_as_advanced(${package}_INSTALL_CMAKEDIR)
 configure_package_config_file(cmake/install-config.cmake.in ${package}Config.cmake
                               INSTALL_DESTINATION ${${package}_INSTALL_CMAKEDIR})
 
-install(DIRECTORY ${PROJECT_BINARY_DIR}/include/my_project DESTINATION include)
-
 install(FILES ${PROJECT_BINARY_DIR}/${package}Config.cmake ${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake
         DESTINATION ${${package}_INSTALL_CMAKEDIR})
 
 install(
     FILES ${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
-    COMPONENT ${package}_Development)
+    COMPONENT Development)
 
 install(
     EXPORT ${package}Targets
     NAMESPACE ${package}::
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
-    COMPONENT ${package}_Development)
+    COMPONENT Development)
 
 if(PROJECT_IS_TOP_LEVEL)
     include(CPack)

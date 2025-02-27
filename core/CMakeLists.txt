@@ -76,6 +76,10 @@ target_sources(
            TYPE HEADERS
            BASE_DIRS ${PROJECT_SOURCE_DIR}/include
            FILES ${LIBRARY_INCLUDES}
+    PUBLIC FILE_SET ${PROJECT_NAME}_GeneratedHeaders
+           TYPE HEADERS
+           BASE_DIRS ${PROJECT_BINARY_DIR}/include
+           FILES ${PROJECT_BINARY_DIR}/include/${PARENT_PROJECT_NAME}/${PROJECT_NAME}/exports/exports.hpp
     PRIVATE ${LIBRARY_SOURCES})
 # cmake-format: on
 

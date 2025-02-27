@@ -7,7 +7,7 @@ set(package ${PROJECT_NAME})
 install(
     TARGETS ${package}
     EXPORT ${package}Targets
-    PUBLIC_HEADER FILE_SET ${package}_Headers COMPONENT ${package}_Development)
+    PUBLIC_HEADER FILE_SET ${package}_Headers COMPONENT Development)
 
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
@@ -27,13 +27,13 @@ install(FILES ${PROJECT_BINARY_DIR}/${package}Config.cmake ${PROJECT_BINARY_DIR}
 install(
     FILES ${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
-    COMPONENT ${package}_Development)
+    COMPONENT Development)
 
 install(
     EXPORT ${package}Targets
     NAMESPACE my_project::
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
-    COMPONENT ${package}_Development)
+    COMPONENT Development)
 
 if(PROJECT_IS_TOP_LEVEL)
     include(CPack)
