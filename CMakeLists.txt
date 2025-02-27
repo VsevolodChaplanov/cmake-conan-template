@@ -76,6 +76,11 @@ target_sanitizers(
     SANITIZER_MEMORY
     ${${PROJECT_NAME}_SANITIZER_MEMORY})
 
+export(
+    TARGETS ${PROJECT_NAME}-options
+    NAMESPACE ${PROJECT_NAME}::
+    FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Options.cmake)
+
 register_module(utility)
 register_module(core)
 

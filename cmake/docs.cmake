@@ -1,5 +1,6 @@
 # ---- Dependencies ----
 
+# Wraps adding doxygen docs Check projects and files sets doxygen can generated unnecessary docs for `tools` directories
 function(wrap_doxygen_add_docs target)
     find_package(Doxygen)
 
@@ -7,24 +8,9 @@ function(wrap_doxygen_add_docs target)
         return()
     endif()
 
-    include(CMakeParseArguments)
-    cmake_parse_arguments(ARGUMENTS "" "" "SOURCE_DIRS;OUTPUT" "${ARGV}")
-
     set(DOXYGEN_GENERATE_HTML YES)
 
-    if(ARGUMENTS_OUTPUT)
-        set(DOXYGEN_HTML_OUTPUT ${PROJECT_BINARY_DIR}/${ARGUMENTS_OUTPUT})
-    else()
-        set(DOXYGEN_HTML_OUTPUT ${PROJECT_BINARY_DIR}/documentation)
-    endif()
-
-    if(ARGUMENTS_SOURCE_DIRS)
-        set(FILES_FOR_DOC_SOURCE_DIR ${ARGUMENTS_SOURCE_DIRS})
-    else()
-        set(FILES_FOR_DOC_SOURCE_DIR ${PROJECT_SOURCE_DIR})
-    endif()
-
-    set(EXCLUDE_PATTERNS
+    set(DOXYGEN_EXCLUDE_PATTERNS
         */.git/*
         */.svn/*
         */.idea/*
@@ -45,14 +31,16 @@ function(wrap_doxygen_add_docs target)
         CMakeLists.txt
         CMakeCache.txt)
 
-    set(DOXYGEN_EXCLUDE_PATTERNS "${EXCLUDE_PATTERNS}")
+    set(_projects_and_files ${PROJECT_SOURCE_DIR}/core ${PROJECT_SOURCE_DIR}/utility ${PROJECT_SOURCE_DIR}/README.md)
 
+    # sometimes ninja fails with fetch content of stylings
     if(NOT (CMAKE_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_GENERATOR STREQUAL "Ninja"))
         doxygen_styling()
     endif()
 
-    doxygen_add_docs("${target}-doxygen" "${FILES_FOR_DOC_SOURCE_DIR}"
-                     COMMENT "Generate HTML documentation for ${target}")
+    doxygen_add_docs(doxygen "${_projects_and_files}" COMMENT "Generate HTML documentation for ${target}")
+
+    set_target_properties(doxygen PROPERTIES FOLDER "Utility-targets/Documentation")
 endfunction()
 
 macro(doxygen_styling)

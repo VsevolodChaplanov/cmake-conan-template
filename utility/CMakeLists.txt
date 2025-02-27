@@ -86,6 +86,13 @@ target_link_libraries(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_NAME
 
 target_configure_linker(${PROJECT_NAME})
 
+# ---- Development export
+
+export(
+    TARGETS ${PROJECT_NAME} ${PROJECT_NAME}-options
+    NAMESPACE ${PARENT_PROJECT_NAME}::
+    FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
+
 # ---- Collect all sources for static analysis
 
 set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES})
@@ -111,13 +118,6 @@ endif()
 # ---- Clang-format target
 
 target_clang_format(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
-
-# ---- Doxygen
-
-if(${PROJECT_NAME}_BUILD_DOCS)
-    include(../cmake/docs.cmake)
-    wrap_doxygen_add_docs(${PROJECT_NAME} SOURCE_DIRS "${ALL_SOURCE_FILES}" OUTPUT "doxygen")
-endif()
 
 # ---- Build examples
 

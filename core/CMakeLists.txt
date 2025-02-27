@@ -105,6 +105,13 @@ target_patch_rpath(${PROJECT_NAME} IF ${PROJECT_NAME}_MODIFY_INSTALL_RPATH)
 
 target_configure_linker(${PROJECT_NAME})
 
+# ---- Development export
+
+export(
+    TARGETS ${PROJECT_NAME} ${PROJECT_NAME}-pch ${PROJECT_NAME}-options
+    NAMESPACE ${PARENT_PROJECT_NAME}::
+    FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
+
 # ---- Collect all sources for static analysis
 
 set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES} ${LIBRARY_SOURCES})
