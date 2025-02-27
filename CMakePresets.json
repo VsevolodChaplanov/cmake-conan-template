@@ -29,43 +29,9 @@
             }
         },
         {
-            "name": "cpm-common",
-            "hidden": true,
-            "environment": {
-                "CPM_USE_LOCAL_PACKAGES": "ON",
-                "CPM_LOCAL_PACKAGES_ONLY": "OFF",
-                "CPM_USE_NAMED_CACHE_DIRECTORIES": "ON"
-            }
-        },
-        {
-            "name": "cpm-windows",
-            "hidden": true,
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
-            },
-            "inherits": "cpm-common",
-            "environment": {
-                "CPM_SOURCE_CACHE": "$env{USERPROFILE}\\.cache\\.cpm"
-            }
-        },
-        {
-            "name": "cpm-unix",
-            "hidden": true,
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            },
-            "inherits": "cpm-common",
-            "environment": {
-                "CPM_SOURCE_CACHE": "$env{HOME}\\.cache\\.cpm"
-            }
-        },
-        {
             "name": "conan",
             "hidden": true,
+            "toolchainFile": "${sourceDir}/conan/${hostSystemName}/conan_toolchain.cmake",
             "cacheVariables": {
                 "CMAKE_POLICY_DEFAULT_CMP0091": "NEW"
             }
@@ -308,7 +274,6 @@
                 "ci-darwin",
                 "ci-multi-config",
                 "dev-mode",
-                "cpm-unix",
                 "conan"
             ]
         },
@@ -318,7 +283,6 @@
             "inherits": [
                 "ci-build",
                 "conan",
-                "cpm-unix",
                 "dev-mode"
             ]
         },
@@ -378,7 +342,6 @@
                 "ci-win64",
                 "ci-multi-config",
                 "dev-mode",
-                "cpm-windows",
                 "conan"
             ]
         },
@@ -395,7 +358,6 @@
                 "ci-win64-ninja",
                 "ci-multi-config",
                 "dev-mode",
-                "cpm-windows",
                 "conan"
             ]
         }

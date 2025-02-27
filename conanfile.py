@@ -87,6 +87,8 @@ class ProjectRecipe(ConanFile):
 
     def layout(self):
         cmake_layout(self)
+        os_name = self.settings.os
+        self.folders.generators = f"conan/{os_name}"
 
     def generate(self):
         deps = CMakeDeps(self)
@@ -128,7 +130,3 @@ class ProjectRecipe(ConanFile):
 
             requirements = component.get("requires", [])
             self.cpp_info.components[target].requires = requirements
-        
-        # this approach can be used if package consumed only by cmake projects
-        # self.cpp_info.builddirs.append(os.path.join('share', f'{self.name}'))
-        # self.cpp_info.set_property("cmake_find_mode", "none")

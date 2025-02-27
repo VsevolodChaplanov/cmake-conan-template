@@ -4,14 +4,17 @@ if(POLICY CMP0167)
     cmake_policy(SET CMP0167 NEW)
 endif()
 
-include(cmake/prelude.cmake)
-include(cmake/vsenvironment.cmake)
+include(cmake/prelude.cmake) # prevent in-source builds
 
-run_vcvarsall()
+# cmake-format: off
+# ---- Enable CPM or conan packagers 
+# ---- CPM - cmake based package manager 
+# include(cmake/cpm.cmake) 
+# ---- Install conan eps with cmake configure command may increase configuration time and not recommended
+# include(cmake/conan_provider.cmake)
+# cmake-format: on
 
-include(cmake/cpm.cmake)
-include(cmake/conan_provider.cmake)
-
+# conan search for project name and version and bases on this formatting
 # cmake-format: off
 project(my_project
         VERSION 0.1.0
@@ -19,6 +22,10 @@ project(my_project
         HOMEPAGE_URL "https://example.com/"
         LANGUAGES CXX)
 # cmake-format: on
+
+include(cmake/vsenvironment.cmake) # setup msvc environment
+
+run_vcvarsall()
 
 include(CTest)
 include(GNUInstallDirs)
@@ -34,17 +41,13 @@ include(cmake/linker.cmake)
 include(cmake/ipo.cmake)
 include(cmake/coverage.cmake)
 include(cmake/sanitizers.cmake)
-
+include(cmake/utility.cmake)
 
 if(${PROJECT_NAME}_ENABLE_CCACHE)
     enable_ccache()
 endif()
 
 enable_ipo()
-
-file(RELATIVE_PATH origin_relative ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}
-     ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
-set(CMAKE_INSTALL_RPATH $ORIGIN $ORIGIN/${origin_relative})
 
 # ---- Project options
 

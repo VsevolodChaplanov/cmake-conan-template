@@ -10,9 +10,12 @@ include(../cmake/lint-targets.cmake)
 
 set(PARENT_PROJECT_NAME ${PROJECT_NAME})
 
+message("")
+
 project(
     utility
-    VERSION ${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.${CMAKE_PROJECT_VERSION_PATCH}
+    VERSION
+        ${${PARENT_PROJECT_NAME}_VERSION_MAJOR}.${${PARENT_PROJECT_NAME}_VERSION_MINOR}.${${PARENT_PROJECT_NAME}_VERSION_PATCH}
     LANGUAGES CXX)
 
 include(cmake/options.cmake)

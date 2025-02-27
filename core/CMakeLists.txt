@@ -11,11 +11,12 @@ set(PARENT_PROJECT_NAME ${PROJECT_NAME})
 
 project(
     core
-    VERSION ${CMAKE_PROJECT_VERSION_MAJOR}.${CMAKE_PROJECT_VERSION_MINOR}.${CMAKE_PROJECT_VERSION_PATCH}
+    VERSION
+        ${${PARENT_PROJECT_NAME}_VERSION_MAJOR}.${${PARENT_PROJECT_NAME}_VERSION_MINOR}.${${PARENT_PROJECT_NAME}_VERSION_PATCH}
     LANGUAGES CXX)
 
 include(cmake/options.cmake)
-    
+
 # ---- Project options target
 
 add_library(${PROJECT_NAME}-options INTERFACE)
@@ -59,20 +60,24 @@ add_library(${PARENT_PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 # ---- Generate export header
 
 generate_export_header(${PROJECT_NAME} EXPORT_FILE_NAME
-                       ${PROJECT_BINARY_DIR}/include/my_project/${PROJECT_NAME}/exports/exports.hpp)
+                       ${PROJECT_BINARY_DIR}/include/${PARENT_PROJECT_NAME}/${PROJECT_NAME}/exports/exports.hpp)
 
 # ---- Collect sources
 
-file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/my_project/${PROJECT_NAME}/*.hpp)
+file(GLOB LIBRARY_INCLUDES ${PROJECT_SOURCE_DIR}/include/${PARENT_PROJECT_NAME}/${PROJECT_NAME}/*.hpp)
 file(GLOB LIBRARY_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 # ---- Set target sources
 
+# cmake-format: off
 target_sources(
     ${PROJECT_NAME}
-    PUBLIC FILE_SET 
-    ${PROJECT_NAME}_Headers TYPE HEADERS BASE_DIRS ${PROJECT_SOURCE_DIR}/include FILES ${LIBRARY_INCLUDES}
+    PUBLIC FILE_SET ${PROJECT_NAME}_Headers
+           TYPE HEADERS
+           BASE_DIRS ${PROJECT_SOURCE_DIR}/include
+           FILES ${LIBRARY_INCLUDES}
     PRIVATE ${LIBRARY_SOURCES})
+# cmake-format: on
 
 # ---- Set target include dirs
 
@@ -85,8 +90,12 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    PUBLIC fmt::fmt my_project::utility
+    PUBLIC fmt::fmt ${PARENT_PROJECT_NAME}::utility
     PRIVATE $<BUILD_INTERFACE:${PROJECT_NAME}-pch> $<BUILD_INTERFACE:${PROJECT_NAME}-options>)
+
+# ---- RPATH patching
+
+target_patch_rpath(${PROJECT_NAME} IF ${PROJECT_NAME}_MODIFY_INSTALL_RPATH)
 
 # ---- Configure linker
 
@@ -94,7 +103,7 @@ target_configure_linker(${PROJECT_NAME})
 
 # ---- Collect all sources for static analysis
 
-set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES})
+set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES} ${LIBRARY_SOURCES})
 
 # ---- Clang-tidy target
 
@@ -114,17 +123,14 @@ if(${PROJECT_NAME}_ENABLE_IWYU)
     target_include_what_you_use(${PROJECT_NAME} USE_ON_BUILD)
 endif()
 
+# ---- Clang-format target
+
+target_clang_format(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+
 # ---- Add coverage support
 
 if(${PROJECT_NAME}_ENABLE_COVERAGE)
     target_add_coverage_flags(${PROJECT_NAME})
-endif()
-
-# ---- Doxygen
-
-if(${PROJECT_NAME}_BUILD_DOCS)
-    include(../cmake/docs.cmake)
-    wrap_doxygen_add_docs(${PROJECT_NAME} SOURCE_DIRS "${ALL_SOURCE_FILES}" OUTPUT "doxygen")
 endif()
 
 # ---- Build examples
