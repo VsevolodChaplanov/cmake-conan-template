@@ -103,7 +103,7 @@ include(cmake/install-rules.cmake)
 if(NOT ${PROJECT_NAME}_DEVELOPER_MODE)
     return()
 elseif(NOT PROJECT_IS_TOP_LEVEL)
-    message(AUTHOR_WARNING "Developer mode is intended for developers of my_project")
+    message(AUTHOR_WARNING "Developer mode is intended for developers of ${PROJECT_NAME}")
 endif()
 
 include(cmake/dev-mode.cmake)

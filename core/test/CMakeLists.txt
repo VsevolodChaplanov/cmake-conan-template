@@ -8,13 +8,6 @@ include(../../cmake/project-is-top-level.cmake)
 include(../../cmake/folders.cmake)
 include(../../cmake/static-analyzers.cmake)
 
-# ---- Dependencies ----
-
-if(PROJECT_IS_TOP_LEVEL)
-    find_package(my_project REQUIRED)
-    enable_testing()
-endif()
-
 # ---- Find testing frameworks
 
 find_package(Catch2 REQUIRED)
