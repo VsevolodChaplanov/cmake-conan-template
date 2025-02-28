@@ -4,6 +4,10 @@ if(POLICY CMP0167)
     cmake_policy(SET CMP0167 NEW)
 endif()
 
+if(CMAKE_VERSION GREATER_EQUAL 3.31)
+    set(CMAKE_EXPERIMENTAL_EXPORT_PACKAGE_INFO b80be207-778e-46ba-8080-b23bba22639e)
+endif()
+
 include(cmake/prelude.cmake) # prevent in-source builds
 
 # cmake-format: off

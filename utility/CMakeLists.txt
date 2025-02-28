@@ -10,8 +10,6 @@ include(../cmake/lint-targets.cmake)
 
 set(PARENT_PROJECT_NAME ${PROJECT_NAME})
 
-message("")
-
 project(
     utility
     VERSION

@@ -4,10 +4,12 @@ include(GNUInstallDirs)
 # find_package(<package>) call for consumers to find this project
 set(package ${PROJECT_NAME})
 
+# cmake-format: off
 install(
     TARGETS ${package}
     EXPORT ${package}Targets
-    PUBLIC_HEADER FILE_SET ${package}_Headers COMPONENT Development)
+    FILE_SET ${package}_Headers COMPONENT Development)
+# cmake-format: on
 
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
@@ -28,10 +30,6 @@ install(
 
 install(
     EXPORT ${package}Targets
-    NAMESPACE my_project::
+    NAMESPACE ${PARENT_PROJECT_NAME}::
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
     COMPONENT Development)
-
-if(PROJECT_IS_TOP_LEVEL)
-    include(CPack)
-endif()

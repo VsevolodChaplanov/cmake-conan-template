@@ -34,3 +34,8 @@ option(${PROJECT_NAME}_BUILD_SHARED_LIBS "Select library type for the ${PROJECT_
 
 option(${PROJECT_NAME}_SKIP_INSTALL_RULES "Skip install rules for the ${PROJECT_NAME} project"
        ${${PARENT_PROJECT_NAME}_SKIP_INSTALL_RULES})
+
+set(${PROJECT_NAME}_DEBUG_POSTFIX
+    ${${PARENT_PROJECT_NAME}_DEBUG_POSTFIX}
+    CACHE STRING "Postfix for debug builds")
+mark_as_advanced(${PROJECT_NAME}_DEBUG_POSTFIX)

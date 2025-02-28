@@ -30,8 +30,3 @@ install(
     NAMESPACE ${package}::
     DESTINATION ${${package}_INSTALL_CMAKEDIR}
     COMPONENT Development)
-
-if(PROJECT_IS_TOP_LEVEL)
-    include(cmake/packaging.cmake)
-    include(CPack)
-endif()

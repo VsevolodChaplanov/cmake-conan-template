@@ -25,3 +25,8 @@ option(${PROJECT_NAME}_BUILD_DOCS "Generate docs using Doxygen and doxygen-aweso
 option(${PROJECT_NAME}_ENABLE_PCH "Enable precompiled headers for the ${PROJECT_NAME} project" ON)
 
 option(${PROJECT_NAME}_SKIP_INSTALL_RULES "Skip install rules for all projects" OFF)
+
+set(${PROJECT_NAME}_DEBUG_POSTFIX
+    d
+    CACHE STRING "Postfix for debug builds")
+mark_as_advanced(${PROJECT_NAME}_DEBUG_POSTFIX)

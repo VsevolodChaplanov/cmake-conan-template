@@ -101,6 +101,14 @@ target_link_libraries(
 
 target_patch_rpath(${PROJECT_NAME} IF ${PROJECT_NAME}_MODIFY_INSTALL_RPATH)
 
+# ---- Properties
+
+set_target_properties(
+    ${PROJECT_NAME}
+    PROPERTIES DEBUG_POSTFIX ${${PROJECT_NAME}_DEBUG_POSTFIX}
+               VERSION ${PROJECT_VERSION}
+               SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
+
 # ---- Configure linker
 
 target_configure_linker(${PROJECT_NAME})

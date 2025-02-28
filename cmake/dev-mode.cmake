@@ -9,4 +9,9 @@ endif()
 include(cmake/lint-targets.cmake)
 include(cmake/spell-targets.cmake)
 
+if(PROJECT_IS_TOP_LEVEL)
+    include(cmake/packaging.cmake)
+    include(CPack)
+endif()
+
 add_folders(Project)
