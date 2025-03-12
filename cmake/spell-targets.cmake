@@ -1,22 +1,34 @@
-find_program(CODESPELL NAMES codespell codespell.exe)
+function(codespell_target)
 
-if(CODESPELL)
-    message(STATUS "codespcell found, spell check targets added")
+    if(DEFINED ENV{VIRTUAL_ENV})
+        set(VENV_BIN_PATH $ENV{VIRTUAL_ENV}/bin/ $ENV{VIRTUAL_ENV}/Scripts/)
+    else()
+        set(VENV_BIN_PATH)
+    endif()
 
-    add_custom_target(
-        spell-check
-        COMMAND "${CMAKE_COMMAND}" -D "SPELL_COMMAND=${CODESPELL}" -P "${PROJECT_SOURCE_DIR}/cmake/spell.cmake"
-        WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-        COMMENT "Checking spelling"
-        VERBATIM)
+    find_program(
+        CODESPELL
+        NAMES codespell codespell.exe
+        PATHS ${VENV_BIN_PATH})
 
-    add_custom_target(
-        spell-fix
-        COMMAND "${CMAKE_COMMAND}" -D "SPELL_COMMAND=${CODESPELL}" -D FIX=YES -P
-                "${PROJECT_SOURCE_DIR}/cmake/spell.cmake"
-        WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
-        COMMENT "Fixing spelling errors"
-        VERBATIM)
-else()
-    message(STATUS "codespell is not found, spell check targets not added")
-endif()
+    if(CODESPELL)
+        message(STATUS "codespcell found, spell check targets added")
+
+        add_custom_target(
+            spell-check
+            COMMAND "${CMAKE_COMMAND}" -D "SPELL_COMMAND=${CODESPELL}" -P "${PROJECT_SOURCE_DIR}/cmake/spell.cmake"
+            WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+            COMMENT "Checking spelling"
+            VERBATIM)
+
+        add_custom_target(
+            spell-fix
+            COMMAND "${CMAKE_COMMAND}" -D "SPELL_COMMAND=${CODESPELL}" -D FIX=YES -P
+                    "${PROJECT_SOURCE_DIR}/cmake/spell.cmake"
+            WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}"
+            COMMENT "Fixing spelling errors"
+            VERBATIM)
+    else()
+        message(STATUS "codespell is not found, spell check targets not added")
+    endif()
+endfunction()

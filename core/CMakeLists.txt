@@ -127,24 +127,24 @@ set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES} ${LIBRARY_SOURCES})
 # ---- Clang-tidy target
 
 if(${PROJECT_NAME}_ENABLE_CLANGTIDY)
-    target_clangtidy(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
+    target_clangtidy(TARGET ${PROJECT_NAME} WARNINGS_AS_ERRORS ${${PROJECT_NAME}_WARNINGS_AS_ERRORS})
 endif()
 
 # ---- Cppcheck target
 
 if(${PROJECT_NAME}_ENABLE_CPPCHECK)
-    target_cppcheck(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
+    target_cppcheck(TARGET ${PROJECT_NAME} WARNINGS_AS_ERRORS ${${PROJECT_NAME}_WARNINGS_AS_ERRORS})
 endif()
 
 # ---- IWYU target
 
 if(${PROJECT_NAME}_ENABLE_IWYU)
-    target_include_what_you_use(${PROJECT_NAME} USE_ON_BUILD)
+    target_include_what_you_use(TARGET ${PROJECT_NAME})
 endif()
 
 # ---- Clang-format target
 
-target_clang_format(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+target_clang_format(TARGET ${PROJECT_NAME} FILES "${ALL_SOURCE_FILES}")
 
 # ---- Add coverage support
 

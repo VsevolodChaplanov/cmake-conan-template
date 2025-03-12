@@ -76,3 +76,26 @@ include(cmake/cpm.cmake)
 },
 ...
 ```
+
+## Python and tools
+
+Some tools can be consumed using python's pip or other tool. Project contains special targets for spell to enable them from venv, pass an env variable in preset (it can be helpful to find venv's python instead of system one)
+
+```json
+...
+{
+    "name": "pyvenv",
+    "hidden": true,
+    "environment": {
+        "VIRTUAL_ENV": "${sourceDir}/.venv"
+    },
+    "cacheVariables": {
+        "Python_FIND_VIRTUALENV": "FIRST"
+    }
+}
+...
+```
+
+You can activate venv in several ways but recommend to use [uv](https://docs.astral.sh/uv/)
+
+You declare `CONAN_COMMAND` variable for [cmake-conan](https://github.com/conan-io/cmake-conan) wrapper and conan will be stored in current venv.

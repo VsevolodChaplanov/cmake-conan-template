@@ -9,6 +9,8 @@ endif()
 include(cmake/lint-targets.cmake)
 include(cmake/spell-targets.cmake)
 
+codespell_target()
+
 if(PROJECT_IS_TOP_LEVEL)
     include(cmake/packaging.cmake)
     include(CPack)

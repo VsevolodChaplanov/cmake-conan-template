@@ -26,3 +26,6 @@ option(${PROJECT_NAME}_BUILD_DOCS "Enable doxygen build for the ${PROJECT_NAME} 
 
 option(${PROJECT_NAME}_SKIP_INSTALL_RULES "Skip install rules for the ${PROJECT_NAME} project"
        ${${PARENT_PROJECT_NAME}_SKIP_INSTALL_RULES})
+
+option(${PROJECT_NAME}_WARNINGS_AS_ERRORS "Treat warnings as errors for static analyzers for ${PROJECT_NAME} project"
+       ${${PARENT_PROJECT_NAME}_SKIP_INSTALL_RULES})

@@ -23,14 +23,6 @@ add_executable(${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PARENT_PROJECT_NAME} Catch2::Catch2WithMain)
 target_sources(${PROJECT_NAME} PRIVATE ${TEST_SOURCES})
 
-option(LINT_TESTS "enable static analyzers for tests" OFF)
-
-if(LINT_TESTS)
-    target_cppcheck(${PROJECT_NAME} "${TEST_SOURCES}")
-    target_clangtidy(${PROJECT_NAME} "${TEST_SOURCES}")
-    target_include_what_you_use(${PROJECT_NAME} "${TEST_SOURCES}")
-endif()
-
 # ---- Discover Catch2 tests
 
 catch_discover_tests(${PROJECT_NAME})

@@ -1,13 +1,11 @@
 include(CMakeParseArguments)
 
-option(WARNINGS_AS_ERRORS "thread warnings as errors for static analyzers" OFF)
-
 function(get_default_cppcheck_options OPTIONS TEMPLATE)
     # Enable all warnings that are actionable by the user of this toolset style should enable the other 3, but we'll be
     # explicit just in case
     set(SUPPRESS_DIR "*:${CMAKE_CURRENT_BINARY_DIR}/_deps/*.h")
 
-    set(CPPCHECK_OPTIONS
+    set(OPTIONS
         --template=${TEMPLATE}
         --enable=style,performance,warning,portability
         --inline-suppr
@@ -25,16 +23,43 @@ function(get_default_cppcheck_options OPTIONS TEMPLATE)
         --suppress=${SUPPRESS_DIR})
 
     set(OPTIONS
-        "${CPPCHECK_OPTIONS}"
+        "${OPTIONS}"
         PARENT_SCOPE)
 endfunction()
 
-function(target_cppcheck target)
+# cmake-format: off
+##
+# Function: target_cppcheck
+# 
+# This function sets up and integrates the cppcheck static analysis tool for a specified target in a CMake project.
+# It locates the cppcheck executable and configures it with the appropriate options and target properties.
+# 
+# Signature:
+#
+#   target_cppcheck(TARGET <target>
+#                   WARNINGS_AS_ERRORS <bool>
+#                   [OPTIONS] <list>)
+#
+# Parameters:
+# 
+# - TARGET: The name of the target to analyze with cppcheck.
+# - WARNINGS_AS_ERRORS: Optional flag indicating whether warnings should be treated as errors.
+# - OPTIONS: overwrite options to be passed when executing the tool.
+# 
+# This function relies on the `cmake_parse_arguments` function to parse input arguments and
+# `get_target_property` to retrieve target-specific properties such as the CXX standard.
+##
+# cmake-format: on
+function(target_cppcheck)
     find_program(CPPCHECK cppcheck)
     if(CPPCHECK)
-        cmake_parse_arguments(ARGUMENTS "" "WARNINGS_AS_ERRORS" "CPPCHECK_OPTIONS" "${ARGV}")
+        cmake_parse_arguments(ARGUMENTS "" "TARGET;WARNINGS_AS_ERRORS" "OPTIONS" "${ARGV}")
 
-        get_target_property(TARGET_CXX_STANDARD ${target} CXX_STANDARD)
+        if(NOT ARGUMENTS_TARGET)
+            message(FATAL_ERROR "TARGET is required for `target_cppcheck` function")
+        endif()
+
+        get_target_property(TARGET_CXX_STANDARD ${ARGUMENTS_TARGET} CXX_STANDARD)
 
         if(CMAKE_GENERATOR MATCHES ".*Visual Studio.*")
             set(CPPCHECK_TEMPLATE "vs")
@@ -42,11 +67,11 @@ function(target_cppcheck target)
             set(CPPCHECK_TEMPLATE "gcc")
         endif()
 
-        if(ARGUMENTS_CPPCHECK_OPTIONS)
-            set(TARGET_CXX_CPPCHECK "${CPPCHECK};${ARGUMENTS_CPPCHECK_OPTIONS}")
+        if(ARGUMENTS_OPTIONS)
+            set(TARGET_CXX_CPPCHECK "${CPPCHECK};${ARGUMENTS_OPTIONS}")
         else()
             get_default_cppcheck_options(OPTIONS ${CPPCHECK_TEMPLATE})
-            # if the user provides a CPPCHECK_OPTIONS with a template specified, it will override this template
+            # if the user provides a OPTIONS with a template specified, it will override this template
             set(TARGET_CXX_CPPCHECK ${CPPCHECK} --template=${CPPCHECK_TEMPLATE} "${OPTIONS}")
         endif()
 
@@ -61,7 +86,7 @@ function(target_cppcheck target)
         endif()
 
         message(STATUS "using cppcheck analyzer on build for project ${target}")
-        set_target_properties(${target} PROPERTIES CXX_CPPCHECK "${TARGET_CXX_CPPCHECK}")
+        set_target_properties(${ARGUMENTS_TARGET} PROPERTIES CXX_CPPCHECK "${TARGET_CXX_CPPCHECK}")
     else()
         message(WARNING "cppcheck requested but executable not found")
     endif()
@@ -77,18 +102,45 @@ function(get_clang_tidy_default_options OPTIONS)
         PARENT_SCOPE)
 endfunction()
 
-function(target_clangtidy target)
+# cmake-format: off
+##
+# Function: target_clangtidy
+# 
+# This function sets up and integrates the clang-tidy static analysis tool for a specified target in a CMake project.
+# It locates the clang-tidy executable and configures it with the appropriate options and target properties.
+# 
+# Signature:
+#
+#   target_clangtidy(TARGET <target>
+#                    WARNINGS_AS_ERRORS <bool>
+#                    [OPTIONS] <list>)
+#
+# Parameters:
+# 
+# - TARGET: The name of the target to analyze with cppcheck.
+# - WARNINGS_AS_ERRORS: Optional flag indicating whether warnings should be treated as errors.
+# - OPTIONS: overwrite options to be passed when executing the tool.
+# 
+# This function relies on the `cmake_parse_arguments` function to parse input arguments and
+# `get_target_property` to retrieve target-specific properties such as the CXX standard.
+##
+# cmake-format: on
+function(target_clangtidy)
     find_program(CLANGTIDY clang-tidy)
     if(CLANGTIDY)
-        cmake_parse_arguments(ARGUMENTS "" "WARNINGS_AS_ERRORS;USE_ON_BUILD" "CLANGTIDY_OPTIONS" "${ARGV}")
+        cmake_parse_arguments(ARGUMENTS "" "TARGET;WARNINGS_AS_ERRORS" "OPTIONS" "${ARGV}")
 
-        get_target_property(TARGET_CXX_STANDARD ${target} CXX_STANDARD)
+        if(NOT ARGUMENTS_TARGET)
+            message(FATAL_ERROR "TARGET is required for `target_clangtidy` function")
+        endif()
+
+        get_target_property(TARGET_CXX_STANDARD ${ARGUMENTS_TARGET} CXX_STANDARD)
 
         if(NOT CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
             get_target_property(TARGET-pch ${target} INTERFACE_PRECOMPILE_HEADERS)
 
             if("${TARGET-pch}" STREQUAL "TARGET-pch-NOTFOUND")
-                get_target_property(TARGET-pch ${target} PRECOMPILE_HEADERS)
+                get_target_property(TARGET-pch ${ARGUMENTS_TARGET} PRECOMPILE_HEADERS)
             endif()
 
             if(NOT ("${TARGET-pch}" STREQUAL "TARGET-pch-NOTFOUND"))
@@ -99,8 +151,8 @@ function(target_clangtidy target)
             endif()
         endif()
 
-        if(ARGUMENTS_CLANGTIDY_OPTIONS)
-            set(TARGET_CXX_CLANGTIDY "${CLANGTIDY};${ARGUMENTS_CLANGTIDY_OPTIONS}")
+        if(ARGUMENTS_OPTIONS)
+            set(TARGET_CXX_CLANGTIDY "${CLANGTIDY};${ARGUMENTS_OPTIONS}")
         else()
             get_clang_tidy_default_options(OPTIONS)
             set(TARGET_CXX_CLANGTIDY "${CLANGTIDY};${OPTIONS}")
@@ -125,8 +177,8 @@ function(target_clangtidy target)
             endif()
         endif()
 
-        message(STATUS "using clang-tidy analyzer on build for project ${target}")
-        set_target_properties(${target} PROPERTIES CXX_CLANG_TIDY "${TARGET_CXX_CLANGTIDY}")
+        message(STATUS "using clang-tidy analyzer on build for project ${ARGUMENTS_TARGET}")
+        set_target_properties(${ARGUMENTS_TARGET} PROPERTIES CXX_CLANG_TIDY "${TARGET_CXX_CLANGTIDY}")
     else()
         message(WARNING "clang-tidy requested but executable not found")
     endif()
@@ -146,11 +198,35 @@ function(get_default_iwyu_options OPTIONS)
         PARENT_SCOPE)
 endfunction()
 
-function(target_include_what_you_use target)
+# cmake-format: off
+##
+# Function: target_include_what_you_use
+# 
+# This function sets up and integrates the "include-what-you-use" (IWYU) tool for a specified target in a CMake project.
+# It locates the IWYU executable and configures it with the appropriate options and target properties.
+# 
+# Signature:
+#
+#   target_include_what_you_use(TARGET <target>
+#                               [OPTIONS] <list>)
+#
+# Parameters:
+# 
+# - TARGET: The name of the target to analyze with include-what-you-use.
+# - OPTIONS: Optional list of additional options to be passed to the IWYU command.
+# 
+# This function relies on the `cmake_parse_arguments` function to parse input arguments.
+##
+# cmake-format: on
+function(target_include_what_you_use)
     find_program(INCLUDE_WHAT_YOU_USE include-what-you-use)
 
     if(INCLUDE_WHAT_YOU_USE)
-        cmake_parse_arguments(ARGUMENTS "" "" "IWYU_OPTIONS" "${ARGV}")
+        cmake_parse_arguments(ARGUMENTS "" "TARGET" "OPTIONS" "${ARGV}")
+
+        if(NOT ARGUMENTS_TARGET)
+            message(FATAL_ERROR "TARGET is required for `target_include_what_you_use` function")
+        endif()
 
         if(ARGUMENTS_IWYU_OPTIONS)
             set(TARGET_IWYU_OPTIONS "${ARGUMENTS_IWYU_OPTIONS}")
@@ -159,8 +235,8 @@ function(target_include_what_you_use target)
             set(TARGET_IWYU_OPTIONS "${OPTIONS}")
         endif()
 
-        message(STATUS "using iwyu analyzer on build for project ${target}")
-        set_target_properties(${target} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
+        message(STATUS "using iwyu analyzer on build for project ${ARGUMENTS_TARGET}")
+        set_target_properties(${ARGUMENTS_TARGET} PROPERTIES CXX_INCLUDE_WHAT_YOU_USE
                                                    "${INCLUDE_WHAT_YOU_USE};${TARGET_IWYU_OPTIONS}")
     else()
         message(WARNING "include-what-you-use requested but executable not found")

@@ -39,3 +39,6 @@ set(${PROJECT_NAME}_DEBUG_POSTFIX
     ${${PARENT_PROJECT_NAME}_DEBUG_POSTFIX}
     CACHE STRING "Postfix for debug builds")
 mark_as_advanced(${PROJECT_NAME}_DEBUG_POSTFIX)
+
+option(${PROJECT_NAME}_WARNINGS_AS_ERRORS "Treat warnings as errors for static analyzers for ${PROJECT_NAME} project"
+       ${${PARENT_PROJECT_NAME}_SKIP_INSTALL_RULES})

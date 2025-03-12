@@ -26,6 +26,8 @@ option(${PROJECT_NAME}_ENABLE_PCH "Enable precompiled headers for the ${PROJECT_
 
 option(${PROJECT_NAME}_SKIP_INSTALL_RULES "Skip install rules for all projects" OFF)
 
+option(${PROJECT_NAME}_WARNINGS_AS_ERRORS "Treat warnings as errors for static analyzers" OFF)
+
 set(${PROJECT_NAME}_DEBUG_POSTFIX
     d
     CACHE STRING "Postfix for debug builds")

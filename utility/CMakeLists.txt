@@ -98,13 +98,13 @@ set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES})
 # ---- Clang-tidy target
 
 if(${PROJECT_NAME}_ENABLE_CLANGTIDY)
-    target_clangtidy(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
+    target_clangtidy(${PROJECT_NAME} WARNINGS_AS_ERRORS ${${PROJECT_NAME}_WARNINGS_AS_ERRORS})
 endif()
 
 # ---- Cppcheck target
 
 if(${PROJECT_NAME}_ENABLE_CPPCHECK)
-    target_cppcheck(${PROJECT_NAME} WARNINGS_AS_ERRORS "${WARNINGS_AS_ERRORS}")
+    target_cppcheck(${PROJECT_NAME} WARNINGS_AS_ERRORS ${${PROJECT_NAME}_WARNINGS_AS_ERRORS})
 endif()
 
 # ---- IWYU target
@@ -115,7 +115,7 @@ endif()
 
 # ---- Clang-format target
 
-target_clang_format(${PROJECT_NAME} "${ALL_SOURCE_FILES}")
+target_clang_format(TARGET ${PROJECT_NAME} FILES "${ALL_SOURCE_FILES}")
 
 # ---- Build examples
 

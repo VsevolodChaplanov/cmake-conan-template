@@ -7,10 +7,10 @@
     },
     "configurePresets": [
         {
-            "name": "pass-conan",
+            "name": "pyvenv",
             "hidden": true,
-            "cacheVariables": {
-                "CONAN_COMMAND": "${sourceDir}/.venv/bin/conan"
+            "environment": {
+                "VIRTUAL_ENV": "${sourceDir}/.venv"
             }
         },
         {
@@ -18,7 +18,8 @@
             "hidden": true,
             "inherits": [
                 "dev-mode",
-                "conan"
+                "conan",
+                "pyvenv"
             ],
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
@@ -35,8 +36,7 @@
             },
             "inherits": [
                 "dev-common",
-                "ci-linux",
-                "pass-conan"
+                "ci-linux"
             ],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
