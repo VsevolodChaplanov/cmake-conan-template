@@ -13,6 +13,8 @@ conan_test/CMakeUserPresets.json
 
 fetch_content_test/build
 
+test_package/CMakeUserPresets.json
+
 .vs
 .idea
 .vscode/

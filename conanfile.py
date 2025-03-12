@@ -68,8 +68,8 @@ class ProjectRecipe(ConanFile):
                 raise ValueError("Version not found in CMakeLists.txt")
 
     def requirements(self):
-        self.requires("fmt/[11.0.2]")
-        self.test_requires("catch2/3.5.3")
+        self.requires("fmt/11.1.4")
+        self.test_requires("catch2/3.8.0")
 
     def config_options(self):
         if self.settings.os == "Windows":
