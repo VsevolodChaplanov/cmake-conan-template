@@ -92,7 +92,9 @@ register_module(core)
 
 add_library(${PROJECT_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} INTERFACE ${MODULES_REGISTRY})
+target_link_libraries(${PROJECT_NAME} INTERFACE ${PROJECT_NAME}::utility ${PROJECT_NAME}::core)
+
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets)
 
 # ---- Install rules for project interface library
 

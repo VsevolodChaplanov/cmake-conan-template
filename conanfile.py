@@ -68,7 +68,7 @@ class ProjectRecipe(ConanFile):
                 raise ValueError("Version not found in CMakeLists.txt")
 
     def requirements(self):
-        self.requires("fmt/[11.0.2]", transitive_headers=True)
+        self.requires("fmt/[11.0.2]")
         self.test_requires("catch2/3.5.3")
 
     def config_options(self):
@@ -105,13 +105,5 @@ class ProjectRecipe(ConanFile):
         cmake.install()
 
     def package_info(self):
-        def _components(self):
-            return [
-                f"utility",
-                f"core",
-                f"{self.name}"
-            ]
-
         self.cpp_info.set_property('cmake_find_mode', 'none')
-        self.cpp_info.builddirs.extend(
-            [os.path.join('share', component) for component in _components(self)])
+        self.cpp_info.builddirs.append(os.path.join('lib', 'cmake', f"{self.name}"))

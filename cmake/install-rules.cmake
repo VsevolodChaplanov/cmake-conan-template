@@ -6,13 +6,11 @@ set(package ${PROJECT_NAME})
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
 
-install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets)
-
 write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
 # Allow package maintainers to freely override the path for the configs
 set(${package}_INSTALL_CMAKEDIR
-    ${CMAKE_INSTALL_DATADIR}/${package}
+    ${CMAKE_INSTALL_LIBDIR}/cmake/${package}
     CACHE STRING "CMake package config location relative to the install prefix")
 set_property(CACHE ${package}_INSTALL_CMAKEDIR PROPERTY TYPE PATH)
 mark_as_advanced(${package}_INSTALL_CMAKEDIR)

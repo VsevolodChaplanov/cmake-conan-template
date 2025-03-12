@@ -133,7 +133,12 @@ endif()
 # ---- Configure install rules
 
 if(NOT CMAKE_SKIP_INSTALL_RULES AND NOT ${PROJECT_NAME}_SKIP_INSTALL_RULES)
-    include(cmake/install-rules.cmake)
+    # cmake-format: off
+    install(
+        TARGETS ${PROJECT_NAME}
+        EXPORT ${PARENT_PROJECT_NAME}Targets
+        FILE_SET ${PROJECT_NAME}_Headers COMPONENT Development)
+    # cmake-format: on
 endif()
 
 # ---- Project outline

@@ -2,8 +2,8 @@
 
 include(CMakeFindDependencyMacro)
 
-find_dependency(utility REQUIRED)
-find_dependency(core REQUIRED)
+find_dependency(fmt REQUIRED)
 
 include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")
-check_required_components(@PROJECT_NAME@)
+check_required_components(core)
+check_required_components(utility)
