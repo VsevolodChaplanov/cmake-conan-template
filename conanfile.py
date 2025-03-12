@@ -105,5 +105,33 @@ class ProjectRecipe(ConanFile):
         cmake.install()
 
     def package_info(self):
+        #! ----
+        #! CMake only based solution for provide package info and to reuse cmake configs 
+        #! package do not propagates its requirements for consumers
+        #! ----
+        
         self.cpp_info.set_property('cmake_find_mode', 'none')
         self.cpp_info.builddirs.append(os.path.join('lib', 'cmake', f"{self.name}"))
+
+        #! ----
+        #! Below is example of packaging `generic` package
+        #! Compatible with any other build tools but requires to 
+        #! repeat cmake's info
+        #! Might become redundant with the arrival CPS
+        #! ----
+
+        # debug = 'd' if self.settings.build_type == 'Debug' else ''
+
+        # # declare super-target
+        # self.cpp_info.set_property("cmake_find_mode", "both")
+        # self.cpp_info.set_property("cmake_file_name", f"{self.name}")
+        # self.cpp_info.set_property("cmake_target_name", f"{self.name}::{self.name}")
+
+        # self.cpp_info.components[f"utility"].bindirs = []
+        # self.cpp_info.components[f"utility"].libdirs = []        
+        # self.cpp_info.components[f"utility"].set_property("cmake_target_name", f"{self.name}::utility")
+
+        # self.cpp_info.components[f"core"].libs.append(f"core{debug}")
+        # self.cpp_info.components[f"core"].requires.extend(["fmt::fmt"])
+        # self.cpp_info.components[f"core"].set_property("cmake_target_name", f"{self.name}::core")
+
