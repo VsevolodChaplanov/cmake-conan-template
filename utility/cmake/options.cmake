@@ -9,12 +9,6 @@ option(${PROJECT_NAME}_ENABLE_CLANGTIDY "Enable clang-tidy during the build" ${$
 option(${PROJECT_NAME}_ENABLE_CPPCHECK "Enable cppcheck during the build" ${${PARENT_PROJECT_NAME}_ENABLE_CPPCHECK})
 option(${PROJECT_NAME}_ENABLE_IWYU "Enable include-what-you-use during the build" ${${PARENT_PROJECT_NAME}_ENABLE_IWYU})
 
-
-
-
-
-
-
 option(${PROJECT_NAME}_BUILD_DOCS "Enable doxygen build for the ${PROJECT_NAME} project"
        ${${PARENT_PROJECT_NAME}_BUILD_DOCS})
 

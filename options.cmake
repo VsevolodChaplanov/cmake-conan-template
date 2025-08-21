@@ -13,8 +13,6 @@ option(${PROJECT_NAME}_ENABLE_CLANGTIDY "Enable clang-tidy analyzer on default" 
 option(${PROJECT_NAME}_ENABLE_CPPCHECK "Enable cppcheck analyzer on default" OFF)
 option(${PROJECT_NAME}_ENABLE_IWYU "Enable iwyu analyzer on default" OFF)
 
-
-
 option(${PROJECT_NAME}_BUILD_DOCS "Generate docs using Doxygen and doxygen-awesome-css" ON)
 
 option(${PROJECT_NAME}_ENABLE_PCH "Enable precompiled headers for the ${PROJECT_NAME} project" ON)

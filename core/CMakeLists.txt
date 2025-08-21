@@ -4,7 +4,6 @@ include(GenerateExportHeader)
 
 include(../cmake/folders.cmake)
 include(../cmake/linker.cmake)
-
 include(../cmake/static-analyzers.cmake)
 
 set(PARENT_PROJECT_NAME ${PROJECT_NAME})
@@ -24,8 +23,6 @@ add_library(${PROJECT_NAME}-options INTERFACE)
 # ---- Link with project wide options
 
 target_link_libraries(${PROJECT_NAME}-options INTERFACE $<BUILD_INTERFACE:${PARENT_PROJECT_NAME}-options>)
-
-# ---- Sanitizers are now handled via CMake presets
 
 # ---- Declare library precompiled headers
 

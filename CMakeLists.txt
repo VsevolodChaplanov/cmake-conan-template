@@ -44,7 +44,6 @@ include(cmake/ccache.cmake)
 include(cmake/linker.cmake)
 include(cmake/ipo.cmake)
 include(cmake/coverage.cmake)
-
 include(cmake/utility.cmake)
 
 if(${PROJECT_NAME}_ENABLE_CCACHE)
@@ -64,8 +63,6 @@ target_compile_options(${PROJECT_NAME}-options INTERFACE $<$<CXX_COMPILER_ID:MSV
 # ---- Set cxx standard project wide
 
 target_compile_features(${PROJECT_NAME}-options INTERFACE cxx_std_${CMAKE_CXX_STANDARD})
-
-# ---- Project wide sanitizers are now handled via CMake presets
 
 export(
     TARGETS ${PROJECT_NAME}-options
