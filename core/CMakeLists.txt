@@ -4,7 +4,7 @@ include(GenerateExportHeader)
 
 include(../cmake/folders.cmake)
 include(../cmake/linker.cmake)
-include(../cmake/sanitizers.cmake)
+
 include(../cmake/static-analyzers.cmake)
 
 set(PARENT_PROJECT_NAME ${PROJECT_NAME})
@@ -25,20 +25,7 @@ add_library(${PROJECT_NAME}-options INTERFACE)
 
 target_link_libraries(${PROJECT_NAME}-options INTERFACE $<BUILD_INTERFACE:${PARENT_PROJECT_NAME}-options>)
 
-# ---- Add sanitizers
-
-target_sanitizers(
-    ${PROJECT_NAME}-options
-    SANITIZER_ADDRESS
-    ${${PROJECT_NAME}_SANITIZER_ADDRESS}
-    SANITIZER_LEAK
-    ${${PROJECT_NAME}_SANITIZER_LEAK}
-    SANITIZER_UNDEFINED_BEHAVIOR
-    ${${PROJECT_NAME}_SANITIZER_UNDEFINED_BEHAVIOR}
-    SANITIZER_THREAD
-    ${${PROJECT_NAME}_SANITIZER_THREAD}
-    SANITIZER_MEMORY
-    ${${PROJECT_NAME}_SANITIZER_MEMORY})
+# ---- Sanitizers are now handled via CMake presets
 
 # ---- Declare library precompiled headers
 

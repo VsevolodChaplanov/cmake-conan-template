@@ -98,4 +98,32 @@ Some tools can be consumed using python's pip or other tool. Project contains sp
 
 You can activate venv in several ways but recommend to use [uv](https://docs.astral.sh/uv/)
 
+## Using Sanitizers
+
+Sanitizers are now configured through CMake presets instead of CMake options. This provides better control and easier management of sanitizer configurations.
+
+### Available Sanitizer Presets
+
+The following sanitizer presets are available:
+
+- **`sanitize-address`** - Address sanitizer for detecting memory errors
+- **`sanitize-leak`** - Leak sanitizer for detecting memory leaks  
+- **`sanitize-ub`** - Undefined behavior sanitizer
+- **`sanitize-thread`** - Thread sanitizer for detecting data races
+- **`sanitize-memory`** - Memory sanitizer (Clang only)
+- **`sanitize-safe-stack`** - Safe stack sanitizer (Clang only)
+- **`sanitize-address-leak-ub`** - Combined address, leak, and undefined behavior sanitizers
+
+### Usage Examples
+
+To use a single sanitizer:
+```bash
+cmake --preset ci-ubuntu-debug-sanitize-address
+```
+
+**Note**: Some sanitizers are incompatible with each other:
+- Thread sanitizer doesn't work with Address or Leak sanitizer
+- Memory sanitizer doesn't work with Address, Thread, or Leak sanitizer
+- MSVC only supports address sanitizer
+
 You declare `CONAN_COMMAND` variable for [cmake-conan](https://github.com/conan-io/cmake-conan) wrapper and conan will be stored in current venv.

@@ -58,38 +58,96 @@
             }
         },
         {
-            "name": "sanitize-address",
+            "name": "sanitize-address-base",
             "hidden": true,
             "cacheVariables": {
-                "my_project_SANITIZER_ADDRESS": "ON"
+                "CMAKE_CXX_FLAGS": "-fsanitize=address",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=address"
             }
+        },
+        {
+            "name": "sanitize-leak-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=leak",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=leak",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=leak"
+            }
+        },
+        {
+            "name": "sanitize-ub-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=undefined",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=undefined",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=undefined"
+            }
+        },
+        {
+            "name": "sanitize-thread-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=thread",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=thread",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=thread"
+            }
+        },
+        {
+            "name": "sanitize-memory-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=memory",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=memory",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=memory"
+            }
+        },
+        {
+            "name": "sanitize-safe-stack-base",
+            "hidden": true,
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=safe-stack",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=safe-stack",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=safe-stack"
+            }
+        },
+        {
+            "name": "sanitize-address",
+            "hidden": true,
+            "inherits": "sanitize-address-base"
         },
         {
             "name": "sanitize-leak",
             "hidden": true,
-            "cacheVariables": {
-                "my_project_SANITIZER_LEAK": "ON"
-            }
+            "inherits": "sanitize-leak-base"
         },
         {
             "name": "sanitize-ub",
             "hidden": true,
-            "cacheVariables": {
-                "my_project_SANITIZER_UNDEFINED_BEHAVIOR": "ON"
-            }
+            "inherits": "sanitize-ub-base"
         },
         {
             "name": "sanitize-thread",
             "hidden": true,
-            "cacheVariables": {
-                "my_project_SANITIZER_THREAD": "ON"
-            }
+            "inherits": "sanitize-thread-base"
         },
         {
             "name": "sanitize-memory",
             "hidden": true,
+            "inherits": "sanitize-memory-base"
+        },
+        {
+            "name": "sanitize-safe-stack",
+            "hidden": true,
+            "inherits": "sanitize-safe-stack-base"
+        },
+        {
+            "name": "sanitize-address-leak-ub",
+            "hidden": true,
             "cacheVariables": {
-                "my_project_SANITIZER_MEMORY": "ON"
+                "CMAKE_CXX_FLAGS": "-fsanitize=address,leak,undefined",
+                "CMAKE_EXE_LINKER_FLAGS": "-fsanitize=address,leak,undefined",
+                "CMAKE_SHARED_LINKER_FLAGS": "-fsanitize=address,leak,undefined"
             }
         },
         {
@@ -310,9 +368,7 @@
             "inherits": [
                 "ci-ubuntu-common",
                 "ci-linux-debug",
-                "sanitize-address",
-                "sanitize-leak",
-                "sanitize-ub"
+                "sanitize-address-leak-ub"
             ]
         },
         {
