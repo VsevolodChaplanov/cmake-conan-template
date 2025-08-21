@@ -5,6 +5,8 @@ option(${PROJECT_NAME}_BUILD_SHARED_LIBS "Build shared libraries for ${PROJECT_N
 option(${PROJECT_NAME}_BUILD_EXAMPLES "Enable build examples for ${PROJECT_NAME}" OFF)
 option(${PROJECT_NAME}_BUILD_TESTING "Enable build tests for ${PROJECT_NAME}" ${BUILD_TESTING})
 
+option(${PROJECT_NAME}_ENABLE_CCACHE "Enable ccache" ON)
+
 option(${PROJECT_NAME}_MODIFY_INSTALL_RPATH "Modify install rpath for all projects" ON)
 
 option(${PROJECT_NAME}_ENABLE_COVERAGE "Enable coverage info on default" OFF)
@@ -12,8 +14,6 @@ option(${PROJECT_NAME}_ENABLE_COVERAGE "Enable coverage info on default" OFF)
 option(${PROJECT_NAME}_ENABLE_CLANGTIDY "Enable clang-tidy analyzer on default" OFF)
 option(${PROJECT_NAME}_ENABLE_CPPCHECK "Enable cppcheck analyzer on default" OFF)
 option(${PROJECT_NAME}_ENABLE_IWYU "Enable iwyu analyzer on default" OFF)
-
-option(${PROJECT_NAME}_BUILD_DOCS "Generate docs using Doxygen and doxygen-awesome-css" ON)
 
 option(${PROJECT_NAME}_ENABLE_PCH "Enable precompiled headers for the ${PROJECT_NAME} project" ON)
 

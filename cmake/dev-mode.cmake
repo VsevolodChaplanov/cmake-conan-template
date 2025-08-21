@@ -1,7 +1,6 @@
 include(cmake/docs.cmake)
 project_documentation()
 
-include(cmake/lint-targets.cmake)
 include(cmake/spell-targets.cmake)
 
 codespell_target()

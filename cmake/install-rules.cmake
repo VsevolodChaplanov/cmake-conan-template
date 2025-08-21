@@ -1,30 +1,26 @@
 include_guard(GLOBAL)
 
-# find_package(<package>) call for consumers to find this project
-set(package ${PROJECT_NAME})
-
 include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
 
-write_basic_package_version_file(${package}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
+write_basic_package_version_file(${PROJECT_NAME}ConfigVersion.cmake COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
 
-# Allow package maintainers to freely override the path for the configs
-set(${package}_INSTALL_CMAKEDIR
-    ${CMAKE_INSTALL_LIBDIR}/cmake/${package}
-    CACHE STRING "CMake package config location relative to the install prefix")
-set_property(CACHE ${package}_INSTALL_CMAKEDIR PROPERTY TYPE PATH)
-mark_as_advanced(${package}_INSTALL_CMAKEDIR)
+# Allow PROJECT_NAME maintainers to freely override the path for the configs
+set(${PROJECT_NAME}_INSTALL_CMAKEDIR
+    ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
+    CACHE STRING "CMake PROJECT_NAME config location relative to the install prefix")
+set_property(CACHE ${PROJECT_NAME}_INSTALL_CMAKEDIR PROPERTY TYPE PATH)
+mark_as_advanced(${PROJECT_NAME}_INSTALL_CMAKEDIR)
 
 configure_package_config_file(cmake/install-config.cmake.in ${PROJECT_NAME}Config.cmake
-                              INSTALL_DESTINATION ${${package}_INSTALL_CMAKEDIR})
+                              INSTALL_DESTINATION ${${PROJECT_NAME}_INSTALL_CMAKEDIR})
 
 install(
     FILES ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-    DESTINATION ${${package}_INSTALL_CMAKEDIR}
+    DESTINATION ${${PROJECT_NAME}_INSTALL_CMAKEDIR}
     COMPONENT Development)
 
 install(
-    EXPORT ${package}Targets
-    NAMESPACE ${package}::
-    DESTINATION ${${package}_INSTALL_CMAKEDIR}
+    EXPORT ${PROJECT_NAME}Targets
+    NAMESPACE ${PROJECT_NAME}::
+    DESTINATION ${${PROJECT_NAME}_INSTALL_CMAKEDIR}
     COMPONENT Development)

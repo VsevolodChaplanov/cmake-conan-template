@@ -4,16 +4,7 @@ set(PARENT_PROJECT_NAME ${PROJECT_NAME})
 
 project(${PARENT_PROJECT_NAME}-tests LANGUAGES CXX)
 
-include(../../cmake/project-is-top-level.cmake)
-include(../../cmake/folders.cmake)
-include(../../cmake/static-analyzers.cmake)
-include(../../cmake/memory.cmake)
-
-# ---- Dependencies ----
-
-if(PROJECT_IS_TOP_LEVEL)
-    find_package(${PARENT_PROJECT_NAME} REQUIRED)
-endif()
+include(memory)
 
 # ---- Find testing frameworks
 

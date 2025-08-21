@@ -1,12 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 
-include(GenerateExportHeader)
-
-include(../cmake/folders.cmake)
-include(../cmake/linker.cmake)
-include(../cmake/static-analyzers.cmake)
-include(../cmake/lint-targets.cmake)
-
 set(PARENT_PROJECT_NAME ${PROJECT_NAME})
 
 project(
@@ -64,20 +57,12 @@ target_include_directories(${PROJECT_NAME} ${warning_guard} INTERFACE $<BUILD_IN
 
 target_link_libraries(${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${PROJECT_NAME}-options>)
 
-# ---- Configure linker
-
-target_configure_linker(${PROJECT_NAME})
-
 # ---- Development export
 
 export(
     TARGETS ${PROJECT_NAME} ${PROJECT_NAME}-options
     NAMESPACE ${PARENT_PROJECT_NAME}::
     FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
-
-# ---- Collect all sources for static analysis
-
-set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES})
 
 # ---- Clang-tidy target
 
@@ -96,10 +81,6 @@ endif()
 if(${PROJECT_NAME}_ENABLE_IWYU)
     target_include_what_you_use(${PROJECT_NAME} USE_ON_BUILD)
 endif()
-
-# ---- Clang-format target
-
-target_clang_format(TARGET ${PROJECT_NAME} FILES "${ALL_SOURCE_FILES}")
 
 # ---- Build examples
 

@@ -8,7 +8,9 @@ if(CMAKE_VERSION GREATER_EQUAL 3.31)
     set(CMAKE_EXPERIMENTAL_EXPORT_PACKAGE_INFO b80be207-778e-46ba-8080-b23bba22639e)
 endif()
 
-include(cmake/prelude.cmake) # prevent in-source builds
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+include(prelude) # prevent in-source builds
 
 # cmake-format: off
 # ---- Enable CPM or conan packagers 
@@ -27,24 +29,24 @@ project(my_project
         LANGUAGES CXX)
 # cmake-format: on
 
-include(cmake/vsenvironment.cmake) # setup msvc environment
+include(vsenvironment) # setup msvc environment
 
 run_vcvarsall()
 
 include(CTest)
 include(GNUInstallDirs)
+include(GenerateExportHeader)
 
 include(options.cmake)
 include(dependencies.cmake)
 
-include(cmake/project-is-top-level.cmake)
-include(cmake/module-registry.cmake)
-include(cmake/variables.cmake)
-include(cmake/ccache.cmake)
-include(cmake/linker.cmake)
-include(cmake/ipo.cmake)
-include(cmake/coverage.cmake)
-include(cmake/utility.cmake)
+include(variables)
+include(ccache)
+include(ipo)
+include(coverage)
+include(utility)
+include(folders)
+include(static-analyzers)
 
 if(${PROJECT_NAME}_ENABLE_CCACHE)
     enable_ccache()
@@ -69,8 +71,8 @@ export(
     NAMESPACE ${PROJECT_NAME}::
     FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Options.cmake)
 
-register_module(utility)
-register_module(core)
+add_subdirectory(utility)
+add_subdirectory(core)
 
 # ---- Target to link with all library modules
 
@@ -82,7 +84,7 @@ install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets)
 
 # ---- Install rules for project interface library
 
-include(cmake/install-rules.cmake)
+include(install-rules)
 
 # ---- Developer mode ----
 
@@ -92,4 +94,4 @@ elseif(NOT PROJECT_IS_TOP_LEVEL)
     message(AUTHOR_WARNING "Developer mode is intended for developers of ${PROJECT_NAME}")
 endif()
 
-include(cmake/dev-mode.cmake)
+include(dev-mode)

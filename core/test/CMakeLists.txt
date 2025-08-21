@@ -4,10 +4,6 @@ set(PARENT_PROJECT_NAME ${PROJECT_NAME})
 
 project(${PARENT_PROJECT_NAME}-tests LANGUAGES CXX)
 
-include(../../cmake/project-is-top-level.cmake)
-include(../../cmake/folders.cmake)
-include(../../cmake/static-analyzers.cmake)
-
 # ---- Find testing frameworks
 
 find_package(Catch2 REQUIRED)

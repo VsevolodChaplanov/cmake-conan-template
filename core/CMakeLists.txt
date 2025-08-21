@@ -1,11 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
 
-include(GenerateExportHeader)
-
-include(../cmake/folders.cmake)
-include(../cmake/linker.cmake)
-include(../cmake/static-analyzers.cmake)
-
 set(PARENT_PROJECT_NAME ${PROJECT_NAME})
 
 project(
@@ -93,20 +87,12 @@ set_target_properties(
                VERSION ${PROJECT_VERSION}
                SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR})
 
-# ---- Configure linker
-
-target_configure_linker(${PROJECT_NAME})
-
 # ---- Development export
 
 export(
     TARGETS ${PROJECT_NAME} ${PROJECT_NAME}-pch ${PROJECT_NAME}-options
     NAMESPACE ${PARENT_PROJECT_NAME}::
     FILE ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake)
-
-# ---- Collect all sources for static analysis
-
-set(ALL_SOURCE_FILES ${LIBRARY_INCLUDES} ${LIBRARY_SOURCES})
 
 # ---- Clang-tidy target
 
@@ -125,10 +111,6 @@ endif()
 if(${PROJECT_NAME}_ENABLE_IWYU)
     target_include_what_you_use(TARGET ${PROJECT_NAME})
 endif()
-
-# ---- Clang-format target
-
-target_clang_format(TARGET ${PROJECT_NAME} FILES "${ALL_SOURCE_FILES}")
 
 # ---- Add coverage support
 

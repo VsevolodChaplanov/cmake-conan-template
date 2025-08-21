@@ -4,10 +4,6 @@ set(PARENT_PROJECT_NAME ${PROJECT_NAME})
 
 project(${PARENT_PROJECT_NAME}-examples CXX)
 
-include(../../cmake/project-is-top-level.cmake)
-include(../../cmake/folders.cmake)
-include(../../cmake/static-analyzers.cmake)
-
 add_custom_target(${PROJECT_NAME}-run-examples)
 
 option(LINT_EXAMPLES "enable linters for examples" OFF)
