@@ -9,26 +9,6 @@ function(project_documentation)
         return()
     endif()
 
-    # Get all registered modules from the registry
-    if(DEFINED MODULES_REGISTRY)
-        set(_documentation_sources "")
-        foreach(module ${MODULES_REGISTRY})
-            if(IS_DIRECTORY "${PROJECT_SOURCE_DIR}/${module}")
-                list(APPEND _documentation_sources "${PROJECT_SOURCE_DIR}/${module}")
-            endif()
-        endforeach()
-    endif()
-
-    # Add project root files if they exist
-    if(EXISTS "${PROJECT_SOURCE_DIR}/README.md")
-        list(APPEND _documentation_sources "${PROJECT_SOURCE_DIR}/README.md")
-    endif()
-
-    # If no modules found, use a default pattern
-    if(NOT _documentation_sources)
-        set(_documentation_sources "${PROJECT_SOURCE_DIR}")
-    endif()
-
     # Configure Doxygen settings
     set(DOXYGEN_GENERATE_HTML YES)
     set(DOXYGEN_GENERATE_TREEVIEW YES)
@@ -63,7 +43,7 @@ function(project_documentation)
         doxygen_styling()
     endif()
 
-    doxygen_add_docs(${PROJECT_NAME}-docs "${_documentation_sources}" COMMENT "Generate HTML documentation for ${PROJECT_NAME}")
+    doxygen_add_docs(${PROJECT_NAME}-docs ${PROJECT_SOURCE_DIR} COMMENT "Generate HTML documentation for ${PROJECT_NAME}")
 endfunction()
 
 macro(doxygen_styling)
